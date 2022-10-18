@@ -1,0 +1,11 @@
+.slds-box {
+    border-style: none !important;
+}
+
+.warning {
+    -webkit-text-fill-color: red;
+}
+
+.imageAlignment{
+    margin-left: 15% !important;
+}

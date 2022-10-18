@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomLabels xmlns="http://soap.sforce.com/2006/04/metadata">
+    <labels>
+        <fullName>Clear_Button</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Clear Button</shortDescription>
+        <value>Clear</value>
+    </labels>
+    <labels>
+        <fullName>Copy_Button</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Copy Button</shortDescription>
+        <value>Copy</value>
+    </labels>
+    <labels>
+        <fullName>Details_Button</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Details Button</shortDescription>
+        <value>Details</value>
+    </labels>
+    <labels>
+        <fullName>KycReport_Button</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>KycReport Button</shortDescription>
+        <value>KYC Report</value>
+    </labels>
+    <labels>
+        <fullName>Refresh_Button</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Refresh Button</shortDescription>
+        <value>Refresh</value>
+    </labels>
+    <labels>
+        <fullName>Report_Button</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Report Button</shortDescription>
+        <value>Report</value>
+    </labels>
+    <labels>
+        <fullName>Search_Button</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Search Button</shortDescription>
+        <value>Search</value>
+    </labels>
+    <labels>
+        <fullName>Select_Button</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Select Button</shortDescription>
+        <value>Select</value>
+    </labels>
+    <labels>
+        <fullName>Term_to_search</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Term to search</shortDescription>
+        <value>Term to search...</value>
+    </labels>
+    <labels>
+        <fullName>X101</fullName>
+        <categories>Errors</categories>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>101</shortDescription>
+        <value>No users found for this &quot;CompanyWebLogin&quot; and &quot;CompanyWebPassword&quot;</value>
+    </labels>
+    <labels>
+        <fullName>X102</fullName>
+        <categories>Errors</categories>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>102</shortDescription>
+        <value>You have reached the maximum number of 5 bad login attempts. Contact Companyweb to resolve this.</value>
+    </labels>
+    <labels>
+        <fullName>X103</fullName>
+        <categories>Errors</categories>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>103</shortDescription>
+        <value>Your account has been blocked. Contact Companyweb to resolve this.</value>
+    </labels>
+    <labels>
+        <fullName>X104</fullName>
+        <categories>Errors</categories>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>104</shortDescription>
+        <value>Your weekly API usage limit has been exceeded. Either try again later or contact Companyweb to resolve this.</value>
+    </labels>
+    <labels>
+        <fullName>X201</fullName>
+        <categories>Errors</categories>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>201</shortDescription>
+        <value>API usage is not enabled for your account. Contact Company to resolve this.</value>
+    </labels>
+    <labels>
+        <fullName>X202</fullName>
+        <categories>Errors</categories>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>202</shortDescription>
+        <value>API usage is not configured for your account. Contact Companyweb to resolve this.</value>
+    </labels>
+    <labels>
+        <fullName>X301</fullName>
+        <categories>Errors</categories>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>301</shortDescription>
+        <value>The parameter &quot;CompanyWebLogin&quot; is invalid or empty.</value>
+    </labels>
+    <labels>
+        <fullName>X302</fullName>
+        <categories>Errors</categories>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>302</shortDescription>
+        <value>The parameter &quot;CompanyWebPassword&quot; is invalid or empty.</value>
+    </labels>
+    <labels>
+        <fullName>X303</fullName>
+        <categories>Errors</categories>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>303</shortDescription>
+        <value>Something went wrong. Please try again or contact Companyweb if the problem persists. Error reference: LoginHash</value>
+    </labels>
+    <labels>
+        <fullName>X304</fullName>
+        <categories>Errors</categories>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>304</shortDescription>
+        <value>Something went wrong. Please try again or contact Companyweb if the problem persists. Error reference: ServiceIntegrator</value>
+    </labels>
+    <labels>
+        <fullName>X305</fullName>
+        <categories>Errors</categories>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>305</shortDescription>
+        <value>Something went wrong. Please try again or contact Companyweb if the problem persists. Error reference: Language</value>
+    </labels>
+    <labels>
+        <fullName>X306</fullName>
+        <categories>Errors</categories>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>306</shortDescription>
+        <value>The parameter &quot;VatNumber&quot; is not a valid belgian vatnumber or empty.</value>
+    </labels>
+    <labels>
+        <fullName>X307</fullName>
+        <categories>Errors</categories>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>307</shortDescription>
+        <value>The parameter &quot;SearchTerm&quot; is invalid or empty.</value>
+    </labels>
+    <labels>
+        <fullName>X308</fullName>
+        <categories>Errors</categories>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>308</shortDescription>
+        <value>The parameter &quot;ChangedDate&quot; is invalid or empty.</value>
+    </labels>
+    <labels>
+        <fullName>X309</fullName>
+        <categories>Errors</categories>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>309</shortDescription>
+        <value>Something went wrong. Please try again or contact Companyweb if the problem persists. Error reference: Step2Token</value>
+    </labels>
+    <labels>
+        <fullName>X310</fullName>
+        <categories>Errors</categories>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>310</shortDescription>
+        <value>Something went wrong. Please try again or contact Companyweb if the problem persists. Error reference: Step3Token</value>
+    </labels>
+    <labels>
+        <fullName>X311</fullName>
+        <categories>Errors</categories>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>311</shortDescription>
+        <value>The request you sent is invalid or empty.</value>
+    </labels>
+    <labels>
+        <fullName>X401</fullName>
+        <categories>Errors</categories>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>401</shortDescription>
+        <value>No company found with this VatNumber.</value>
+    </labels>
+    <labels>
+        <fullName>X402</fullName>
+        <categories>Errors</categories>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>402</shortDescription>
+        <value>The &quot;ChangedDate&quot; is invalid. The date has already been requested.</value>
+    </labels>
+    <labels>
+        <fullName>X403</fullName>
+        <categories>Errors</categories>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>403</shortDescription>
+        <value>The combination &quot;ChangedDate&quot; and &quot;VatNumber&quot; is invalid.</value>
+    </labels>
+    <labels>
+        <fullName>X404</fullName>
+        <categories>Errors</categories>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>404</shortDescription>
+        <value>This company already exists in your list.</value>
+    </labels>
+    <labels>
+        <fullName>X405</fullName>
+        <categories>Errors</categories>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>405</shortDescription>
+        <value>You cannot add a company to the alerts-list. You have reached your limit.</value>
+    </labels>
+    <labels>
+        <fullName>X900</fullName>
+        <categories>Errors</categories>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>900</shortDescription>
+        <value>An unknown error occured, we have been notified of the problem.</value>
+    </labels>
+</CustomLabels>

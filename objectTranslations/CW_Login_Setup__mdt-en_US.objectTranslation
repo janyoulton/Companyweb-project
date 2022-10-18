@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObjectTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <caseValues>
+        <plural>false</plural>
+        <value>Login Setup</value>
+    </caseValues>
+    <caseValues>
+        <plural>true</plural>
+        <value>Login Setups</value>
+    </caseValues>
+    <fields>
+        <help><!-- Please, provide the API name of the existing Activities field on the Account object.
+This mapping accepts Long Text Area fields only. --></help>
+        <label><!-- Account Activities Field --></label>
+        <name>Account_Activities_Field__c</name>
+    </fields>
+    <fields>
+        <help><!-- Please, provide the API name of the existing Credit Limit field on the Account object.
+This mapping accepts Number fields only. --></help>
+        <label><!-- Account Credit Limit Field --></label>
+        <name>Account_Credit_Limit_Field__c</name>
+    </fields>
+    <fields>
+        <help><!-- Please, provide the API name of the existing Joint Committees Blue Collar field on the Account object.
+This mapping accepts Long Text Area fields only. --></help>
+        <label><!-- Account Joint Commitees Blue Field --></label>
+        <name>Account_Joint_Commitees_Field__c</name>
+    </fields>
+    <fields>
+        <help><!-- Please, provide the API name of the existing Joint Committees White Collar field on the Account object.
+This mapping accepts Long Text Area fields only. --></help>
+        <label><!-- Account Joint Commitees White Field --></label>
+        <name>Account_Joint_Commitees_White_Field__c</name>
+    </fields>
+    <fields>
+        <help><!-- Please, provide the API name of the existing Legal Form field on the Account object.
+This mapping accepts Picklist fields only. --></help>
+        <label><!-- Account Legal Form Field --></label>
+        <name>Account_Legal_Form_Field__c</name>
+    </fields>
+    <fields>
+        <help><!-- Please, provide the API name of the existing Main Activity field on the Account object.
+This mapping accepts Text and Long Text Area fields only. --></help>
+        <label><!-- Account Main Activity Field --></label>
+        <name>Account_Main_Activity_Field__c</name>
+    </fields>
+    <fields>
+        <help><!-- Please, provide the API name of the existing Number of Employees field on the Account object.
+This mapping accepts Number fields only. --></help>
+        <label><!-- Account Number Employees Field --></label>
+        <name>Account_Number_Employees_Field__c</name>
+    </fields>
+    <fields>
+        <help><!-- Please, provide the API name of the existing Company Web Score field on the Account object.
+This mapping accepts Number fields only. --></help>
+        <label><!-- Account Score Field --></label>
+        <name>Account_Score_Field__c</name>
+    </fields>
+    <fields>
+        <help><!-- Please, provide the API name of the existing Social Security Number field on the Account object.
+This mapping accepts Text and Long Text Area fields only. --></help>
+        <label><!-- Account Social Security Field --></label>
+        <name>Account_Social_Security_Field__c</name>
+    </fields>
+    <fields>
+        <help><!-- Please, provide the API name of the existing VAT Number field on the Account object.
+This mapping accepts Text and Long Text Area fields only. --></help>
+        <label><!-- Account VAT Number Field --></label>
+        <name>Account_VAT_Number_Field__c</name>
+    </fields>
+    <fields>
+        <label><!-- CompanyWebLogin --></label>
+        <name>CW_CompanyWebLogin__c</name>
+    </fields>
+    <fields>
+        <label><!-- CompanyWebPassword --></label>
+        <name>CW_CompanyWebPassword__c</name>
+    </fields>
+    <fields>
+        <label><!-- CompanyWebSecret --></label>
+        <name>CW_CompanyWebSecret__c</name>
+    </fields>
+    <fields>
+        <help><!-- Enable/disable the VAT duplication rule on record creation --></help>
+        <label><!-- Duplicate Check on Creation --></label>
+        <name>CW_Duplicate_Check_Creation__c</name>
+    </fields>
+    <fields>
+        <help><!-- Enable/disable the VAT duplication rule on record refresh --></help>
+        <label><!-- Duplicate Check on Refresh --></label>
+        <name>CW_Duplicate_Check_Refresh__c</name>
+    </fields>
+    <fields>
+        <label><!-- ServiceIntegrator --></label>
+        <name>CW_ServiceIntegrator__c</name>
+    </fields>
+    <fields>
+        <help><!-- Please, provide the API name of the existing Activities field on the Lead object.
+This mapping accepts Long Text Area fields only. --></help>
+        <label><!-- Lead Activities Field --></label>
+        <name>Lead_Activities_Field__c</name>
+    </fields>
+    <fields>
+        <help><!-- Please, provide the API name of the existing Credit Limit field on the Lead object.
+This mapping accepts Number fields only. --></help>
+        <label><!-- Lead Credit Limit Field --></label>
+        <name>Lead_Credit_Limit_Field__c</name>
+    </fields>
+    <fields>
+        <help><!-- Please, provide the API name of the existing Joint Committees field on the Lead object.
+This mapping accepts Long Text Area fields only. --></help>
+        <label><!-- Lead Joint Commitees Blue Field --></label>
+        <name>Lead_Joint_Commitees_Field__c</name>
+    </fields>
+    <fields>
+        <help><!-- Please, provide the API name of the existing Joint Committees White Collar field on the Lead object.
+This mapping accepts Long Text Area fields only. --></help>
+        <label><!-- Lead Joint Commitees White Field --></label>
+        <name>Lead_Joint_Commitees_White_Field__c</name>
+    </fields>
+    <fields>
+        <help><!-- Please, provide the API name of the existing Legal Form field on the Lead object.
+This mapping accepts Picklist fields only. --></help>
+        <label><!-- Lead Legal Form Field --></label>
+        <name>Lead_Legal_Form_Field__c</name>
+    </fields>
+    <fields>
+        <help><!-- Please, provide the API name of the existing Main Activity field on the Lead object.
+This mapping accepts Text and Long Text Area fields only. --></help>
+        <label><!-- Lead Main Activity Field --></label>
+        <name>Lead_Main_Activity_Field__c</name>
+    </fields>
+    <fields>
+        <help><!-- Please, provide the API name of the existing Number of Employees field on the Lead object.
+This mapping accepts Number fields only. --></help>
+        <label><!-- Lead Number Employees Field --></label>
+        <name>Lead_Number_Employees_Field__c</name>
+    </fields>
+    <fields>
+        <help><!-- Please, provide the API name of the existing Company Web Score field on the Lead object.
+This mapping accepts Number fields only. --></help>
+        <label><!-- Lead Score Field --></label>
+        <name>Lead_Score_Field__c</name>
+    </fields>
+    <fields>
+        <help><!-- Please, provide the API name of the existing Social Security Number field on the Lead object.
+This mapping accepts Text and Long Text Area fields only. --></help>
+        <label><!-- Lead Social Security Field --></label>
+        <name>Lead_Social_Security_Field__c</name>
+    </fields>
+    <fields>
+        <help><!-- Please, provide the API name of the existing VAT Number field on the Lead object.
+This mapping accepts Text and Long Text Area fields only. --></help>
+        <label><!-- Lead VAT Number Field --></label>
+        <name>Lead_VAT_Number_Field__c</name>
+    </fields>
+    <layouts>
+        <layout>Login Setup Layout</layout>
+        <sections>
+            <label><!-- Account Mapping --></label>
+            <section>Account Mapping</section>
+        </sections>
+        <sections>
+            <label><!-- Custom Links --></label>
+            <section>Custom Links</section>
+        </sections>
+        <sections>
+            <label><!-- Lead Mapping --></label>
+            <section>Lead Mapping</section>
+        </sections>
+    </layouts>
+    <startsWith>Consonant</startsWith>
+</CustomObjectTranslation>
