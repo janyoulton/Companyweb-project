@@ -25,7 +25,7 @@ import getCompanyInfo from '@salesforce/apex/CompanyWebController.getCompanyInfo
 import getVATNumber from '@salesforce/apex/CompanyWebController.getVATNumber';
 import searchCompaniesInfo from '@salesforce/apex/CompanyWebController.searchCompaniesInfo';
 import getCWFields from '@salesforce/apex/CompanyWebController.getCWFields';
-import copyData from '@salesforce/apex/CompanyWebController.copyData';
+//import copyData from '@salesforce/apex/CompanyWebController.copyData';
 import clearData from '@salesforce/apex/CompanyWebController.clearData';
 import errorHandler from '@salesforce/apex/CompanyWebController.errorHandler';
 //Resources

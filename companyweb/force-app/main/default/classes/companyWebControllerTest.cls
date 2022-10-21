@@ -91,25 +91,25 @@ private class companyWebControllerTest {
         Test.stopTest();
     }
 
-    @isTest static Void copyDataAccountTest() {
-        Test.startTest();
+    // @isTest static Void copyDataAccountTest() {
+    //     Test.startTest();
         
-        Account account = new Account (Name = 'test3', CW_VAT_Number__c= '423584152' , CW_Name__c = 'Test LLC', CW_Phone__c = '1313131' , CW_Employees__c= 4.5 , CW_Revenue__c = 324324, CW_Street__c = 'Street Test' , CW_City__c = 'City Test', CW_PostalCode__c = '2035', CW_Country__c='BE');
-        insert account;
+    //     Account account = new Account (Name = 'test3', CW_VAT_Number__c= '423584152' , CW_Name__c = 'Test LLC', CW_Phone__c = '1313131' , CW_Employees__c= 4.5 , CW_Revenue__c = 324324, CW_Street__c = 'Street Test' , CW_City__c = 'City Test', CW_PostalCode__c = '2035', CW_Country__c='BE');
+    //     insert account;
     
-        CompanyWebController.copyData(account.id, 'Account');
-        Test.stopTest();
-    }
+    //     CompanyWebController.copyData(account.id, 'Account');
+    //     Test.stopTest();
+    // }
 
-    @isTest static Void copyDataLeadTest() {
-        Test.startTest();
+    // @isTest static Void copyDataLeadTest() {
+    //     Test.startTest();
         
-        Lead lead = new Lead (LastName = 'test4', Company='Test LLC', CW_VAT_Number__c= '423584152' , CW_Name__c = 'Test LLC', CW_Phone__c = '1313131' , CW_Employees__c= 4.5 , CW_Revenue__c = 324324, CW_Street__c = 'Street Test' , CW_City__c = 'City Test', CW_PostalCode__c = '2035', CW_Country__c='BE');
-        insert lead;
+    //     Lead lead = new Lead (LastName = 'test4', Company='Test LLC', CW_VAT_Number__c= '423584152' , CW_Name__c = 'Test LLC', CW_Phone__c = '1313131' , CW_Employees__c= 4.5 , CW_Revenue__c = 324324, CW_Street__c = 'Street Test' , CW_City__c = 'City Test', CW_PostalCode__c = '2035', CW_Country__c='BE');
+    //     insert lead;
     
-        CompanyWebController.copyData(lead.id, 'Lead');
-        Test.stopTest();
-    }
+    //     CompanyWebController.copyData(lead.id, 'Lead');
+    //     Test.stopTest();
+    // }
 
     @isTest static Void getCWFieldsAccountTest() {
         Test.startTest();
