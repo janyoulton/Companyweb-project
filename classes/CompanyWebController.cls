@@ -58,7 +58,15 @@ public with sharing class CompanyWebController {
 
             CW_Login_Setup__mdt oLoginSetup = new CW_Login_Setup__mdt();
 
-            oLoginSetup = [SELECT Id, CW_CompanyWebLogin__c, CW_CompanyWebPassword__c, CW_CompanyWebSecret__c, CW_ServiceIntegrator__c, Account_VAT_Number_Field__c, Lead_VAT_Number_Field__c,Account_Score_Field__c,Account_Activities_Field__c,Account_Credit_Limit_Field__c,Account_Joint_Commitees_Field__c,Account_Joint_Commitees_White_Field__c,Account_Legal_Form_Field__c,Account_Main_Activity_Field__c,Account_Number_Employees_Field__c,Account_Social_Security_Field__c,CW_Duplicate_Check_Creation__c,CW_Duplicate_Check_Refresh__c,Lead_Score_Field__c,Lead_Activities_Field__c,Lead_Credit_Limit_Field__c,Lead_Joint_Commitees_Field__c,Lead_Joint_Commitees_White_Field__c,Lead_Legal_Form_Field__c,Lead_Main_Activity_Field__c,Lead_Number_Employees_Field__c,Lead_Social_Security_Field__c FROM CW_Login_Setup__mdt WHERE DeveloperName = 'CW_Login'];
+            oLoginSetup = [SELECT Id, CW_CompanyWebLogin__c, CW_CompanyWebPassword__c, CW_CompanyWebSecret__c, CW_ServiceIntegrator__c, Account_VAT_Number_Field__c,
+             Lead_VAT_Number_Field__c,Account_Score_Field__c,Account_Activities_Field__c,Account_Credit_Limit_Field__c,Account_Joint_Commitees_Field__c,
+             Account_Joint_Commitees_White_Field__c,Account_Legal_Form_Field__c,Account_Main_Activity_Field__c,Account_Number_Employees_Field__c,
+             Account_Social_Security_Field__c,Account_Phone_Field__c,Account_Street_Field__c,Account_PostalCode_Field__c,Account_City_Field__c,Account_CountryCode_Field__c,
+             Account_Line1_Field__c,Account_Line2_Field__c,Account_Annual_Revenue_Field__c,CW_Duplicate_Check_Creation__c,
+             CW_Duplicate_Check_Refresh__c,Lead_Score_Field__c,Lead_Activities_Field__c,Lead_Credit_Limit_Field__c,Lead_Joint_Commitees_Field__c,
+             Lead_Joint_Commitees_White_Field__c,Lead_Legal_Form_Field__c,Lead_Main_Activity_Field__c,Lead_Number_Employees_Field__c,Lead_Social_Security_Field__c,
+             Lead_Phone_Field__c,Lead_Annual_Revenue_Field__c,Lead_Street_Field__c,Lead_PostalCode_Field__c,Lead_City_Field__c,Lead_CountryCode_Field__c,
+             Lead_Line1_Field__c,Lead_Line2_Field__c FROM CW_Login_Setup__mdt WHERE DeveloperName = 'CW_Login'];
 
             system.debug('Result of loginSetup '+ oLoginSetup);
             system.debug('objectName '+ objectName);
@@ -78,6 +86,14 @@ public with sharing class CompanyWebController {
             String accountNumberEmployeesAPI = oLoginSetup.Account_Number_Employees_Field__c;
             String accountSocialSecurityAPI = oLoginSetup.Account_Social_Security_Field__c;
             String accountLegalFormAPI = oLoginSetup.Account_Legal_Form_Field__c;
+            String accountPhoneAPI = oLoginSetup.Account_Phone_Field__c;
+            String accountAnnualRevenueAPI = oLoginSetup.Account_Annual_Revenue_Field__c;
+            String accountStreetAPI = oLoginSetup.Account_Street_Field__c;
+            String accountPostalCodeAPI = oLoginSetup.Account_PostalCode_Field__c;
+            String accountCityAPI = oLoginSetup.Account_City_Field__c;
+            String accountCountryCodeAPI = oLoginSetup.Account_CountryCode_Field__c;
+            //String accountLine1API = oLoginSetup.Account_Line1_Field__c;
+            //String accountLine2API = oLoginSetup.Account_Line2_Field__c;
 
             //Lead
             String leadVATAPI = oLoginSetup.Lead_VAT_Number_Field__c;
@@ -90,6 +106,14 @@ public with sharing class CompanyWebController {
             String leadNumberEmployeesAPI = oLoginSetup.Lead_Number_Employees_Field__c;
             String leadSocialSecurityAPI = oLoginSetup.Lead_Social_Security_Field__c;
             String leadLegalFormAPI = oLoginSetup.Lead_Legal_Form_Field__c;
+            String leadPhoneAPI = oLoginSetup.Lead_Phone_Field__c;
+            String leadAnnualRevenueAPI = oLoginSetup.Lead_Annual_Revenue_Field__c;
+            String leadStreetAPI = oLoginSetup.Lead_Street_Field__c;
+            String leadPostalCodeAPI = oLoginSetup.Lead_PostalCode_Field__c;
+            String leadCityAPI = oLoginSetup.Lead_City_Field__c;
+            String leadCountryCodeAPI = oLoginSetup.Lead_CountryCode_Field__c;
+            //String leadLine1API = oLoginSetup.Lead_Line1_Field__c;
+            //String leadLine2API = oLoginSetup.Lead_Line2_Field__c;
 
             String queryString;
 
@@ -204,6 +228,7 @@ public with sharing class CompanyWebController {
             String warningsString = '';
 
             Schema.DisplayType dt,dtAccountVAT, dtAccountScore, dtAccountActivities, dtAccountCreditLimit, dtAccountJointCommiteesBlue, dtAccountJointCommiteesWhite, dtAccountLegalForm, dtAccountMainActivity, dtAccountNumberEmployees, dtAccountSocialSecurity,dtLeadVAT, dtLeadScore, dtLeadActivities, dtLeadCreditLimit, dtLeadJointCommiteesBlue, dtLeadJointCommiteesWhite, dtLeadLegalForm, dtLeadMainActivity, dtLeadNumberEmployees, dtLeadSocialSecurity;
+            Schema.DisplayType dtAccountPhone, dtAccountAnnualRevenue, dtAccountAddress, dtLeadPhone, dtLeadAnnualRevenue, dtLeadAddress;
             System.debug('statuscode = ' + result.StatusCode);
         
             if(result.StatusCode  == 0){
@@ -251,8 +276,15 @@ public with sharing class CompanyWebController {
                             dtAccountSocialSecurity = Schema.getGlobalDescribe().get('Account').getDescribe().fields.getMap().get(accountSocialSecurityAPI).getDescribe().getType();
                         }
 
+                        if(accountPhoneAPI != null){
+                            dtAccountPhone = Schema.getGlobalDescribe().get('Account').getDescribe().fields.getMap().get(accountPhoneAPI).getDescribe().getType();
+                        }
+
+                        if(accountAnnualRevenueAPI != null){
+                            dtAccountAnnualRevenue = Schema.getGlobalDescribe().get('Account').getDescribe().fields.getMap().get(accountAnnualRevenueAPI).getDescribe().getType();
+                        }
                         
-                        String vatAccountFieldType, scroreFieldType, activitiesFieldType,creditLimitFieldType,joinCommiteesBlueFieldType,joinCommiteesWhiteFieldType,legalFormFieldType,mainActivityFieldType,numberEmployeesFieldType,socialSecurityFieldType ;
+                        String vatAccountFieldType,scroreFieldType,activitiesFieldType,creditLimitFieldType,joinCommiteesBlueFieldType,joinCommiteesWhiteFieldType,legalFormFieldType,mainActivityFieldType,numberEmployeesFieldType,socialSecurityFieldType,phoneFieldType,annualRevenueFieldType;
 
                         vatAccountFieldType = String.valueOf(dtAccountVAT);
                         scroreFieldType = String.valueOf(dtAccountScore);
@@ -264,26 +296,28 @@ public with sharing class CompanyWebController {
                         mainActivityFieldType= String.valueOf(dtAccountMainActivity);
                         numberEmployeesFieldType= String.valueOf(dtAccountNumberEmployees);
                         socialSecurityFieldType= String.valueOf(dtAccountSocialSecurity);
+                        phoneFieldType = String.valueOf(dtAccountPhone);
+                        annualRevenueFieldType = String.valueOf(dtAccountAnnualRevenue);
 
                         System.debug('vatFieldType = ' + vatAccountFieldType);
                     
                     //Address
                     if(result.CompanyResponse.Address.IsEnabled == True){
-                        acc.CW_Street__c = result.CompanyResponse.Address.Value.Street + ' ' + result.CompanyResponse.Address.Value.HouseNumber;
-                        acc.CW_City__c = result.CompanyResponse.Address.Value.City;
-                        acc.CW_PostalCode__c = result.CompanyResponse.Address.Value.PostalCode;
-                        acc.CW_Country__c = result.CompanyResponse.Address.Value.CountryCode;
-                        acc.CW_Address_Line_1__c = result.CompanyResponse.Address.Value.Line1;
-                        acc.CW_Address_Line_2__c = result.CompanyResponse.Address.Value.Line2;
-                    }else{
-                        acc.CW_Street__c = null;
-                        acc.CW_City__c = null;
-                        acc.CW_PostalCode__c = null;
-                        acc.CW_Country__c = null;
-                        acc.CW_Address_Line_1__c = null;
-                        acc.CW_Address_Line_2__c = null;
-
+                        acc.put(accountStreetAPI, result.CompanyResponse.Address.Value.Street + ' ' + result.CompanyResponse.Address.Value.HouseNumber);
+                        acc.put(accountCityAPI, result.CompanyResponse.Address.Value.City);
+                        acc.put(accountPostalCodeAPI, result.CompanyResponse.Address.Value.PostalCode);
+                        acc.put(accountCountryCodeAPI, result.CompanyResponse.Address.Value.CountryCode);
+                        acc.put(accountLine1API, result.CompanyResponse.Address.Value.Line1);
+                        acc.put(accountLine2API, result.CompanyResponse.Address.Value.Line2);
                     }
+                    // else{
+                    //     acc.CW_Street__c = null;
+                    //     acc.CW_City__c = null;
+                    //     acc.CW_PostalCode__c = null;
+                    //     acc.CW_Country__c = null;
+                    //     acc.CW_Address_Line_1__c = null;
+                    //     acc.CW_Address_Line_2__c = null;
+                    // }
 
                     //Company Name
                     if(result.CompanyResponse.CompanyName.IsEnabled == True){
@@ -323,10 +357,16 @@ public with sharing class CompanyWebController {
                         acc.CW_VAT_Liable__c = false; 
                     }
                     //Phone number
-                    if(result.CompanyResponse.TelephoneNumber.IsEnabled == True){   
-                        acc.CW_Phone__c = result.CompanyResponse.TelephoneNumber.Value;
-                    } else {
-                        acc.CW_Phone__c = null;
+                    if(result.CompanyResponse.TelephoneNumber.IsEnabled == True){
+                        if (accountPhoneAPI != null) {
+                            if (phoneFieldType != 'String') {
+                                acc.put(accountPhoneAPI, result.CompanyResponse.TelephoneNumber.Value);
+                            } else {
+                                acc.put(accountPhoneAPI, String.valueOf(result.CompanyResponse.TelephoneNumber.Value));
+                            }
+                        } else {
+                            acc.CW_Phone__c = result.CompanyResponse.TelephoneNumber.Value;
+                        }
                     }
                     //Legal form
                     if(result.CompanyResponse.LegalForm.IsEnabled == True){
@@ -443,7 +483,15 @@ public with sharing class CompanyWebController {
                             }
                             if (String.isNotBlank(result.CompanyResponse.Balances.Value.Balans[0].BalansData.BalansData[2].Value)){
                                 //Revenue
-                                acc.CW_Revenue__c = Decimal.valueOf(result.CompanyResponse.Balances.Value.Balans[0].BalansData.BalansData[2].Value);
+                                if(accountAnnualRevenueAPI != null){
+                                    if (scroreFieldType != 'String') {
+                                        acc.put(accountAnnualRevenueAPI, Decimal.valueOf(result.CompanyResponse.Balances.Value.Balans[0].BalansData.BalansData[2].Value));
+                                    } else {
+                                        acc.put(accountAnnualRevenueAPI, Integer.valueOf(Decimal.valueOf(result.CompanyResponse.Balances.Value.Balans[0].BalansData.BalansData[2].Value).round(RoundingMode.HALF_UP)));
+                                    }
+                                } else {
+                                    acc.CW_Revenue__c = Decimal.valueOf(result.CompanyResponse.Balances.Value.Balans[0].BalansData.BalansData[2].Value);
+                                }
                             }
                             else{
                                 acc.CW_Revenue__c = null;
@@ -603,7 +651,7 @@ public with sharing class CompanyWebController {
                     /* Schema.DisplayType dt; */
                     if(leadVATAPI != null){
                         dtLeadVAT = Schema.getGlobalDescribe().get('Lead').getDescribe().fields.getMap().get(leadVATAPI).getDescribe().getType();
-                }
+                    }
                     
                     if(leadScoreAPI != null){
                         dtLeadScore = Schema.getGlobalDescribe().get('Lead').getDescribe().fields.getMap().get(leadScoreAPI).getDescribe().getType();
@@ -641,8 +689,19 @@ public with sharing class CompanyWebController {
                         dtLeadSocialSecurity = Schema.getGlobalDescribe().get('Lead').getDescribe().fields.getMap().get(leadSocialSecurityAPI).getDescribe().getType();
                     }
 
+                    if(leadPhoneAPI != null){
+                        dtLeadPhone = Schema.getGlobalDescribe().get('Lead').getDescribe().fields.getMap().get(leadPhoneAPI).getDescribe().getType();
+                    }
+
+                    if(leadAnnualRevenueAPI != null){
+                        dtLeadAnnualRevenue = Schema.getGlobalDescribe().get('Lead').getDescribe().fields.getMap().get(leadAnnualRevenueAPI).getDescribe().getType();
+                    }
+
+                    if(leadAddressAPI != null){
+                        dtLeadAddress = Schema.getGlobalDescribe().get('Lead').getDescribe().fields.getMap().get(leadAddressAPI).getDescribe().getType();
+                    }
                     
-                    String vatLeadFieldType, scroreFieldType, activitiesFieldType,creditLimitFieldType,joinCommiteesBlueFieldType,joinCommiteesWhiteFieldType,legalFormFieldType,mainActivityFieldType,numberEmployeesFieldType,socialSecurityFieldType ;
+                    String vatLeadFieldType, scroreFieldType, activitiesFieldType,creditLimitFieldType,joinCommiteesBlueFieldType,joinCommiteesWhiteFieldType,legalFormFieldType,mainActivityFieldType,numberEmployeesFieldType,socialSecurityFieldType,phoneFieldType,annualRevenueFieldType;
 
                     vatLeadFieldType = String.valueOf(dtLeadVAT);
                     scroreFieldType = String.valueOf(dtLeadScore);
@@ -654,26 +713,29 @@ public with sharing class CompanyWebController {
                     mainActivityFieldType= String.valueOf(dtLeadMainActivity);
                     numberEmployeesFieldType= String.valueOf(dtLeadNumberEmployees);
                     socialSecurityFieldType= String.valueOf(dtLeadSocialSecurity);
+                    phoneFieldType = String.valueOf(dtLeadPhone);
+                    annualRevenueFieldType = String.valueOf(dtLeadAnnualRevenue);
 
                     System.debug('vatFieldType = ' + vatLeadFieldType);
                     System.debug('vatFieldType = ' + vatFieldType);
                     
                     //Address
                     if(result.CompanyResponse.Address.IsEnabled == True){
-                        lead.CW_Street__c = result.CompanyResponse.Address.Value.Street + ' ' + result.CompanyResponse.Address.Value.HouseNumber;
-                        lead.CW_City__c = result.CompanyResponse.Address.Value.City;
-                        lead.CW_PostalCode__c = result.CompanyResponse.Address.Value.PostalCode;
-                        lead.CW_Country__c = result.CompanyResponse.Address.Value.CountryCode;
-                        lead.CW_Address_Line_1__c = result.CompanyResponse.Address.Value.Line1;
-                        lead.CW_Address_Line_2__c = result.CompanyResponse.Address.Value.Line2;
-                    } else {
-                        lead.CW_Street__c = null;
-                        lead.CW_City__c = null;
-                        lead.CW_PostalCode__c = null; 
-                        lead.CW_Country__c = null;
-                        lead.CW_Address_Line_1__c = null; 
-                        lead.CW_Address_Line_2__c = null;
-                    }
+                        lead.put(leadStreetAPI, result.CompanyResponse.Address.Value.Street + ' ' + result.CompanyResponse.Address.Value.HouseNumber);
+                        lead.put(leadCityAPI, result.CompanyResponse.Address.Value.City);
+                        lead.put(leadPostalCodeAPI, result.CompanyResponse.Address.Value.PostalCode);
+                        lead.put(leadCountryCodeAPI, result.CompanyResponse.Address.Value.CountryCode);
+                        lead.put(leadLine1API, result.CompanyResponse.Address.Value.Line1);
+                        lead.put(leadLine2API, result.CompanyResponse.Address.Value.Line2);
+                    } 
+                    //else {
+                    //     lead.CW_Street__c = null;
+                    //     lead.CW_City__c = null;
+                    //     lead.CW_PostalCode__c = null; 
+                    //     lead.CW_Country__c = null;
+                    //     lead.CW_Address_Line_1__c = null; 
+                    //     lead.CW_Address_Line_2__c = null;
+                    // }
 
                     //Lead Name
                     if(result.CompanyResponse.CompanyName.IsEnabled == True){
@@ -715,9 +777,15 @@ public with sharing class CompanyWebController {
                     }
                     //Phone number
                     if(result.CompanyResponse.TelephoneNumber.IsEnabled == True){
-                        lead.CW_Phone__c = result.CompanyResponse.TelephoneNumber.Value;
-                    } else {
-                        lead.CW_Phone__c = null;
+                        if(leadPhoneAPI != null){
+                            if(phoneFieldType != 'String'){
+                                lead.put(leadPhoneAPI, result.CompanyResponse.TelephoneNumber.Value);
+                            } else {
+                                lead.put(leadPhoneAPI, String.ValueOf(result.CompanyResponse.TelephoneNumber.Value));
+                            }
+                        } else {
+                            lead.CW_Phone__c = result.CompanyResponse.TelephoneNumber.Value;
+                        }
                     }
                     //Legal form
                     if(result.CompanyResponse.LegalForm.IsEnabled == True){
@@ -827,7 +895,15 @@ public with sharing class CompanyWebController {
                             }
                             if (String.isNotBlank(result.CompanyResponse.Balances.Value.Balans[0].BalansData.BalansData[2].Value)){
                                 //Revenue
-                                lead.CW_Revenue__c = Decimal.valueOf(result.CompanyResponse.Balances.Value.Balans[0].BalansData.BalansData[2].Value);
+                                if(leadAnnualRevenueAPI != null){
+                                    if (scroreFieldType != 'String') {
+                                        lead.put(leadAnnualRevenueAPI, Decimal.valueOf(result.CompanyResponse.Balances.Value.Balans[0].BalansData.BalansData[2].Value));
+                                    } else {
+                                        lead.put(leadAnnualRevenueAPI, Integer.valueOf(Decimal.valueOf(result.CompanyResponse.Balances.Value.Balans[0].BalansData.BalansData[2].Value).round(RoundingMode.HALF_UP)));
+                                    }
+                                } else {
+                                    lead.CW_Revenue__c = Decimal.valueOf(result.CompanyResponse.Balances.Value.Balans[0].BalansData.BalansData[2].Value);
+                                }
                             }
                             else{
                                 lead.CW_Revenue__c = null;
@@ -1203,401 +1279,401 @@ public with sharing class CompanyWebController {
         return result;
     }
 
-    @AuraEnabled
-    public static void copyData(String Id, String objectName){
-        CW_Login_Setup__mdt oLoginSetup = getCurrentVATNumberFields();
+    // @AuraEnabled
+    // public static void copyData(String Id, String objectName){
+    //     CW_Login_Setup__mdt oLoginSetup = getCurrentVATNumberFields();
 
-        //Account
-        String accountVATAPI = oLoginSetup.Account_VAT_Number_Field__c;
-        String accountScoreAPI = oLoginSetup.Account_Score_Field__c;
-        String accountActivitiesAPI = oLoginSetup.Account_Activities_Field__c;
-        String accountCreditLimitAPI = oLoginSetup.Account_Credit_Limit_Field__c;
-        String accountJointCommitieesBlueAPI = oLoginSetup.Account_Joint_Commitees_Field__c;
-        String accountJointCommitieesWhiteAPI = oLoginSetup.Account_Joint_Commitees_White_Field__c;
-        String accountMainActivityAPI = oLoginSetup.Account_Main_Activity_Field__c;
-        String accountNumberEmployeesAPI = oLoginSetup.Account_Number_Employees_Field__c;
-        String accountSocialSecurityAPI = oLoginSetup.Account_Social_Security_Field__c;
-        String accountLegalFormAPI = oLoginSetup.Account_Legal_Form_Field__c;
+    //     //Account
+    //     String accountVATAPI = oLoginSetup.Account_VAT_Number_Field__c;
+    //     String accountScoreAPI = oLoginSetup.Account_Score_Field__c;
+    //     String accountActivitiesAPI = oLoginSetup.Account_Activities_Field__c;
+    //     String accountCreditLimitAPI = oLoginSetup.Account_Credit_Limit_Field__c;
+    //     String accountJointCommitieesBlueAPI = oLoginSetup.Account_Joint_Commitees_Field__c;
+    //     String accountJointCommitieesWhiteAPI = oLoginSetup.Account_Joint_Commitees_White_Field__c;
+    //     String accountMainActivityAPI = oLoginSetup.Account_Main_Activity_Field__c;
+    //     String accountNumberEmployeesAPI = oLoginSetup.Account_Number_Employees_Field__c;
+    //     String accountSocialSecurityAPI = oLoginSetup.Account_Social_Security_Field__c;
+    //     String accountLegalFormAPI = oLoginSetup.Account_Legal_Form_Field__c;
         
-        //Lead
-        String leadVATAPI = oLoginSetup.Lead_VAT_Number_Field__c;
-        String leadScoreAPI = oLoginSetup.Lead_Score_Field__c;
-        String leadActivitiesAPI = oLoginSetup.Lead_Activities_Field__c;
-        String leadCreditLimitAPI = oLoginSetup.Lead_Credit_Limit_Field__c;
-        String leadJointCommitieesBlueAPI = oLoginSetup.Lead_Joint_Commitees_Field__c;
-        String leadJointCommitieesWhiteAPI = oLoginSetup.Lead_Joint_Commitees_White_Field__c;
-        String leadMainActivityAPI = oLoginSetup.Lead_Main_Activity_Field__c;
-        String leadNumberEmployeesAPI = oLoginSetup.Lead_Number_Employees_Field__c;
-        String leadSocialSecurityAPI = oLoginSetup.Lead_Social_Security_Field__c;
-        String leadLegalFormAPI = oLoginSetup.Lead_Legal_Form_Field__c;
+    //     //Lead
+    //     String leadVATAPI = oLoginSetup.Lead_VAT_Number_Field__c;
+    //     String leadScoreAPI = oLoginSetup.Lead_Score_Field__c;
+    //     String leadActivitiesAPI = oLoginSetup.Lead_Activities_Field__c;
+    //     String leadCreditLimitAPI = oLoginSetup.Lead_Credit_Limit_Field__c;
+    //     String leadJointCommitieesBlueAPI = oLoginSetup.Lead_Joint_Commitees_Field__c;
+    //     String leadJointCommitieesWhiteAPI = oLoginSetup.Lead_Joint_Commitees_White_Field__c;
+    //     String leadMainActivityAPI = oLoginSetup.Lead_Main_Activity_Field__c;
+    //     String leadNumberEmployeesAPI = oLoginSetup.Lead_Number_Employees_Field__c;
+    //     String leadSocialSecurityAPI = oLoginSetup.Lead_Social_Security_Field__c;
+    //     String leadLegalFormAPI = oLoginSetup.Lead_Legal_Form_Field__c;
 
-        //Schema Datatypes
-        Schema.DisplayType dtAccountVAT, dtAccountScore, dtAccountActivities, dtAccountCreditLimit, dtAccountJointCommiteesBlue, dtJointCommiteesWhite, dtAccountLegalForm, dtAccountMainActivity, dtAccountNumberEmployees, dtAccountSocialSecurity,dtLeadVAT, dtLeadScore, dtLeadActivities, dtLeadCreditLimit, dtLeadJointCommiteesBlue, dtLeadJointCommiteesWhite, dtLeadLegalForm, dtLeadMainActivity, dtLeadNumberEmployees, dtLeadSocialSecurity;
+    //     //Schema Datatypes
+    //     Schema.DisplayType dtAccountVAT, dtAccountScore, dtAccountActivities, dtAccountCreditLimit, dtAccountJointCommiteesBlue, dtJointCommiteesWhite, dtAccountLegalForm, dtAccountMainActivity, dtAccountNumberEmployees, dtAccountSocialSecurity,dtLeadVAT, dtLeadScore, dtLeadActivities, dtLeadCreditLimit, dtLeadJointCommiteesBlue, dtLeadJointCommiteesWhite, dtLeadLegalForm, dtLeadMainActivity, dtLeadNumberEmployees, dtLeadSocialSecurity;
 
-        if(accountVATAPI != null){
-            dtAccountVAT = Schema.getGlobalDescribe().get('Account').getDescribe().fields.getMap().get(accountVATAPI).getDescribe().getType();
-        }
+    //     if(accountVATAPI != null){
+    //         dtAccountVAT = Schema.getGlobalDescribe().get('Account').getDescribe().fields.getMap().get(accountVATAPI).getDescribe().getType();
+    //     }
         
-        if(accountScoreAPI != null){
-            dtAccountScore = Schema.getGlobalDescribe().get('Account').getDescribe().fields.getMap().get(accountScoreAPI).getDescribe().getType();
-        }
+    //     if(accountScoreAPI != null){
+    //         dtAccountScore = Schema.getGlobalDescribe().get('Account').getDescribe().fields.getMap().get(accountScoreAPI).getDescribe().getType();
+    //     }
 
-        if(accountActivitiesAPI != null){
-            dtAccountActivities = Schema.getGlobalDescribe().get('Account').getDescribe().fields.getMap().get(accountActivitiesAPI).getDescribe().getType();
-        }
+    //     if(accountActivitiesAPI != null){
+    //         dtAccountActivities = Schema.getGlobalDescribe().get('Account').getDescribe().fields.getMap().get(accountActivitiesAPI).getDescribe().getType();
+    //     }
 
-        if(accountCreditLimitAPI != null){
-            dtAccountCreditLimit = Schema.getGlobalDescribe().get('Account').getDescribe().fields.getMap().get(accountCreditLimitAPI).getDescribe().getType();
-        }
+    //     if(accountCreditLimitAPI != null){
+    //         dtAccountCreditLimit = Schema.getGlobalDescribe().get('Account').getDescribe().fields.getMap().get(accountCreditLimitAPI).getDescribe().getType();
+    //     }
 
-        if(accountJointCommitieesBlueAPI != null){
-            dtAccountJointCommiteesBlue = Schema.getGlobalDescribe().get('Account').getDescribe().fields.getMap().get(accountJointCommitieesBlueAPI).getDescribe().getType();
-        }
+    //     if(accountJointCommitieesBlueAPI != null){
+    //         dtAccountJointCommiteesBlue = Schema.getGlobalDescribe().get('Account').getDescribe().fields.getMap().get(accountJointCommitieesBlueAPI).getDescribe().getType();
+    //     }
 
-        if(accountJointCommitieesWhiteAPI != null){
-            dtJointCommiteesWhite = Schema.getGlobalDescribe().get('Account').getDescribe().fields.getMap().get(accountJointCommitieesWhiteAPI).getDescribe().getType();
-        }
+    //     if(accountJointCommitieesWhiteAPI != null){
+    //         dtJointCommiteesWhite = Schema.getGlobalDescribe().get('Account').getDescribe().fields.getMap().get(accountJointCommitieesWhiteAPI).getDescribe().getType();
+    //     }
 
-        if(accountLegalFormAPI != null){
-            dtAccountLegalForm = Schema.getGlobalDescribe().get('Account').getDescribe().fields.getMap().get(accountLegalFormAPI).getDescribe().getType();
-        }
+    //     if(accountLegalFormAPI != null){
+    //         dtAccountLegalForm = Schema.getGlobalDescribe().get('Account').getDescribe().fields.getMap().get(accountLegalFormAPI).getDescribe().getType();
+    //     }
 
-        if(accountMainActivityAPI != null){
-            dtAccountMainActivity = Schema.getGlobalDescribe().get('Account').getDescribe().fields.getMap().get(accountMainActivityAPI).getDescribe().getType();
-        }
+    //     if(accountMainActivityAPI != null){
+    //         dtAccountMainActivity = Schema.getGlobalDescribe().get('Account').getDescribe().fields.getMap().get(accountMainActivityAPI).getDescribe().getType();
+    //     }
 
-        if(accountNumberEmployeesAPI != null){
-            dtAccountNumberEmployees = Schema.getGlobalDescribe().get('Account').getDescribe().fields.getMap().get(accountNumberEmployeesAPI).getDescribe().getType();
-        }
+    //     if(accountNumberEmployeesAPI != null){
+    //         dtAccountNumberEmployees = Schema.getGlobalDescribe().get('Account').getDescribe().fields.getMap().get(accountNumberEmployeesAPI).getDescribe().getType();
+    //     }
 
-        if(accountSocialSecurityAPI != null){
-            dtAccountSocialSecurity = Schema.getGlobalDescribe().get('Account').getDescribe().fields.getMap().get(accountSocialSecurityAPI).getDescribe().getType();
-        }
+    //     if(accountSocialSecurityAPI != null){
+    //         dtAccountSocialSecurity = Schema.getGlobalDescribe().get('Account').getDescribe().fields.getMap().get(accountSocialSecurityAPI).getDescribe().getType();
+    //     }
 
-        if(leadVATAPI != null){
-            dtLeadVAT = Schema.getGlobalDescribe().get('Lead').getDescribe().fields.getMap().get(leadVATAPI).getDescribe().getType();
-        }
+    //     if(leadVATAPI != null){
+    //         dtLeadVAT = Schema.getGlobalDescribe().get('Lead').getDescribe().fields.getMap().get(leadVATAPI).getDescribe().getType();
+    //     }
         
-        if(leadScoreAPI != null){
-            dtLeadScore = Schema.getGlobalDescribe().get('Lead').getDescribe().fields.getMap().get(leadScoreAPI).getDescribe().getType();
-        }
+    //     if(leadScoreAPI != null){
+    //         dtLeadScore = Schema.getGlobalDescribe().get('Lead').getDescribe().fields.getMap().get(leadScoreAPI).getDescribe().getType();
+    //     }
 
-        if(leadActivitiesAPI != null){
-            dtLeadActivities = Schema.getGlobalDescribe().get('Lead').getDescribe().fields.getMap().get(leadActivitiesAPI).getDescribe().getType();
-        }
+    //     if(leadActivitiesAPI != null){
+    //         dtLeadActivities = Schema.getGlobalDescribe().get('Lead').getDescribe().fields.getMap().get(leadActivitiesAPI).getDescribe().getType();
+    //     }
 
-        if(leadCreditLimitAPI != null){
-            dtLeadCreditLimit = Schema.getGlobalDescribe().get('Lead').getDescribe().fields.getMap().get(leadCreditLimitAPI).getDescribe().getType();
-        }
+    //     if(leadCreditLimitAPI != null){
+    //         dtLeadCreditLimit = Schema.getGlobalDescribe().get('Lead').getDescribe().fields.getMap().get(leadCreditLimitAPI).getDescribe().getType();
+    //     }
 
-        if(leadJointCommitieesBlueAPI != null){
-            dtLeadJointCommiteesBlue = Schema.getGlobalDescribe().get('Lead').getDescribe().fields.getMap().get(leadJointCommitieesBlueAPI).getDescribe().getType();
-        }
+    //     if(leadJointCommitieesBlueAPI != null){
+    //         dtLeadJointCommiteesBlue = Schema.getGlobalDescribe().get('Lead').getDescribe().fields.getMap().get(leadJointCommitieesBlueAPI).getDescribe().getType();
+    //     }
 
-        if(leadJointCommitieesWhiteAPI != null){
-            dtJointCommiteesWhite = Schema.getGlobalDescribe().get('Lead').getDescribe().fields.getMap().get(leadJointCommitieesWhiteAPI).getDescribe().getType();
-        }
+    //     if(leadJointCommitieesWhiteAPI != null){
+    //         dtJointCommiteesWhite = Schema.getGlobalDescribe().get('Lead').getDescribe().fields.getMap().get(leadJointCommitieesWhiteAPI).getDescribe().getType();
+    //     }
 
-        if(leadLegalFormAPI != null){
-            dtLeadLegalForm = Schema.getGlobalDescribe().get('Lead').getDescribe().fields.getMap().get(leadLegalFormAPI).getDescribe().getType();
-        }
+    //     if(leadLegalFormAPI != null){
+    //         dtLeadLegalForm = Schema.getGlobalDescribe().get('Lead').getDescribe().fields.getMap().get(leadLegalFormAPI).getDescribe().getType();
+    //     }
 
-        if(leadMainActivityAPI != null){
-            dtLeadMainActivity = Schema.getGlobalDescribe().get('Lead').getDescribe().fields.getMap().get(leadMainActivityAPI).getDescribe().getType();
-        }
+    //     if(leadMainActivityAPI != null){
+    //         dtLeadMainActivity = Schema.getGlobalDescribe().get('Lead').getDescribe().fields.getMap().get(leadMainActivityAPI).getDescribe().getType();
+    //     }
 
-        if(leadNumberEmployeesAPI != null){
-            dtLeadNumberEmployees = Schema.getGlobalDescribe().get('Lead').getDescribe().fields.getMap().get(leadNumberEmployeesAPI).getDescribe().getType();
-        }
+    //     if(leadNumberEmployeesAPI != null){
+    //         dtLeadNumberEmployees = Schema.getGlobalDescribe().get('Lead').getDescribe().fields.getMap().get(leadNumberEmployeesAPI).getDescribe().getType();
+    //     }
 
-        if(leadSocialSecurityAPI != null){
-            dtLeadSocialSecurity = Schema.getGlobalDescribe().get('Lead').getDescribe().fields.getMap().get(leadSocialSecurityAPI).getDescribe().getType();
-        }
+    //     if(leadSocialSecurityAPI != null){
+    //         dtLeadSocialSecurity = Schema.getGlobalDescribe().get('Lead').getDescribe().fields.getMap().get(leadSocialSecurityAPI).getDescribe().getType();
+    //     }
 
-        //try {
+    //     //try {
 
-            System.debug('recordId = ' + Id);
-            System.debug('objectName = ' + objectName);
+    //         System.debug('recordId = ' + Id);
+    //         System.debug('objectName = ' + objectName);
 
-            //clearStdData(Id, objectName);
+    //         //clearStdData(Id, objectName);
 
-            String queryString;
+    //         String queryString;
 
-            switch on objectName {
-                when 'Account' {
-                    queryString = 'SELECT Id, CW_Name__c, CW_Phone__c, CW_Employees__c, CW_Revenue__c, CW_Street__c, CW_City__c, CW_PostalCode__c, CW_Country__c, CW_VAT_Number__c, CW_Score__c, CW_Abbreviation__c, CW_Credit_Limit__c, CW_Main_Activity__c, CW_Activities__c, CW_Joint_Commitees__c, CW_Joint_Commitees_White_Collar__c, CW_Social_Security_Information__c,CW_Legal_Form__c FROM Account WHERE Id = :Id';
-                }
-                when 'Lead' {
-                    queryString = 'SELECT Id, CW_Name__c, CW_Phone__c, CW_Employees__c, CW_Revenue__c, CW_Street__c, CW_City__c, CW_PostalCode__c, CW_Country__c, CW_VAT_Number__c FROM Lead WHERE Id = :Id';
-                }
-            }
+    //         switch on objectName {
+    //             when 'Account' {
+    //                 queryString = 'SELECT Id, CW_Name__c, CW_Phone__c, CW_Employees__c, CW_Revenue__c, CW_Street__c, CW_City__c, CW_PostalCode__c, CW_Country__c, CW_VAT_Number__c, CW_Score__c, CW_Abbreviation__c, CW_Credit_Limit__c, CW_Main_Activity__c, CW_Activities__c, CW_Joint_Commitees__c, CW_Joint_Commitees_White_Collar__c, CW_Social_Security_Information__c,CW_Legal_Form__c FROM Account WHERE Id = :Id';
+    //             }
+    //             when 'Lead' {
+    //                 queryString = 'SELECT Id, CW_Name__c, CW_Phone__c, CW_Employees__c, CW_Revenue__c, CW_Street__c, CW_City__c, CW_PostalCode__c, CW_Country__c, CW_VAT_Number__c FROM Lead WHERE Id = :Id';
+    //             }
+    //         }
 
-            sObject genericObject = Database.query(queryString);
+    //         sObject genericObject = Database.query(queryString);
 
-            if(objectName == 'Account'){
-                Account acc = (Account)genericObject;
-                if (accountVATAPI != null) {
-                    dtAccountVAT = Schema.getGlobalDescribe().get('Account').getDescribe().fields.getMap().get(accountVATAPI).getDescribe().getType();
-                    String vatAccountFieldType = String.valueOf(dtAccountVAT);
-                    if (vatAccountFieldType == 'String') {
-                        acc.put(accountVATAPI, acc.CW_VAT_Number__c);
-                    } else {
-                        acc.put(accountVATAPI, Integer.valueOf(acc.CW_VAT_Number__c));
-                    }
-                }
-                if (acc.CW_Name__c != null) {
-                    acc.Name = acc.CW_Name__c;
-                }
-                if (acc.CW_Phone__c != null) {
-                    acc.Phone = acc.CW_Phone__c;
-                }
-                if (acc.CW_Street__c != null) {
-                    acc.ShippingStreet = acc.CW_Street__c;
-                }
-                if (acc.CW_City__c != null) {
-                    acc.ShippingCity = acc.CW_City__c;
-                }
-                if (acc.CW_PostalCode__c != null) {
-                    acc.ShippingPostalCode = acc.CW_PostalCode__c;
-                }
-                if (acc.CW_Country__c != null) {
-                    acc.ShippingCountry = acc.CW_Country__c;
-                }
-                acc.ShippingState = null;
-                if (acc.CW_Revenue__c != null) {
-                    acc.AnnualRevenue = acc.CW_Revenue__c;
-                }
-                if (acc.CW_Abbreviation__c != null) {
-                    if(accountLegalFormAPI != null){
-                        String accountLegalFormFieldType = String.valueOf(dtAccountLegalForm);
-                        /*if (accountLegalFormFieldType == 'String') {
-                            acc.put(accountLegalFormAPI, String.valueOf(acc.CW_Legal_Form__c));
-                        } else {
-                            acc.put(accountLegalFormAPI, acc.CW_Legal_Form__c);
-                        } */
-                    }
-                } 
-                if (acc.CW_Score__c != null) {
-                    if(accountScoreAPI != null){
-                        String accountScoreFieldType = String.valueOf(dtAccountScore);
-                        if (accountScoreFieldType == 'String') {
-                            acc.put(accountScoreAPI, String.valueOf(acc.CW_Score__c));
-                        } else {
-                            acc.put(accountScoreAPI, String.valueOf(acc.CW_Score__c));
-                        }
-                    }
-                }
-                if (acc.CW_Employees__c != null) {
-                    if(accountNumberEmployeesAPI != null){
-                        String NumberEmployeesFieldType = String.valueOf(dtAccountNumberEmployees);
-                        if (NumberEmployeesFieldType == 'String') {
-                            acc.put(accountNumberEmployeesAPI, acc.CW_Employees__c);
-                        } else {
-                            acc.put(accountNumberEmployeesAPI,acc.CW_Employees__c);
-                }
-                   }
-                   //acc.NumberOfEmployees = Integer.valueOf(acc.CW_Employees__c);    
-                }
-                if (acc.CW_Credit_Limit__c != null) {
-                    if(accountCreditLimitAPI != null){
-                        String CreditLimitFieldType = String.valueOf(dtAccountCreditLimit);
-                        if (CreditLimitFieldType == 'String') {
-                            acc.put(accountCreditLimitAPI, acc.CW_Credit_Limit__c);
-                    } else {
-                            acc.put(accountCreditLimitAPI, Integer.valueOf(acc.CW_Credit_Limit__c));
-                        }
-                    }  
-                }
-                if (acc.CW_Main_Activity__c != null) {
-                    if(accountMainActivityAPI != null){
-                        String CreditLimitFieldType = String.valueOf(dtAccountMainActivity);
-                        if (CreditLimitFieldType == 'String') {
-                            acc.put(accountMainActivityAPI, acc.CW_Main_Activity__c);
-                        } else {
-                            acc.put(accountMainActivityAPI, String.valueOf(acc.CW_Main_Activity__c));
-                        }
-                    }
-                }
-                if (acc.CW_Activities__c != null) {
-                   if(accountActivitiesAPI != null){
-                        String ActivitiesFieldType = String.valueOf(dtAccountActivities);
-                        if (ActivitiesFieldType == 'String') {
-                            acc.put(accountActivitiesAPI, acc.CW_Activities__c);
-                        } else {
-                           // acc.put(accountActivitiesAPI, String.valueOf(acc.CW_Activities__c));
-                        }
-                   }  
-                }
-                // if (acc.CW_Joint_Commitees__c != null) {
-                //     if(accountJointCommitieesBlueAPI != null){
-                //        // String accountJointCommiteesBlueFieldType = String.valueOf(dtJointCommiteesBlue);
-                //         if (accountJointCommiteesBlueFieldType == 'String') {
-                //             acc.put(accountJointCommitieesBlueAPI, acc.CW_Joint_Commitees__c);
-                //         } else {
-                //             acc.put(accountJointCommitieesBlueAPI, String.valueOf(acc.CW_Joint_Commitees__c));
-                //         }
-                //     }  
-                // }
-                if (acc.CW_Joint_Commitees_White_Collar__c != null) {
-                    if(accountJointCommitieesWhiteAPI != null){
-                        String accountJointCommiteesWhiteFieldType = String.valueOf(dtJointCommiteesWhite);
-                        if (accountJointCommiteesWhiteFieldType == 'String') {
-                            acc.put(accountJointCommitieesWhiteAPI, acc.CW_Joint_Commitees_White_Collar__c);
-                        } else {
-                            acc.put(accountJointCommitieesWhiteAPI, String.valueOf(acc.CW_Joint_Commitees_White_Collar__c));
-                        }
-                    }  
-                }
-                if (acc.CW_Social_Security_Information__c != null) {
-                    if(accountSocialSecurityAPI != null){
-                        String accountSocialSecurityType = String.valueOf(dtAccountSocialSecurity);
-                        if (AccountSocialSecurityType == 'String') {
-                            acc.put(accountSocialSecurityAPI, acc.CW_Social_Security_Information__c);
-                        } else {
-                            acc.put(accountSocialSecurityAPI, String.valueOf(acc.CW_Social_Security_Information__c));
-                        }
-                    }
-               }
+    //         if(objectName == 'Account'){
+    //             Account acc = (Account)genericObject;
+    //             if (accountVATAPI != null) {
+    //                 dtAccountVAT = Schema.getGlobalDescribe().get('Account').getDescribe().fields.getMap().get(accountVATAPI).getDescribe().getType();
+    //                 String vatAccountFieldType = String.valueOf(dtAccountVAT);
+    //                 if (vatAccountFieldType == 'String') {
+    //                     acc.put(accountVATAPI, acc.CW_VAT_Number__c);
+    //                 } else {
+    //                     acc.put(accountVATAPI, Integer.valueOf(acc.CW_VAT_Number__c));
+    //                 }
+    //             }
+    //             if (acc.CW_Name__c != null) {
+    //                 acc.Name = acc.CW_Name__c;
+    //             }
+    //             if (acc.CW_Phone__c != null) {
+    //                 acc.Phone = acc.CW_Phone__c;
+    //             }
+    //             if (acc.CW_Street__c != null) {
+    //                 acc.ShippingStreet = acc.CW_Street__c;
+    //             }
+    //             if (acc.CW_City__c != null) {
+    //                 acc.ShippingCity = acc.CW_City__c;
+    //             }
+    //             if (acc.CW_PostalCode__c != null) {
+    //                 acc.ShippingPostalCode = acc.CW_PostalCode__c;
+    //             }
+    //             if (acc.CW_Country__c != null) {
+    //                 acc.ShippingCountry = acc.CW_Country__c;
+    //             }
+    //             acc.ShippingState = null;
+    //             if (acc.CW_Revenue__c != null) {
+    //                 acc.AnnualRevenue = acc.CW_Revenue__c;
+    //             }
+    //             if (acc.CW_Abbreviation__c != null) {
+    //                 if(accountLegalFormAPI != null){
+    //                     String accountLegalFormFieldType = String.valueOf(dtAccountLegalForm);
+    //                     /*if (accountLegalFormFieldType == 'String') {
+    //                         acc.put(accountLegalFormAPI, String.valueOf(acc.CW_Legal_Form__c));
+    //                     } else {
+    //                         acc.put(accountLegalFormAPI, acc.CW_Legal_Form__c);
+    //                     } */
+    //                 }
+    //             } 
+    //             if (acc.CW_Score__c != null) {
+    //                 if(accountScoreAPI != null){
+    //                     String accountScoreFieldType = String.valueOf(dtAccountScore);
+    //                     if (accountScoreFieldType == 'String') {
+    //                         acc.put(accountScoreAPI, String.valueOf(acc.CW_Score__c));
+    //                     } else {
+    //                         acc.put(accountScoreAPI, String.valueOf(acc.CW_Score__c));
+    //                     }
+    //                 }
+    //             }
+    //             if (acc.CW_Employees__c != null) {
+    //                 if(accountNumberEmployeesAPI != null){
+    //                     String NumberEmployeesFieldType = String.valueOf(dtAccountNumberEmployees);
+    //                     if (NumberEmployeesFieldType == 'String') {
+    //                         acc.put(accountNumberEmployeesAPI, acc.CW_Employees__c);
+    //                     } else {
+    //                         acc.put(accountNumberEmployeesAPI,acc.CW_Employees__c);
+    //             }
+    //                }
+    //                //acc.NumberOfEmployees = Integer.valueOf(acc.CW_Employees__c);    
+    //             }
+    //             if (acc.CW_Credit_Limit__c != null) {
+    //                 if(accountCreditLimitAPI != null){
+    //                     String CreditLimitFieldType = String.valueOf(dtAccountCreditLimit);
+    //                     if (CreditLimitFieldType == 'String') {
+    //                         acc.put(accountCreditLimitAPI, acc.CW_Credit_Limit__c);
+    //                 } else {
+    //                         acc.put(accountCreditLimitAPI, Integer.valueOf(acc.CW_Credit_Limit__c));
+    //                     }
+    //                 }  
+    //             }
+    //             if (acc.CW_Main_Activity__c != null) {
+    //                 if(accountMainActivityAPI != null){
+    //                     String CreditLimitFieldType = String.valueOf(dtAccountMainActivity);
+    //                     if (CreditLimitFieldType == 'String') {
+    //                         acc.put(accountMainActivityAPI, acc.CW_Main_Activity__c);
+    //                     } else {
+    //                         acc.put(accountMainActivityAPI, String.valueOf(acc.CW_Main_Activity__c));
+    //                     }
+    //                 }
+    //             }
+    //             if (acc.CW_Activities__c != null) {
+    //                if(accountActivitiesAPI != null){
+    //                     String ActivitiesFieldType = String.valueOf(dtAccountActivities);
+    //                     if (ActivitiesFieldType == 'String') {
+    //                         acc.put(accountActivitiesAPI, acc.CW_Activities__c);
+    //                     } else {
+    //                        // acc.put(accountActivitiesAPI, String.valueOf(acc.CW_Activities__c));
+    //                     }
+    //                }  
+    //             }
+    //             // if (acc.CW_Joint_Commitees__c != null) {
+    //             //     if(accountJointCommitieesBlueAPI != null){
+    //             //        // String accountJointCommiteesBlueFieldType = String.valueOf(dtJointCommiteesBlue);
+    //             //         if (accountJointCommiteesBlueFieldType == 'String') {
+    //             //             acc.put(accountJointCommitieesBlueAPI, acc.CW_Joint_Commitees__c);
+    //             //         } else {
+    //             //             acc.put(accountJointCommitieesBlueAPI, String.valueOf(acc.CW_Joint_Commitees__c));
+    //             //         }
+    //             //     }  
+    //             // }
+    //             if (acc.CW_Joint_Commitees_White_Collar__c != null) {
+    //                 if(accountJointCommitieesWhiteAPI != null){
+    //                     String accountJointCommiteesWhiteFieldType = String.valueOf(dtJointCommiteesWhite);
+    //                     if (accountJointCommiteesWhiteFieldType == 'String') {
+    //                         acc.put(accountJointCommitieesWhiteAPI, acc.CW_Joint_Commitees_White_Collar__c);
+    //                     } else {
+    //                         acc.put(accountJointCommitieesWhiteAPI, String.valueOf(acc.CW_Joint_Commitees_White_Collar__c));
+    //                     }
+    //                 }  
+    //             }
+    //             if (acc.CW_Social_Security_Information__c != null) {
+    //                 if(accountSocialSecurityAPI != null){
+    //                     String accountSocialSecurityType = String.valueOf(dtAccountSocialSecurity);
+    //                     if (AccountSocialSecurityType == 'String') {
+    //                         acc.put(accountSocialSecurityAPI, acc.CW_Social_Security_Information__c);
+    //                     } else {
+    //                         acc.put(accountSocialSecurityAPI, String.valueOf(acc.CW_Social_Security_Information__c));
+    //                     }
+    //                 }
+    //            }
 
-                // Update Account
-                update acc;
-            } else if (objectName == 'Lead'){
-                Lead lead = (Lead)genericObject;
-                if (lead.CW_Name__c != null) {
-                    lead.Company = lead.CW_Name__c;
-                }
-                if (lead.CW_Phone__c != null) {
-                    lead.Phone = lead.CW_Phone__c;
-                }
-                if (lead.CW_Street__c != null) {
-                    lead.Street = lead.CW_Street__c;
-                }
-                if (lead.CW_City__c != null) {
-                    lead.City = lead.CW_City__c;
-                }
-                if (lead.CW_PostalCode__c != null) {
-                    lead.PostalCode = lead.CW_PostalCode__c;
-                }
-                if (lead.CW_Country__c != null) {
-                    lead.Country = lead.CW_Country__c;
-                }
-                lead.State = null;
-                if (lead.CW_Revenue__c != null) {
-                    lead.AnnualRevenue = lead.CW_Revenue__c;
-                }
-                if (lead.CW_Employees__c != null) {
-                    if(leadNumberEmployeesAPI != null){
-                        String NumberEmployeesFieldType = String.valueOf(dtAccountNumberEmployees);
-                        if (NumberEmployeesFieldType == 'String') {
-                            lead.put(leadNumberEmployeesAPI, lead.CW_Employees__c);
-                        } else {
-                            lead.put(leadNumberEmployeesAPI,lead.CW_Employees__c);
-                }
-                   }
-                   //lead.NumberOfEmployees = Integer.valueOf(lead.CW_Employees__c);    
-                }
-                //lead.ShippingState = null;
-                if (lead.CW_Revenue__c != null) {
-                    lead.AnnualRevenue = lead.CW_Revenue__c;
-                }
-                if (lead.CW_Abbreviation__c != null) {
-                    if(leadLegalFormAPI != null){
-                        String leadLegalFormFieldType = String.valueOf(dtAccountLegalForm);
-                        // if (leadLegalFormFieldType == 'String') {
-                        //     lead.put(leadLegalFormAPI, String.valueOf(lead.CW_Legal_Form__c));
-                        // } else {
-                        //     lead.put(leadLegalFormAPI, lead.CW_Legal_Form__c);
-                        // } 
-                    }
-                } 
-                if (lead.CW_Score__c != null) {
-                    if(leadScoreAPI != null){
-                        String leadScoreFieldType = String.valueOf(dtAccountScore);
-                        if (leadScoreFieldType == 'String') {
-                            lead.put(leadScoreAPI, String.valueOf(lead.CW_Score__c));
-                        } else {
-                            lead.put(leadScoreAPI, String.valueOf(lead.CW_Score__c));
-                        }
-                    }
-                }
-                if (lead.CW_Employees__c != null) {
-                    if(leadNumberEmployeesAPI != null){
-                        String NumberEmployeesFieldType = String.valueOf(dtAccountNumberEmployees);
-                        if (NumberEmployeesFieldType == 'String') {
-                            lead.put(leadNumberEmployeesAPI, lead.CW_Employees__c);
-                        } else {
-                            lead.put(leadNumberEmployeesAPI,lead.CW_Employees__c);
-                }
-                   }
-                   //lead.NumberOfEmployees = Integer.valueOf(lead.CW_Employees__c);    
-                }
-                if (lead.CW_Credit_Limit__c != null) {
-                    if(leadCreditLimitAPI != null){
-                        String CreditLimitFieldType = String.valueOf(dtAccountCreditLimit);
-                        if (CreditLimitFieldType == 'String') {
-                            lead.put(leadCreditLimitAPI, lead.CW_Credit_Limit__c);
-                    } else {
-                            lead.put(leadCreditLimitAPI, Integer.valueOf(lead.CW_Credit_Limit__c));
-                        }
-                    }  
-                }
-                if (lead.CW_Main_Activity__c != null) {
-                    if(leadMainActivityAPI != null){
-                        String CreditLimitFieldType = String.valueOf(dtAccountMainActivity);
-                        if (CreditLimitFieldType == 'String') {
-                            lead.put(leadMainActivityAPI, lead.CW_Main_Activity__c);
-                        } else {
-                            lead.put(leadMainActivityAPI, String.valueOf(lead.CW_Main_Activity__c));
-                        }
-                    }
-                }
-                if (lead.CW_Activities__c != null) {
-                   if(leadActivitiesAPI != null){
-                        String ActivitiesFieldType = String.valueOf(dtAccountActivities);
-                        if (ActivitiesFieldType == 'String') {
-                            lead.put(leadActivitiesAPI, lead.CW_Activities__c);
-                        } else {
-                            lead.put(leadActivitiesAPI, String.valueOf(lead.CW_Activities__c));
-                        }
-                   }  
-                }
-                // if (lead.CW_Joint_Commitees__c != null) {
-                //     if(leadJointCommitieesBlueAPI != null){
-                //         String leadJointCommiteesBlueFieldType = String.valueOf(dtJointCommiteesBlue);
-                //         if (leadJointCommiteesBlueFieldType == 'String') {
-                //             lead.put(leadJointCommitieesBlueAPI, lead.CW_Joint_Commitees__c);
-                //         } else {
-                //             lead.put(leadJointCommitieesBlueAPI, String.valueOf(lead.CW_Joint_Commitees__c));
-                //         }
-                //     }  
-                //}
-                if (lead.CW_Joint_Commitees_White_Collar__c != null) {
-                    if(leadJointCommitieesWhiteAPI != null){
-                        String leadJointCommiteesWhiteFieldType = String.valueOf(dtJointCommiteesWhite);
-                        if (leadJointCommiteesWhiteFieldType == 'String') {
-                            lead.put(leadJointCommitieesWhiteAPI, lead.CW_Joint_Commitees_White_Collar__c);
-                        } else {
-                            lead.put(leadJointCommitieesWhiteAPI, String.valueOf(lead.CW_Joint_Commitees_White_Collar__c));
-                        }
-                    }  
-                }
-                if (lead.CW_Social_Security_Information__c != null) {
-                    if(leadSocialSecurityAPI != null){
-                        String leadSocialSecurityType = String.valueOf(dtAccountSocialSecurity);
-                        if (LeadSocialSecurityType == 'String') {
-                            lead.put(leadSocialSecurityAPI, lead.CW_Social_Security_Information__c);
-                        } else {
-                            lead.put(leadSocialSecurityAPI, String.valueOf(lead.CW_Social_Security_Information__c));
-                        }
-                    }
-               }
+    //             // Update Account
+    //             update acc;
+    //         } else if (objectName == 'Lead'){
+    //             Lead lead = (Lead)genericObject;
+    //             if (lead.CW_Name__c != null) {
+    //                 lead.Company = lead.CW_Name__c;
+    //             }
+    //             if (lead.CW_Phone__c != null) {
+    //                 lead.Phone = lead.CW_Phone__c;
+    //             }
+    //             if (lead.CW_Street__c != null) {
+    //                 lead.Street = lead.CW_Street__c;
+    //             }
+    //             if (lead.CW_City__c != null) {
+    //                 lead.City = lead.CW_City__c;
+    //             }
+    //             if (lead.CW_PostalCode__c != null) {
+    //                 lead.PostalCode = lead.CW_PostalCode__c;
+    //             }
+    //             if (lead.CW_Country__c != null) {
+    //                 lead.Country = lead.CW_Country__c;
+    //             }
+    //             lead.State = null;
+    //             if (lead.CW_Revenue__c != null) {
+    //                 lead.AnnualRevenue = lead.CW_Revenue__c;
+    //             }
+    //             if (lead.CW_Employees__c != null) {
+    //                 if(leadNumberEmployeesAPI != null){
+    //                     String NumberEmployeesFieldType = String.valueOf(dtAccountNumberEmployees);
+    //                     if (NumberEmployeesFieldType == 'String') {
+    //                         lead.put(leadNumberEmployeesAPI, lead.CW_Employees__c);
+    //                     } else {
+    //                         lead.put(leadNumberEmployeesAPI,lead.CW_Employees__c);
+    //             }
+    //                }
+    //                //lead.NumberOfEmployees = Integer.valueOf(lead.CW_Employees__c);    
+    //             }
+    //             //lead.ShippingState = null;
+    //             if (lead.CW_Revenue__c != null) {
+    //                 lead.AnnualRevenue = lead.CW_Revenue__c;
+    //             }
+    //             if (lead.CW_Abbreviation__c != null) {
+    //                 if(leadLegalFormAPI != null){
+    //                     String leadLegalFormFieldType = String.valueOf(dtAccountLegalForm);
+    //                     // if (leadLegalFormFieldType == 'String') {
+    //                     //     lead.put(leadLegalFormAPI, String.valueOf(lead.CW_Legal_Form__c));
+    //                     // } else {
+    //                     //     lead.put(leadLegalFormAPI, lead.CW_Legal_Form__c);
+    //                     // } 
+    //                 }
+    //             } 
+    //             if (lead.CW_Score__c != null) {
+    //                 if(leadScoreAPI != null){
+    //                     String leadScoreFieldType = String.valueOf(dtAccountScore);
+    //                     if (leadScoreFieldType == 'String') {
+    //                         lead.put(leadScoreAPI, String.valueOf(lead.CW_Score__c));
+    //                     } else {
+    //                         lead.put(leadScoreAPI, String.valueOf(lead.CW_Score__c));
+    //                     }
+    //                 }
+    //             }
+    //             if (lead.CW_Employees__c != null) {
+    //                 if(leadNumberEmployeesAPI != null){
+    //                     String NumberEmployeesFieldType = String.valueOf(dtAccountNumberEmployees);
+    //                     if (NumberEmployeesFieldType == 'String') {
+    //                         lead.put(leadNumberEmployeesAPI, lead.CW_Employees__c);
+    //                     } else {
+    //                         lead.put(leadNumberEmployeesAPI,lead.CW_Employees__c);
+    //             }
+    //                }
+    //                //lead.NumberOfEmployees = Integer.valueOf(lead.CW_Employees__c);    
+    //             }
+    //             if (lead.CW_Credit_Limit__c != null) {
+    //                 if(leadCreditLimitAPI != null){
+    //                     String CreditLimitFieldType = String.valueOf(dtAccountCreditLimit);
+    //                     if (CreditLimitFieldType == 'String') {
+    //                         lead.put(leadCreditLimitAPI, lead.CW_Credit_Limit__c);
+    //                 } else {
+    //                         lead.put(leadCreditLimitAPI, Integer.valueOf(lead.CW_Credit_Limit__c));
+    //                     }
+    //                 }  
+    //             }
+    //             if (lead.CW_Main_Activity__c != null) {
+    //                 if(leadMainActivityAPI != null){
+    //                     String CreditLimitFieldType = String.valueOf(dtAccountMainActivity);
+    //                     if (CreditLimitFieldType == 'String') {
+    //                         lead.put(leadMainActivityAPI, lead.CW_Main_Activity__c);
+    //                     } else {
+    //                         lead.put(leadMainActivityAPI, String.valueOf(lead.CW_Main_Activity__c));
+    //                     }
+    //                 }
+    //             }
+    //             if (lead.CW_Activities__c != null) {
+    //                if(leadActivitiesAPI != null){
+    //                     String ActivitiesFieldType = String.valueOf(dtAccountActivities);
+    //                     if (ActivitiesFieldType == 'String') {
+    //                         lead.put(leadActivitiesAPI, lead.CW_Activities__c);
+    //                     } else {
+    //                         lead.put(leadActivitiesAPI, String.valueOf(lead.CW_Activities__c));
+    //                     }
+    //                }  
+    //             }
+    //             // if (lead.CW_Joint_Commitees__c != null) {
+    //             //     if(leadJointCommitieesBlueAPI != null){
+    //             //         String leadJointCommiteesBlueFieldType = String.valueOf(dtJointCommiteesBlue);
+    //             //         if (leadJointCommiteesBlueFieldType == 'String') {
+    //             //             lead.put(leadJointCommitieesBlueAPI, lead.CW_Joint_Commitees__c);
+    //             //         } else {
+    //             //             lead.put(leadJointCommitieesBlueAPI, String.valueOf(lead.CW_Joint_Commitees__c));
+    //             //         }
+    //             //     }  
+    //             //}
+    //             if (lead.CW_Joint_Commitees_White_Collar__c != null) {
+    //                 if(leadJointCommitieesWhiteAPI != null){
+    //                     String leadJointCommiteesWhiteFieldType = String.valueOf(dtJointCommiteesWhite);
+    //                     if (leadJointCommiteesWhiteFieldType == 'String') {
+    //                         lead.put(leadJointCommitieesWhiteAPI, lead.CW_Joint_Commitees_White_Collar__c);
+    //                     } else {
+    //                         lead.put(leadJointCommitieesWhiteAPI, String.valueOf(lead.CW_Joint_Commitees_White_Collar__c));
+    //                     }
+    //                 }  
+    //             }
+    //             if (lead.CW_Social_Security_Information__c != null) {
+    //                 if(leadSocialSecurityAPI != null){
+    //                     String leadSocialSecurityType = String.valueOf(dtAccountSocialSecurity);
+    //                     if (LeadSocialSecurityType == 'String') {
+    //                         lead.put(leadSocialSecurityAPI, lead.CW_Social_Security_Information__c);
+    //                     } else {
+    //                         lead.put(leadSocialSecurityAPI, String.valueOf(lead.CW_Social_Security_Information__c));
+    //                     }
+    //                 }
+    //            }
 
-                update lead;
-            }
-        /* } catch (Exception e) {
-            throw new AuraHandledException(e.getMessage());
-        } */
-    }
+    //             update lead;
+    //         }
+    //     /* } catch (Exception e) {
+    //         throw new AuraHandledException(e.getMessage());
+    //     } */
+    // }
 
     @AuraEnabled
     public static void clearData(String Id, String objectName){
