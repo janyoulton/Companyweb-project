@@ -236,66 +236,66 @@ public with sharing class CompanyWebController {
                             dtAccountVAT = Schema.getGlobalDescribe().get('Account').getDescribe().fields.getMap().get(accountVATAPI).getDescribe().getType();
                     }
                         
-                        if(accountScoreAPI != null){
-                            dtAccountScore = Schema.getGlobalDescribe().get('Account').getDescribe().fields.getMap().get(accountScoreAPI).getDescribe().getType();
-                        }
+                    if(accountScoreAPI != null){
+                        dtAccountScore = Schema.getGlobalDescribe().get('Account').getDescribe().fields.getMap().get(accountScoreAPI).getDescribe().getType();
+                    }
 
-                        if(accountActivitiesAPI != null){
-                            dtAccountActivities = Schema.getGlobalDescribe().get('Account').getDescribe().fields.getMap().get(accountActivitiesAPI).getDescribe().getType();
-                        }
+                    if(accountActivitiesAPI != null){
+                        dtAccountActivities = Schema.getGlobalDescribe().get('Account').getDescribe().fields.getMap().get(accountActivitiesAPI).getDescribe().getType();
+                    }
 
-                        if(accountCreditLimitAPI != null){
-                            dtAccountCreditLimit = Schema.getGlobalDescribe().get('Account').getDescribe().fields.getMap().get(accountCreditLimitAPI).getDescribe().getType();
-                        }
+                    if(accountCreditLimitAPI != null){
+                        dtAccountCreditLimit = Schema.getGlobalDescribe().get('Account').getDescribe().fields.getMap().get(accountCreditLimitAPI).getDescribe().getType();
+                    }
 
-                        if(accountJointCommitieesBlueAPI != null){
-                            dtAccountJointCommiteesBlue = Schema.getGlobalDescribe().get('Account').getDescribe().fields.getMap().get(accountJointCommitieesBlueAPI).getDescribe().getType();
-                        }
+                    if(accountJointCommitieesBlueAPI != null){
+                        dtAccountJointCommiteesBlue = Schema.getGlobalDescribe().get('Account').getDescribe().fields.getMap().get(accountJointCommitieesBlueAPI).getDescribe().getType();
+                    }
 
-                        if(accountJointCommitieesWhiteAPI != null){
-                            dtAccountJointCommiteesWhite = Schema.getGlobalDescribe().get('Account').getDescribe().fields.getMap().get(accountJointCommitieesWhiteAPI).getDescribe().getType();
-                        }
+                    if(accountJointCommitieesWhiteAPI != null){
+                        dtAccountJointCommiteesWhite = Schema.getGlobalDescribe().get('Account').getDescribe().fields.getMap().get(accountJointCommitieesWhiteAPI).getDescribe().getType();
+                    }
 
-                        if(accountLegalFormAPI != null){
-                            dtAccountLegalForm = Schema.getGlobalDescribe().get('Account').getDescribe().fields.getMap().get(accountLegalFormAPI).getDescribe().getType();
-                        }
+                    if(accountLegalFormAPI != null){
+                        dtAccountLegalForm = Schema.getGlobalDescribe().get('Account').getDescribe().fields.getMap().get(accountLegalFormAPI).getDescribe().getType();
+                    }
 
-                        if(accountMainActivityAPI != null){
-                            dtAccountMainActivity = Schema.getGlobalDescribe().get('Account').getDescribe().fields.getMap().get(accountMainActivityAPI).getDescribe().getType();
-                        }
+                    if(accountMainActivityAPI != null){
+                        dtAccountMainActivity = Schema.getGlobalDescribe().get('Account').getDescribe().fields.getMap().get(accountMainActivityAPI).getDescribe().getType();
+                    }
 
-                        if(accountNumberEmployeesAPI != null){
-                            dtAccountNumberEmployees = Schema.getGlobalDescribe().get('Account').getDescribe().fields.getMap().get(accountNumberEmployeesAPI).getDescribe().getType();
-                        }
+                    if(accountNumberEmployeesAPI != null){
+                        dtAccountNumberEmployees = Schema.getGlobalDescribe().get('Account').getDescribe().fields.getMap().get(accountNumberEmployeesAPI).getDescribe().getType();
+                    }
 
-                        if(accountSocialSecurityAPI != null){
-                            dtAccountSocialSecurity = Schema.getGlobalDescribe().get('Account').getDescribe().fields.getMap().get(accountSocialSecurityAPI).getDescribe().getType();
-                        }
+                    if(accountSocialSecurityAPI != null){
+                        dtAccountSocialSecurity = Schema.getGlobalDescribe().get('Account').getDescribe().fields.getMap().get(accountSocialSecurityAPI).getDescribe().getType();
+                    }
 
-                        if(accountPhoneAPI != null){
-                            dtAccountPhone = Schema.getGlobalDescribe().get('Account').getDescribe().fields.getMap().get(accountPhoneAPI).getDescribe().getType();
-                        }
+                    if(accountPhoneAPI != null){
+                        dtAccountPhone = Schema.getGlobalDescribe().get('Account').getDescribe().fields.getMap().get(accountPhoneAPI).getDescribe().getType();
+                    }
 
-                        if(accountAnnualRevenueAPI != null){
-                            dtAccountAnnualRevenue = Schema.getGlobalDescribe().get('Account').getDescribe().fields.getMap().get(accountAnnualRevenueAPI).getDescribe().getType();
-                        }
-                        
-                        String vatAccountFieldType,scoreFieldType,activitiesFieldType,creditLimitFieldType,joinCommiteesBlueFieldType,joinCommiteesWhiteFieldType,legalFormFieldType,mainActivityFieldType,numberEmployeesFieldType,socialSecurityFieldType,phoneFieldType,annualRevenueFieldType;
+                    if(accountAnnualRevenueAPI != null){
+                        dtAccountAnnualRevenue = Schema.getGlobalDescribe().get('Account').getDescribe().fields.getMap().get(accountAnnualRevenueAPI).getDescribe().getType();
+                    }
+                    
+                    String vatAccountFieldType,scoreFieldType,activitiesFieldType,creditLimitFieldType,joinCommiteesBlueFieldType,joinCommiteesWhiteFieldType,legalFormFieldType,mainActivityFieldType,numberEmployeesFieldType,socialSecurityFieldType,phoneFieldType,annualRevenueFieldType;
 
-                        vatAccountFieldType = String.valueOf(dtAccountVAT);
-                        scoreFieldType = String.valueOf(dtAccountScore);
-                        activitiesFieldType = String.valueOf(dtAccountActivities);
-                        creditLimitFieldType = String.valueOf(dtAccountCreditLimit);
-                        joinCommiteesBlueFieldType= String.valueOf(dtAccountJointCommiteesBlue);
-                        joinCommiteesWhiteFieldType= String.valueOf(dtAccountJointCommiteesWhite);
-                        legalFormFieldType= String.valueOf(dtAccountLegalForm);
-                        mainActivityFieldType= String.valueOf(dtAccountMainActivity);
-                        numberEmployeesFieldType= String.valueOf(dtAccountNumberEmployees);
-                        socialSecurityFieldType= String.valueOf(dtAccountSocialSecurity);
-                        phoneFieldType = String.valueOf(dtAccountPhone);
-                        annualRevenueFieldType = String.valueOf(dtAccountAnnualRevenue);
+                    vatAccountFieldType = String.valueOf(dtAccountVAT);
+                    scoreFieldType = String.valueOf(dtAccountScore);
+                    activitiesFieldType = String.valueOf(dtAccountActivities);
+                    creditLimitFieldType = String.valueOf(dtAccountCreditLimit);
+                    joinCommiteesBlueFieldType= String.valueOf(dtAccountJointCommiteesBlue);
+                    joinCommiteesWhiteFieldType= String.valueOf(dtAccountJointCommiteesWhite);
+                    legalFormFieldType= String.valueOf(dtAccountLegalForm);
+                    mainActivityFieldType= String.valueOf(dtAccountMainActivity);
+                    numberEmployeesFieldType= String.valueOf(dtAccountNumberEmployees);
+                    socialSecurityFieldType= String.valueOf(dtAccountSocialSecurity);
+                    phoneFieldType = String.valueOf(dtAccountPhone);
+                    annualRevenueFieldType = String.valueOf(dtAccountAnnualRevenue);
 
-                        System.debug('vatFieldType = ' + vatAccountFieldType);
+                    System.debug('vatFieldType = ' + vatAccountFieldType);
                     
                     //Address
                     if(result.CompanyResponse.Address.IsEnabled == True){
@@ -416,13 +416,13 @@ public with sharing class CompanyWebController {
                     if(result.CompanyResponse.Score.IsEnabled == True){
                         //Decimal Score
                         acc.CW_Score__c = result.CompanyResponse.Score.Value.ScoreAsDecimal;
-                            if (accountScoreAPI != null) {
-                                if (scoreFieldType != 'String') {
-                                    acc.put(accountScoreAPI, result.CompanyResponse.Score.Value.ScoreAsDecimal);
-                                } else {
-                                    acc.put(accountScoreAPI, String.valueOf(result.CompanyResponse.Score.Value.ScoreAsDecimal));
-                                }
+                        if (accountScoreAPI != null) {
+                            if (scoreFieldType != 'String') {
+                                acc.put(accountScoreAPI, result.CompanyResponse.Score.Value.ScoreAsDecimal);
+                            } else {
+                                acc.put(accountScoreAPI, String.valueOf(result.CompanyResponse.Score.Value.ScoreAsDecimal));
                             }
+                        }
                         //Score Image
                         acc.CW_Score_Image__c = result.CompanyResponse.Score.Value.ScoreImage;
                     } else {
@@ -436,13 +436,13 @@ public with sharing class CompanyWebController {
                     //CreditLimit
                     if(result.CompanyResponse.CreditLimit.IsEnabled == True){
                         acc.CW_Credit_Limit__c= result.CompanyResponse.CreditLimit.Value.Limit_x;
-                            if (accountCreditLimitAPI != null) {
-                                if (creditLimitFieldType != 'String') {
-                                    acc.put(accountCreditLimitAPI, result.CompanyResponse.CreditLimit.Value.Limit_x);
-                                } else {
-                                    acc.put(accountCreditLimitAPI, String.valueOf(result.CompanyResponse.CreditLimit.Value.Limit_x));
-                                }
+                        if (accountCreditLimitAPI != null) {
+                            if (creditLimitFieldType != 'String') {
+                                acc.put(accountCreditLimitAPI, result.CompanyResponse.CreditLimit.Value.Limit_x);
+                            } else {
+                                acc.put(accountCreditLimitAPI, String.valueOf(result.CompanyResponse.CreditLimit.Value.Limit_x));
                             }
+                        }
                         if (result.CompanyResponse.CreditLimit.Value.Limit_x == 0) {
                             //CreditLimitReason
                             acc.CW_Credit_Limit_Reason__c = result.CompanyResponse.CreditLimit.Value.Info;
@@ -582,73 +582,73 @@ public with sharing class CompanyWebController {
                         acc.CW_Warnings__c = null;
                     }
                     
-                        //Social Security
-                        if(result.CompanyResponse.SocialSecurityInformation.IsEnabled == True){
-                            String delimiter = '-';
-                            String socialSecurityNumberPart1 = String.ValueOf(result.CompanyResponse.SocialSecurityInformation.Value.RegistrationId).substringBefore(delimiter);
-                            String socialSecurityNumberPart2 = String.ValueOf(result.CompanyResponse.SocialSecurityInformation.Value.RegistrationId).substringAfter(delimiter);
+                    //Social Security
+                    if(result.CompanyResponse.SocialSecurityInformation.IsEnabled == True){
+                        String delimiter = '-';
+                        String socialSecurityNumberPart1 = String.ValueOf(result.CompanyResponse.SocialSecurityInformation.Value.RegistrationId).substringBefore(delimiter);
+                        String socialSecurityNumberPart2 = String.ValueOf(result.CompanyResponse.SocialSecurityInformation.Value.RegistrationId).substringAfter(delimiter);
 
-                            String fullSocialSecurityNumber = socialSecurityNumberPart1+socialSecurityNumberPart2;
-                            
-                            if (accountSocialSecurityAPI != null) {
-                                if (socialSecurityFieldType != 'String') {
-                                    acc.put(accountSocialSecurityAPI, fullSocialSecurityNumber);
-                                } else {
-                                    acc.put(accountSocialSecurityAPI, fullSocialSecurityNumber);
-                                }
-                            } 
-                        } else {
-                           //acc.CW_Social_Security_Information__c = null;
-                            if(accountSocialSecurityAPI != null){
-                                acc.put(accountSocialSecurityAPI, null);
+                        String fullSocialSecurityNumber = socialSecurityNumberPart1+socialSecurityNumberPart2;
+                        
+                        if (accountSocialSecurityAPI != null) {
+                            if (socialSecurityFieldType != 'String') {
+                                acc.put(accountSocialSecurityAPI, fullSocialSecurityNumber);
+                            } else {
+                                acc.put(accountSocialSecurityAPI, fullSocialSecurityNumber);
                             }
+                        } 
+                    } else {
+                        //acc.CW_Social_Security_Information__c = null;
+                        if(accountSocialSecurityAPI != null){
+                            acc.put(accountSocialSecurityAPI, null);
                         }
+                    }
 
 
-                        //Join Commitees
-                        if(result.CompanyResponse.JointCommitees.IsEnabled == True){
-                            Integer JointCommiteeArraySize;
-                            String JointCommiteeFieldConcatBlue = ''; 
-                            String JointCommiteeFieldConcatWhite = '';
+                    //Join Commitees
+                    if(result.CompanyResponse.JointCommitees.IsEnabled == True){
+                        Integer JointCommiteeArraySize;
+                        String JointCommiteeFieldConcatBlue = ''; 
+                        String JointCommiteeFieldConcatWhite = '';
 
-                            if(result.CompanyResponse.JointCommitees.Value.JointCommitee != null){
+                        if(result.CompanyResponse.JointCommitees.Value.JointCommitee != null){
 
-                                JointCommiteeArraySize = result.CompanyResponse.JointCommitees.Value.JointCommitee.size();
+                            JointCommiteeArraySize = result.CompanyResponse.JointCommitees.Value.JointCommitee.size();
 
-                                for (Integer i = 0; i < JointCommiteeArraySize; i++) {
-                                    if(result.CompanyResponse.JointCommitees.Value.JointCommitee[i].Code >= 100 && result.CompanyResponse.JointCommitees.Value.JointCommitee[i].Code < 200){
-                                        JointCommiteeFieldConcatBlue  = JointCommiteeFieldConcatBlue + result.CompanyResponse.JointCommitees.Value.JointCommitee[i].Code +' - '+result.CompanyResponse.JointCommitees.Value.JointCommitee[i].Description+'\n';
-                                    } else{
-                                        JointCommiteeFieldConcatWhite  = JointCommiteeFieldConcatWhite + result.CompanyResponse.JointCommitees.Value.JointCommitee[i].Code +' - '+result.CompanyResponse.JointCommitees.Value.JointCommitee[i].Description+'\n';
-                                    }        
-                                }
-
-                                if (accountJointCommitieesBlueAPI != null) {
-                                    if (joinCommiteesBlueFieldType != 'String') {
-                                        acc.put(accountJointCommitieesBlueAPI, String.ValueOf(JointCommiteeFieldConcatBlue));
-                                     } else {
-                                         acc.put(accountJointCommitieesBlueAPI, JointCommiteeFieldConcatBlue);
-                                     }
-                                }
-        
-                                if(accountJointCommitieesWhiteAPI != null){
-                                    if (joinCommiteesWhiteFieldType != 'String') {
-                                        acc.put(accountJointCommitieesWhiteAPI, String.ValueOf(JointCommiteeFieldConcatWhite));
-                                     } else {
-                                         acc.put(accountJointCommitieesWhiteAPI, JointCommiteeFieldConcatWhite);
-                                     }
-                                }
+                            for (Integer i = 0; i < JointCommiteeArraySize; i++) {
+                                if(result.CompanyResponse.JointCommitees.Value.JointCommitee[i].Code >= 100 && result.CompanyResponse.JointCommitees.Value.JointCommitee[i].Code < 200){
+                                    JointCommiteeFieldConcatBlue  = JointCommiteeFieldConcatBlue + result.CompanyResponse.JointCommitees.Value.JointCommitee[i].Code +' - '+result.CompanyResponse.JointCommitees.Value.JointCommitee[i].Description+'\n';
+                                } else{
+                                    JointCommiteeFieldConcatWhite  = JointCommiteeFieldConcatWhite + result.CompanyResponse.JointCommitees.Value.JointCommitee[i].Code +' - '+result.CompanyResponse.JointCommitees.Value.JointCommitee[i].Description+'\n';
+                                }        
                             }
-                        } else {
 
-                            if(accountJointCommitieesBlueAPI != null){
-                                acc.put(accountJointCommitieesBlueAPI, null);
-                            } 
-
+                            if (accountJointCommitieesBlueAPI != null) {
+                                if (joinCommiteesBlueFieldType != 'String') {
+                                    acc.put(accountJointCommitieesBlueAPI, String.ValueOf(JointCommiteeFieldConcatBlue));
+                                    } else {
+                                        acc.put(accountJointCommitieesBlueAPI, JointCommiteeFieldConcatBlue);
+                                    }
+                            }
+    
                             if(accountJointCommitieesWhiteAPI != null){
-                                acc.put(accountJointCommitieesWhiteAPI, null);
-                            } 
+                                if (joinCommiteesWhiteFieldType != 'String') {
+                                    acc.put(accountJointCommitieesWhiteAPI, String.ValueOf(JointCommiteeFieldConcatWhite));
+                                    } else {
+                                        acc.put(accountJointCommitieesWhiteAPI, JointCommiteeFieldConcatWhite);
+                                    }
+                            }
                         }
+                    } else {
+
+                        if(accountJointCommitieesBlueAPI != null){
+                            acc.put(accountJointCommitieesBlueAPI, null);
+                        } 
+
+                        if(accountJointCommitieesWhiteAPI != null){
+                            acc.put(accountJointCommitieesWhiteAPI, null);
+                        } 
+                    }
 
                     //Avoid call out
                     acc.CW_Avoid_Callout__c = false;
@@ -659,7 +659,6 @@ public with sharing class CompanyWebController {
                 } else if (objectName == 'Lead'){
                     String vatFieldType = String.valueOf(dt);
                     Lead lead = (Lead)genericObject;
-                        
                         
                     /* Schema.DisplayType dt; */
                     if(leadVATAPI != null){
@@ -917,16 +916,17 @@ public with sharing class CompanyWebController {
                             }
                             if (String.isNotBlank(result.CompanyResponse.Balances.Value.Balans[0].BalansData.BalansData[3].Value)){
                                 //# Employees
-                                lead.CW_Employees__c = Decimal.valueOf(result.CompanyResponse.Balances.Value.Balans[0].BalansData.BalansData[3].Value);
                                 //lead.NumberOfEmployees = Integer.valueOf(Decimal.valueOf(result.CompanyResponse.Balances.Value.Balans[0].BalansData.BalansData[3].Value).round(RoundingMode.HALF_UP)); 
                                 
                                 if (leadNumberEmployeesAPI != null) {
                                     if (numberEmployeesFieldType != 'String') {
-                                        lead.put(leadNumberEmployeesAPI, Decimal.valueOf(result.CompanyResponse.Balances.Value.Balans[0].BalansData.BalansData[3].Value));
-                                    } else {
                                         lead.put(leadNumberEmployeesAPI, Integer.valueOf(Decimal.valueOf(result.CompanyResponse.Balances.Value.Balans[0].BalansData.BalansData[3].Value).round(RoundingMode.HALF_UP)));
+                                    } else {
+                                        lead.put(leadNumberEmployeesAPI, result.CompanyResponse.Balances.Value.Balans[0].BalansData.BalansData[3].Value);
                                     }
-                                } 
+                                } else {
+                                    lead.CW_Employees__c = Decimal.valueOf(result.CompanyResponse.Balances.Value.Balans[0].BalansData.BalansData[3].Value);
+                                }
                             }
                             else{
                                 lead.CW_Employees__c = null;
