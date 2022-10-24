@@ -163,8 +163,8 @@ export default class CompanyWeb_LWC extends NavigationMixin(LightningElement) {
     renderedCallback() {
         console.log('renderedCallback Method');
 
-        /* getCWFields({ 'recordId': this.recordId, 'objectName': this.objectApiName }) */
-        getCWFields({ 'recordId': this.recordId, 'objectName': 'Account' })
+        getCWFields({ 'recordId': this.recordId, 'objectName': this.objectApiName })
+        //getCWFields({ 'recordId': this.recordId, 'objectName': 'Account' })
             .then(result => {
                 //console.log('result REPONSE ' + JSON.stringify(result));
 
