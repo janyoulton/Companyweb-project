@@ -493,7 +493,7 @@ public with sharing class CompanyWebController {
                             if (String.isNotBlank(result.CompanyResponse.Balances.Value.Balans[0].BalansData.BalansData[2].Value)){
                                 //Revenue
                                 if(accountAnnualRevenueAPI != null){
-                                    if (scoreFieldType != 'String') {
+                                    if (annualRevenueFieldType != 'String') {
                                         acc.put(accountAnnualRevenueAPI, Decimal.valueOf(result.CompanyResponse.Balances.Value.Balans[0].BalansData.BalansData[2].Value));
                                     } else {
                                         acc.put(accountAnnualRevenueAPI, String.valueOf(Decimal.valueOf(result.CompanyResponse.Balances.Value.Balans[0].BalansData.BalansData[2].Value).round(RoundingMode.HALF_UP)));
@@ -510,16 +510,17 @@ public with sharing class CompanyWebController {
                             }
                             if (String.isNotBlank(result.CompanyResponse.Balances.Value.Balans[0].BalansData.BalansData[3].Value)){
                                 //# Employees
-                                acc.CW_Employees__c = Decimal.valueOf(result.CompanyResponse.Balances.Value.Balans[0].BalansData.BalansData[3].Value);
                                 //acc.NumberOfEmployees = Integer.valueOf(Decimal.valueOf(result.CompanyResponse.Balances.Value.Balans[0].BalansData.BalansData[3].Value).round(RoundingMode.HALF_UP)); 
 
                                 if (accountNumberEmployeesAPI != null) {
-                                    if (scoreFieldType != 'String') {
-                                        acc.put(accountNumberEmployeesAPI, Decimal.valueOf(result.CompanyResponse.Balances.Value.Balans[0].BalansData.BalansData[3].Value));
-                                    } else {
+                                    if (numberEmployeesFieldType != 'String') {
                                         acc.put(accountNumberEmployeesAPI, Integer.valueOf(Decimal.valueOf(result.CompanyResponse.Balances.Value.Balans[0].BalansData.BalansData[3].Value).round(RoundingMode.HALF_UP)));
+                                    } else {
+                                        acc.put(accountNumberEmployeesAPI, result.CompanyResponse.Balances.Value.Balans[0].BalansData.BalansData[3].Value);
                                     }
-                                } 
+                                } else{
+                                    acc.CW_Employees__c = Decimal.valueOf(result.CompanyResponse.Balances.Value.Balans[0].BalansData.BalansData[3].Value);
+                                }
                             }
                             else{
                                 acc.CW_Employees__c = null;
@@ -902,7 +903,7 @@ public with sharing class CompanyWebController {
                             if (String.isNotBlank(result.CompanyResponse.Balances.Value.Balans[0].BalansData.BalansData[2].Value)){
                                 //Revenue
                                 if(leadAnnualRevenueAPI != null){
-                                    if (scoreFieldType != 'String') {
+                                    if (annualRevenueFieldType != 'String') {
                                         lead.put(leadAnnualRevenueAPI, Decimal.valueOf(result.CompanyResponse.Balances.Value.Balans[0].BalansData.BalansData[2].Value));
                                     } else {
                                         lead.put(leadAnnualRevenueAPI, Integer.valueOf(Decimal.valueOf(result.CompanyResponse.Balances.Value.Balans[0].BalansData.BalansData[2].Value).round(RoundingMode.HALF_UP)));
@@ -920,7 +921,7 @@ public with sharing class CompanyWebController {
                                 //lead.NumberOfEmployees = Integer.valueOf(Decimal.valueOf(result.CompanyResponse.Balances.Value.Balans[0].BalansData.BalansData[3].Value).round(RoundingMode.HALF_UP)); 
                                 
                                 if (leadNumberEmployeesAPI != null) {
-                                    if (scoreFieldType != 'String') {
+                                    if (numberEmployeesFieldType != 'String') {
                                         lead.put(leadNumberEmployeesAPI, Decimal.valueOf(result.CompanyResponse.Balances.Value.Balans[0].BalansData.BalansData[3].Value));
                                     } else {
                                         lead.put(leadNumberEmployeesAPI, Integer.valueOf(Decimal.valueOf(result.CompanyResponse.Balances.Value.Balans[0].BalansData.BalansData[3].Value).round(RoundingMode.HALF_UP)));
