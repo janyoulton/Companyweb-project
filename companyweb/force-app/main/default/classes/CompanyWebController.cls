@@ -62,11 +62,11 @@ public with sharing class CompanyWebController {
              Lead_VAT_Number_Field__c,Account_Score_Field__c,Account_Activities_Field__c,Account_Credit_Limit_Field__c,Account_Joint_Commitees_Field__c,
              Account_Joint_Commitees_White_Field__c,Account_Legal_Form_Field__c,Account_Main_Activity_Field__c,Account_Number_Employees_Field__c,
              Account_Social_Security_Field__c,Account_Phone_Field__c,Account_Street_Field__c,Account_PostalCode_Field__c,Account_City_Field__c,Account_CountryCode_Field__c,
-             Account_Line1_Field__c,Account_Line2_Field__c,Account_Annual_Revenue_Field__c,CW_Duplicate_Check_Creation__c,
+             Account_Annual_Revenue_Field__c,CW_Duplicate_Check_Creation__c,
              CW_Duplicate_Check_Refresh__c,Lead_Score_Field__c,Lead_Activities_Field__c,Lead_Credit_Limit_Field__c,Lead_Joint_Commitees_Field__c,
              Lead_Joint_Commitees_White_Field__c,Lead_Legal_Form_Field__c,Lead_Main_Activity_Field__c,Lead_Number_Employees_Field__c,Lead_Social_Security_Field__c,
-             Lead_Phone_Field__c,Lead_Annual_Revenue_Field__c,Lead_Street_Field__c,Lead_PostalCode_Field__c,Lead_City_Field__c,Lead_CountryCode_Field__c,
-             Lead_Line1_Field__c,Lead_Line2_Field__c FROM CW_Login_Setup__mdt WHERE DeveloperName = 'CW_Login'];
+             Lead_Phone_Field__c,Lead_Annual_Revenue_Field__c,Lead_Street_Field__c,Lead_PostalCode_Field__c,Lead_City_Field__c,Lead_CountryCode_Field__c
+             FROM CW_Login_Setup__mdt WHERE DeveloperName = 'CW_Login'];
 
             system.debug('Result of loginSetup '+ oLoginSetup);
             system.debug('objectName '+ objectName);
@@ -92,8 +92,6 @@ public with sharing class CompanyWebController {
             String accountPostalCodeAPI = oLoginSetup.Account_PostalCode_Field__c;
             String accountCityAPI = oLoginSetup.Account_City_Field__c;
             String accountCountryCodeAPI = oLoginSetup.Account_CountryCode_Field__c;
-            String accountLine1API = oLoginSetup.Account_Line1_Field__c;
-            String accountLine2API = oLoginSetup.Account_Line2_Field__c;
 
             //Lead
             String leadVATAPI = oLoginSetup.Lead_VAT_Number_Field__c;
@@ -112,8 +110,6 @@ public with sharing class CompanyWebController {
             String leadPostalCodeAPI = oLoginSetup.Lead_PostalCode_Field__c;
             String leadCityAPI = oLoginSetup.Lead_City_Field__c;
             String leadCountryCodeAPI = oLoginSetup.Lead_CountryCode_Field__c;
-            String leadLine1API = oLoginSetup.Lead_Line1_Field__c;
-            String leadLine2API = oLoginSetup.Lead_Line2_Field__c;
 
             String queryString;
 
@@ -284,10 +280,10 @@ public with sharing class CompanyWebController {
                             dtAccountAnnualRevenue = Schema.getGlobalDescribe().get('Account').getDescribe().fields.getMap().get(accountAnnualRevenueAPI).getDescribe().getType();
                         }
                         
-                        String vatAccountFieldType,scroreFieldType,activitiesFieldType,creditLimitFieldType,joinCommiteesBlueFieldType,joinCommiteesWhiteFieldType,legalFormFieldType,mainActivityFieldType,numberEmployeesFieldType,socialSecurityFieldType,phoneFieldType,annualRevenueFieldType;
+                        String vatAccountFieldType,scoreFieldType,activitiesFieldType,creditLimitFieldType,joinCommiteesBlueFieldType,joinCommiteesWhiteFieldType,legalFormFieldType,mainActivityFieldType,numberEmployeesFieldType,socialSecurityFieldType,phoneFieldType,annualRevenueFieldType;
 
                         vatAccountFieldType = String.valueOf(dtAccountVAT);
-                        scroreFieldType = String.valueOf(dtAccountScore);
+                        scoreFieldType = String.valueOf(dtAccountScore);
                         activitiesFieldType = String.valueOf(dtAccountActivities);
                         creditLimitFieldType = String.valueOf(dtAccountCreditLimit);
                         joinCommiteesBlueFieldType= String.valueOf(dtAccountJointCommiteesBlue);
@@ -307,8 +303,6 @@ public with sharing class CompanyWebController {
                         if(accountCityAPI!=null) acc.put(accountCityAPI, result.CompanyResponse.Address.Value.City);
                         if(accountPostalCodeAPI!=null) acc.put(accountPostalCodeAPI, result.CompanyResponse.Address.Value.PostalCode);
                         if(accountCountryCodeAPI!=null) acc.put(accountCountryCodeAPI, result.CompanyResponse.Address.Value.CountryCode);
-                        if(accountLine1API!=null) acc.put(accountLine1API, result.CompanyResponse.Address.Value.Line1);
-                        if(accountLine2API!=null) acc.put(accountLine2API, result.CompanyResponse.Address.Value.Line2);
                     }else{
                         acc.CW_Street__c = null;
                         acc.CW_City__c = null;
@@ -423,7 +417,7 @@ public with sharing class CompanyWebController {
                         //Decimal Score
                         acc.CW_Score__c = result.CompanyResponse.Score.Value.ScoreAsDecimal;
                             if (accountScoreAPI != null) {
-                                if (scroreFieldType != 'String') {
+                                if (scoreFieldType != 'String') {
                                     acc.put(accountScoreAPI, result.CompanyResponse.Score.Value.ScoreAsDecimal);
                                 } else {
                                     acc.put(accountScoreAPI, String.valueOf(result.CompanyResponse.Score.Value.ScoreAsDecimal));
@@ -499,7 +493,7 @@ public with sharing class CompanyWebController {
                             if (String.isNotBlank(result.CompanyResponse.Balances.Value.Balans[0].BalansData.BalansData[2].Value)){
                                 //Revenue
                                 if(accountAnnualRevenueAPI != null){
-                                    if (scroreFieldType != 'String') {
+                                    if (scoreFieldType != 'String') {
                                         acc.put(accountAnnualRevenueAPI, Decimal.valueOf(result.CompanyResponse.Balances.Value.Balans[0].BalansData.BalansData[2].Value));
                                     } else {
                                         acc.put(accountAnnualRevenueAPI, String.valueOf(Decimal.valueOf(result.CompanyResponse.Balances.Value.Balans[0].BalansData.BalansData[2].Value).round(RoundingMode.HALF_UP)));
@@ -520,7 +514,7 @@ public with sharing class CompanyWebController {
                                 //acc.NumberOfEmployees = Integer.valueOf(Decimal.valueOf(result.CompanyResponse.Balances.Value.Balans[0].BalansData.BalansData[3].Value).round(RoundingMode.HALF_UP)); 
 
                                 if (accountNumberEmployeesAPI != null) {
-                                    if (scroreFieldType != 'String') {
+                                    if (scoreFieldType != 'String') {
                                         acc.put(accountNumberEmployeesAPI, Decimal.valueOf(result.CompanyResponse.Balances.Value.Balans[0].BalansData.BalansData[3].Value));
                                     } else {
                                         acc.put(accountNumberEmployeesAPI, Integer.valueOf(Decimal.valueOf(result.CompanyResponse.Balances.Value.Balans[0].BalansData.BalansData[3].Value).round(RoundingMode.HALF_UP)));
@@ -715,10 +709,10 @@ public with sharing class CompanyWebController {
                         dtLeadAnnualRevenue = Schema.getGlobalDescribe().get('Lead').getDescribe().fields.getMap().get(leadAnnualRevenueAPI).getDescribe().getType();
                     }
                     
-                    String vatLeadFieldType, scroreFieldType, activitiesFieldType,creditLimitFieldType,joinCommiteesBlueFieldType,joinCommiteesWhiteFieldType,legalFormFieldType,mainActivityFieldType,numberEmployeesFieldType,socialSecurityFieldType,phoneFieldType,annualRevenueFieldType;
+                    String vatLeadFieldType, scoreFieldType, activitiesFieldType,creditLimitFieldType,joinCommiteesBlueFieldType,joinCommiteesWhiteFieldType,legalFormFieldType,mainActivityFieldType,numberEmployeesFieldType,socialSecurityFieldType,phoneFieldType,annualRevenueFieldType;
 
                     vatLeadFieldType = String.valueOf(dtLeadVAT);
-                    scroreFieldType = String.valueOf(dtLeadScore);
+                    scoreFieldType = String.valueOf(dtLeadScore);
                     activitiesFieldType = String.valueOf(dtLeadActivities);
                     creditLimitFieldType = String.valueOf(dtLeadCreditLimit);
                     joinCommiteesBlueFieldType= String.valueOf(dtLeadJointCommiteesBlue);
@@ -739,8 +733,6 @@ public with sharing class CompanyWebController {
                         if(leadCityAPI!=null) lead.put(leadCityAPI, result.CompanyResponse.Address.Value.City);
                         if(leadPostalCodeAPI!=null) lead.put(leadPostalCodeAPI, result.CompanyResponse.Address.Value.PostalCode);
                         if(leadCountryCodeAPI!=null) lead.put(leadCountryCodeAPI, result.CompanyResponse.Address.Value.CountryCode);
-                        if(leadLine1API!=null) lead.put(leadLine1API, result.CompanyResponse.Address.Value.Line1);
-                        if(leadLine2API!=null) lead.put(leadLine2API, result.CompanyResponse.Address.Value.Line2);
                     } 
                     //else {
                     //     lead.CW_Street__c = null;
@@ -844,7 +836,7 @@ public with sharing class CompanyWebController {
                         
                         //Score Image
                         if (leadScoreAPI != null) {
-                            if (scroreFieldType != 'String') {
+                            if (scoreFieldType != 'String') {
                                 lead.put(leadScoreAPI, result.CompanyResponse.Score.Value.ScoreAsDecimal);
                             } else {
                                 lead.put(leadScoreAPI, String.valueOf(result.CompanyResponse.Score.Value.ScoreAsDecimal));
@@ -910,7 +902,7 @@ public with sharing class CompanyWebController {
                             if (String.isNotBlank(result.CompanyResponse.Balances.Value.Balans[0].BalansData.BalansData[2].Value)){
                                 //Revenue
                                 if(leadAnnualRevenueAPI != null){
-                                    if (scroreFieldType != 'String') {
+                                    if (scoreFieldType != 'String') {
                                         lead.put(leadAnnualRevenueAPI, Decimal.valueOf(result.CompanyResponse.Balances.Value.Balans[0].BalansData.BalansData[2].Value));
                                     } else {
                                         lead.put(leadAnnualRevenueAPI, Integer.valueOf(Decimal.valueOf(result.CompanyResponse.Balances.Value.Balans[0].BalansData.BalansData[2].Value).round(RoundingMode.HALF_UP)));
@@ -928,7 +920,7 @@ public with sharing class CompanyWebController {
                                 //lead.NumberOfEmployees = Integer.valueOf(Decimal.valueOf(result.CompanyResponse.Balances.Value.Balans[0].BalansData.BalansData[3].Value).round(RoundingMode.HALF_UP)); 
                                 
                                 if (leadNumberEmployeesAPI != null) {
-                                    if (scroreFieldType != 'String') {
+                                    if (scoreFieldType != 'String') {
                                         lead.put(leadNumberEmployeesAPI, Decimal.valueOf(result.CompanyResponse.Balances.Value.Balans[0].BalansData.BalansData[3].Value));
                                     } else {
                                         lead.put(leadNumberEmployeesAPI, Integer.valueOf(Decimal.valueOf(result.CompanyResponse.Balances.Value.Balans[0].BalansData.BalansData[3].Value).round(RoundingMode.HALF_UP)));
@@ -1235,7 +1227,7 @@ public with sharing class CompanyWebController {
 
     public static CW_Login_Setup__mdt getCurrentVATNumberFields() {
         CW_Login_Setup__mdt oLoginSetup = new CW_Login_Setup__mdt();
-        oLoginSetup = [SELECT Id, CW_CompanyWebLogin__c, CW_CompanyWebPassword__c, CW_CompanyWebSecret__c, CW_ServiceIntegrator__c, Account_VAT_Number_Field__c, Lead_VAT_Number_Field__c,Account_Score_Field__c,Account_Activities_Field__c,Account_Credit_Limit_Field__c,Account_Joint_Commitees_Field__c,Account_Joint_Commitees_White_Field__c,Account_Legal_Form_Field__c,Account_Main_Activity_Field__c,Account_Number_Employees_Field__c,Account_Social_Security_Field__c,Account_Phone_Field__c,Account_Street_Field__c,Account_PostalCode_Field__c,Account_City_Field__c,Account_CountryCode_Field__c,Account_Line1_Field__c,Account_Line2_Field__c,Account_Annual_Revenue_Field__c,CW_Duplicate_Check_Creation__c,CW_Duplicate_Check_Refresh__c,Lead_Score_Field__c,Lead_Activities_Field__c,Lead_Credit_Limit_Field__c,Lead_Joint_Commitees_Field__c,Lead_Joint_Commitees_White_Field__c,Lead_Legal_Form_Field__c,Lead_Main_Activity_Field__c,Lead_Number_Employees_Field__c,Lead_Social_Security_Field__c,Lead_Phone_Field__c,Lead_Street_Field__c,Lead_PostalCode_Field__c,Lead_City_Field__c,Lead_CountryCode_Field__c,Lead_Line1_Field__c,Lead_Line2_Field__c,Lead_Annual_Revenue_Field__c FROM CW_Login_Setup__mdt WHERE DeveloperName = 'CW_Login'];
+        oLoginSetup = [SELECT Id, CW_CompanyWebLogin__c, CW_CompanyWebPassword__c, CW_CompanyWebSecret__c, CW_ServiceIntegrator__c, Account_VAT_Number_Field__c, Lead_VAT_Number_Field__c,Account_Score_Field__c,Account_Activities_Field__c,Account_Credit_Limit_Field__c,Account_Joint_Commitees_Field__c,Account_Joint_Commitees_White_Field__c,Account_Legal_Form_Field__c,Account_Main_Activity_Field__c,Account_Number_Employees_Field__c,Account_Social_Security_Field__c,Account_Phone_Field__c,Account_Street_Field__c,Account_PostalCode_Field__c,Account_City_Field__c,Account_CountryCode_Field__c,Account_Annual_Revenue_Field__c,CW_Duplicate_Check_Creation__c,CW_Duplicate_Check_Refresh__c,Lead_Score_Field__c,Lead_Activities_Field__c,Lead_Credit_Limit_Field__c,Lead_Joint_Commitees_Field__c,Lead_Joint_Commitees_White_Field__c,Lead_Legal_Form_Field__c,Lead_Main_Activity_Field__c,Lead_Number_Employees_Field__c,Lead_Social_Security_Field__c,Lead_Phone_Field__c,Lead_Street_Field__c,Lead_PostalCode_Field__c,Lead_City_Field__c,Lead_CountryCode_Field__c,Lead_Annual_Revenue_Field__c FROM CW_Login_Setup__mdt WHERE DeveloperName = 'CW_Login'];
         System.debug('Account_VAT_Number_Field__c = '+ oLoginSetup.Account_VAT_Number_Field__c);
         System.debug('Lead_VAT_Number_Field__c = '+ oLoginSetup.Lead_VAT_Number_Field__c);
         return oLoginSetup;
@@ -1714,8 +1706,6 @@ public with sharing class CompanyWebController {
             String accountPostalCodeAPI = oLoginSetup.Account_PostalCode_Field__c;
             String accountCityAPI = oLoginSetup.Account_City_Field__c;
             String accountCountryCodeAPI = oLoginSetup.Account_CountryCode_Field__c;
-            String accountLine1API = oLoginSetup.Account_Line1_Field__c;
-            String accountLine2API = oLoginSetup.Account_Line2_Field__c;
 
             //Lead
             String leadVATAPI = oLoginSetup.Lead_VAT_Number_Field__c;
@@ -1734,8 +1724,6 @@ public with sharing class CompanyWebController {
             String leadPostalCodeAPI = oLoginSetup.Lead_PostalCode_Field__c;
             String leadCityAPI = oLoginSetup.Lead_City_Field__c;
             String leadCountryCodeAPI = oLoginSetup.Lead_CountryCode_Field__c;
-            String leadLine1API = oLoginSetup.Lead_Line1_Field__c;
-            String leadLine2API = oLoginSetup.Lead_Line2_Field__c;
             
             System.debug('accountVATAPI = '+ oLoginSetup.Account_VAT_Number_Field__c);
             System.debug('leadVATAPI = '+ oLoginSetup.Lead_VAT_Number_Field__c);
