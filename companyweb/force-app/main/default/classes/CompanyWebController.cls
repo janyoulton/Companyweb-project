@@ -1,5 +1,87 @@
 public with sharing class CompanyWebController {
 
+    //System
+    public static Boolean duplicatedCheckOnCreation {get; set;}  
+    public static Boolean duplicatedCheckOnRefresh {get; set;} 
+
+    //Account 
+    public static String accountVATAPI {get; set;}
+    public static String accountScoreAPI {get; set;}
+    public static String accountActivitiesAPI {get; set;}
+    public static String accountCreditLimitAPI {get; set;}
+    public static String accountJointCommitieesBlueAPI {get; set;}
+    public static String accountJointCommitieesWhiteAPI {get; set;}
+    public static String accountMainActivityAPI {get; set;}
+    public static String accountNumberEmployeesAPI {get; set;}
+    public static String accountSocialSecurityAPI {get; set;}
+    public static String accountLegalFormAPI {get; set;}
+    public static String accountPhoneAPI {get; set;}
+    public static String accountAnnualRevenueAPI {get; set;}
+    public static String accountStreetAPI {get; set;}
+    public static String accountPostalCodeAPI {get; set;}
+    public static String accountCityAPI {get; set;}
+    public static String accountCountryCodeAPI {get; set;}
+
+    //Lead
+    public static String leadVATAPI {get; set;}
+    public static String leadScoreAPI {get; set;}
+    public static String leadActivitiesAPI {get; set;}
+    public static String leadCreditLimitAPI {get; set;}
+    public static String leadJointCommitieesBlueAPI {get; set;}
+    public static String leadJointCommitieesWhiteAPI {get; set;}
+    public static String leadMainActivityAPI {get; set;}
+    public static String leadNumberEmployeesAPI {get; set;}
+    public static String leadSocialSecurityAPI {get; set;}
+    public static String leadLegalFormAPI {get; set;}
+    public static String leadPhoneAPI {get; set;}
+    public static String leadAnnualRevenueAPI {get; set;}
+    public static String leadStreetAPI {get; set;}
+    public static String leadPostalCodeAPI {get; set;}
+    public static String leadCityAPI {get; set;}
+    public static String leadCountryCodeAPI {get; set;}
+
+    public static void assignDynamicMappingFields(CW_Login_Setup__mdt oLoginSetup){
+        //System
+        duplicatedCheckOnCreation = oLoginSetup.CW_Duplicate_Check_Creation__c;  
+        duplicatedCheckOnRefresh = oLoginSetup.CW_Duplicate_Check_Refresh__c;
+
+        //Account 
+        accountVATAPI = oLoginSetup.Account_VAT_Number_Field__c;
+        accountScoreAPI = oLoginSetup.Account_Score_Field__c;
+        accountActivitiesAPI = oLoginSetup.Account_Activities_Field__c;
+        accountCreditLimitAPI = oLoginSetup.Account_Credit_Limit_Field__c;
+        accountJointCommitieesBlueAPI = oLoginSetup.Account_Joint_Commitees_Field__c;
+        accountJointCommitieesWhiteAPI = oLoginSetup.Account_Joint_Commitees_White_Field__c;
+        accountMainActivityAPI = oLoginSetup.Account_Main_Activity_Field__c;
+        accountNumberEmployeesAPI = oLoginSetup.Account_Number_Employees_Field__c;
+        accountSocialSecurityAPI = oLoginSetup.Account_Social_Security_Field__c;
+        accountLegalFormAPI = oLoginSetup.Account_Legal_Form_Field__c;
+        accountPhoneAPI = oLoginSetup.Account_Phone_Field__c;
+        accountAnnualRevenueAPI = oLoginSetup.Account_Annual_Revenue_Field__c;
+        accountStreetAPI = oLoginSetup.Account_Street_Field__c;
+        accountPostalCodeAPI = oLoginSetup.Account_PostalCode_Field__c;
+        accountCityAPI = oLoginSetup.Account_City_Field__c;
+        accountCountryCodeAPI = oLoginSetup.Account_CountryCode_Field__c;
+
+        //Lead
+        leadVATAPI = oLoginSetup.Lead_VAT_Number_Field__c;
+        leadScoreAPI = oLoginSetup.Lead_Score_Field__c;
+        leadActivitiesAPI = oLoginSetup.Lead_Activities_Field__c;
+        leadCreditLimitAPI = oLoginSetup.Lead_Credit_Limit_Field__c;
+        leadJointCommitieesBlueAPI = oLoginSetup.Lead_Joint_Commitees_Field__c;
+        leadJointCommitieesWhiteAPI = oLoginSetup.Lead_Joint_Commitees_White_Field__c;
+        leadMainActivityAPI = oLoginSetup.Lead_Main_Activity_Field__c;
+        leadNumberEmployeesAPI = oLoginSetup.Lead_Number_Employees_Field__c;
+        leadSocialSecurityAPI = oLoginSetup.Lead_Social_Security_Field__c;
+        leadLegalFormAPI = oLoginSetup.Lead_Legal_Form_Field__c;
+        leadPhoneAPI = oLoginSetup.Lead_Phone_Field__c;
+        leadAnnualRevenueAPI = oLoginSetup.Lead_Annual_Revenue_Field__c;
+        leadStreetAPI = oLoginSetup.Lead_Street_Field__c;
+        leadPostalCodeAPI = oLoginSetup.Lead_PostalCode_Field__c;
+        leadCityAPI = oLoginSetup.Lead_City_Field__c;
+        leadCountryCodeAPI = oLoginSetup.Lead_CountryCode_Field__c;
+    }
+
     @InvocableMethod(label='Call CW to Update Lead/Account' description='Callout to the CompanyWeb API to update information on the Lead/Account')
     public static void updateSObject(List<Requests> requestList) {
         List<SObject> inputCollection = requestList[0].inputCollection;
@@ -43,7 +125,7 @@ public with sharing class CompanyWebController {
         }
     }
 
-    private static String getAuthenticationParametersCompanyWeb(String login, String password, String secret){
+    private static String createCWLoginHash(String login, String password, String secret){
         //Date Handling
         DateTime dtTodayDate = System.today();
         String sMonth;
@@ -113,45 +195,7 @@ public with sharing class CompanyWebController {
             system.debug('Result of loginSetup '+ oLoginSetup);
             system.debug('objectName '+ objectName);
 
-            //System
-            Boolean duplicatedCheckOnCreation = oLoginSetup.CW_Duplicate_Check_Creation__c;  
-            Boolean duplicatedCheckOnRefresh = oLoginSetup.CW_Duplicate_Check_Refresh__c;
-
-            //Account 
-            String accountVATAPI = oLoginSetup.Account_VAT_Number_Field__c;
-            String accountScoreAPI = oLoginSetup.Account_Score_Field__c;
-            String accountActivitiesAPI = oLoginSetup.Account_Activities_Field__c;
-            String accountCreditLimitAPI = oLoginSetup.Account_Credit_Limit_Field__c;
-            String accountJointCommitieesBlueAPI = oLoginSetup.Account_Joint_Commitees_Field__c;
-            String accountJointCommitieesWhiteAPI = oLoginSetup.Account_Joint_Commitees_White_Field__c;
-            String accountMainActivityAPI = oLoginSetup.Account_Main_Activity_Field__c;
-            String accountNumberEmployeesAPI = oLoginSetup.Account_Number_Employees_Field__c;
-            String accountSocialSecurityAPI = oLoginSetup.Account_Social_Security_Field__c;
-            String accountLegalFormAPI = oLoginSetup.Account_Legal_Form_Field__c;
-            String accountPhoneAPI = oLoginSetup.Account_Phone_Field__c;
-            String accountAnnualRevenueAPI = oLoginSetup.Account_Annual_Revenue_Field__c;
-            String accountStreetAPI = oLoginSetup.Account_Street_Field__c;
-            String accountPostalCodeAPI = oLoginSetup.Account_PostalCode_Field__c;
-            String accountCityAPI = oLoginSetup.Account_City_Field__c;
-            String accountCountryCodeAPI = oLoginSetup.Account_CountryCode_Field__c;
-
-            //Lead
-            String leadVATAPI = oLoginSetup.Lead_VAT_Number_Field__c;
-            String leadScoreAPI = oLoginSetup.Lead_Score_Field__c;
-            String leadActivitiesAPI = oLoginSetup.Lead_Activities_Field__c;
-            String leadCreditLimitAPI = oLoginSetup.Lead_Credit_Limit_Field__c;
-            String leadJointCommitieesBlueAPI = oLoginSetup.Lead_Joint_Commitees_Field__c;
-            String leadJointCommitieesWhiteAPI = oLoginSetup.Lead_Joint_Commitees_White_Field__c;
-            String leadMainActivityAPI = oLoginSetup.Lead_Main_Activity_Field__c;
-            String leadNumberEmployeesAPI = oLoginSetup.Lead_Number_Employees_Field__c;
-            String leadSocialSecurityAPI = oLoginSetup.Lead_Social_Security_Field__c;
-            String leadLegalFormAPI = oLoginSetup.Lead_Legal_Form_Field__c;
-            String leadPhoneAPI = oLoginSetup.Lead_Phone_Field__c;
-            String leadAnnualRevenueAPI = oLoginSetup.Lead_Annual_Revenue_Field__c;
-            String leadStreetAPI = oLoginSetup.Lead_Street_Field__c;
-            String leadPostalCodeAPI = oLoginSetup.Lead_PostalCode_Field__c;
-            String leadCityAPI = oLoginSetup.Lead_City_Field__c;
-            String leadCountryCodeAPI = oLoginSetup.Lead_CountryCode_Field__c;
+            assignDynamicMappingFields(oLoginSetup);
 
             String queryString;
 
@@ -218,9 +262,7 @@ public with sharing class CompanyWebController {
             reqByVAT.CompanyWebLogin = oLoginSetup.CW_CompanyWebLogin__c;
             reqByVAT.CompanyWebPassword = oLoginSetup.CW_CompanyWebPassword__c;
             reqByVAT.ServiceIntegrator = oLoginSetup.CW_ServiceIntegrator__c;
-
-            //Authentication CompanyWeb
-            reqByVAT.LoginHash = getAuthenticationParametersCompanyWeb(oLoginSetup.CW_CompanyWebLogin__c, oLoginSetup.CW_CompanyWebPassword__c, oLoginSetup.CW_CompanyWebSecret__c);
+            reqByVAT.LoginHash = createCWLoginHash(oLoginSetup.CW_CompanyWebLogin__c, oLoginSetup.CW_CompanyWebPassword__c, oLoginSetup.CW_CompanyWebSecret__c);
             connectCompanywebBe.BasicHttpBinding_AlacarteServiceV1_3 httpreq = new connectCompanywebBe.BasicHttpBinding_AlacarteServiceV1_3();
             //http Reponse
             result = httpreq.GetCompanyByVat(reqByVAT);
@@ -228,938 +270,17 @@ public with sharing class CompanyWebController {
             String warningsString = '';
             System.debug('statuscode = ' + result.StatusCode);
 
-            Schema.DisplayType dt,dtAccountVAT, dtAccountScore, dtAccountActivities, dtAccountCreditLimit, dtAccountJointCommiteesBlue, dtAccountJointCommiteesWhite, dtAccountLegalForm, dtAccountMainActivity, dtAccountNumberEmployees, dtAccountSocialSecurity,dtLeadVAT, dtLeadScore, dtLeadActivities, dtLeadCreditLimit, dtLeadJointCommiteesBlue, dtLeadJointCommiteesWhite, dtLeadLegalForm, dtLeadMainActivity, dtLeadNumberEmployees, dtLeadSocialSecurity;
-            Schema.DisplayType dtAccountPhone, dtAccountAnnualRevenue, dtLeadPhone, dtLeadAnnualRevenue;
 
             if(result.StatusCode  == 0){
                 if(objectName == 'Account'){
                     Account acc = (Account)genericObject;
-                    
-                    /* Schema.DisplayType dt; */
-                    if(accountVATAPI != null){
-                            dtAccountVAT = Schema.getGlobalDescribe().get('Account').getDescribe().fields.getMap().get(accountVATAPI).getDescribe().getType();
-                    }
-                        
-                    if(accountScoreAPI != null){
-                        dtAccountScore = Schema.getGlobalDescribe().get('Account').getDescribe().fields.getMap().get(accountScoreAPI).getDescribe().getType();
-                    }
-
-                    if(accountActivitiesAPI != null){
-                        dtAccountActivities = Schema.getGlobalDescribe().get('Account').getDescribe().fields.getMap().get(accountActivitiesAPI).getDescribe().getType();
-                    }
-
-                    if(accountCreditLimitAPI != null){
-                        dtAccountCreditLimit = Schema.getGlobalDescribe().get('Account').getDescribe().fields.getMap().get(accountCreditLimitAPI).getDescribe().getType();
-                    }
-
-                    if(accountJointCommitieesBlueAPI != null){
-                        dtAccountJointCommiteesBlue = Schema.getGlobalDescribe().get('Account').getDescribe().fields.getMap().get(accountJointCommitieesBlueAPI).getDescribe().getType();
-                    }
-
-                    if(accountJointCommitieesWhiteAPI != null){
-                        dtAccountJointCommiteesWhite = Schema.getGlobalDescribe().get('Account').getDescribe().fields.getMap().get(accountJointCommitieesWhiteAPI).getDescribe().getType();
-                    }
-
-                    if(accountLegalFormAPI != null){
-                        dtAccountLegalForm = Schema.getGlobalDescribe().get('Account').getDescribe().fields.getMap().get(accountLegalFormAPI).getDescribe().getType();
-                    }
-
-                    if(accountMainActivityAPI != null){
-                        dtAccountMainActivity = Schema.getGlobalDescribe().get('Account').getDescribe().fields.getMap().get(accountMainActivityAPI).getDescribe().getType();
-                    }
-
-                    if(accountNumberEmployeesAPI != null){
-                        dtAccountNumberEmployees = Schema.getGlobalDescribe().get('Account').getDescribe().fields.getMap().get(accountNumberEmployeesAPI).getDescribe().getType();
-                    }
-
-                    if(accountSocialSecurityAPI != null){
-                        dtAccountSocialSecurity = Schema.getGlobalDescribe().get('Account').getDescribe().fields.getMap().get(accountSocialSecurityAPI).getDescribe().getType();
-                    }
-
-                    if(accountPhoneAPI != null){
-                        dtAccountPhone = Schema.getGlobalDescribe().get('Account').getDescribe().fields.getMap().get(accountPhoneAPI).getDescribe().getType();
-                    }
-
-                    if(accountAnnualRevenueAPI != null){
-                        dtAccountAnnualRevenue = Schema.getGlobalDescribe().get('Account').getDescribe().fields.getMap().get(accountAnnualRevenueAPI).getDescribe().getType();
-                    }
-                    
-                    String vatAccountFieldType,scoreFieldType,activitiesFieldType,creditLimitFieldType,joinCommiteesBlueFieldType,joinCommiteesWhiteFieldType,legalFormFieldType,mainActivityFieldType,numberEmployeesFieldType,socialSecurityFieldType,phoneFieldType,annualRevenueFieldType;
-
-                    vatAccountFieldType = String.valueOf(dtAccountVAT);
-                    scoreFieldType = String.valueOf(dtAccountScore);
-                    activitiesFieldType = String.valueOf(dtAccountActivities);
-                    creditLimitFieldType = String.valueOf(dtAccountCreditLimit);
-                    joinCommiteesBlueFieldType= String.valueOf(dtAccountJointCommiteesBlue);
-                    joinCommiteesWhiteFieldType= String.valueOf(dtAccountJointCommiteesWhite);
-                    legalFormFieldType= String.valueOf(dtAccountLegalForm);
-                    mainActivityFieldType= String.valueOf(dtAccountMainActivity);
-                    numberEmployeesFieldType= String.valueOf(dtAccountNumberEmployees);
-                    socialSecurityFieldType= String.valueOf(dtAccountSocialSecurity);
-                    phoneFieldType = String.valueOf(dtAccountPhone);
-                    annualRevenueFieldType = String.valueOf(dtAccountAnnualRevenue);
-
-                    System.debug('vatFieldType = ' + vatAccountFieldType);
-                    
-                    //Address
-                    if(result.CompanyResponse.Address.IsEnabled == True){
-                        if(accountStreetAPI!=null) acc.put(accountStreetAPI, result.CompanyResponse.Address.Value.Street + ' ' + result.CompanyResponse.Address.Value.HouseNumber);
-                        if(accountCityAPI!=null) acc.put(accountCityAPI, result.CompanyResponse.Address.Value.City);
-                        if(accountPostalCodeAPI!=null) acc.put(accountPostalCodeAPI, result.CompanyResponse.Address.Value.PostalCode);
-                        if(accountCountryCodeAPI!=null) acc.put(accountCountryCodeAPI, result.CompanyResponse.Address.Value.CountryCode);
-                    }else{
-                        acc.CW_Street__c = null;
-                        acc.CW_City__c = null;
-                        acc.CW_PostalCode__c = null;
-                        acc.CW_Country__c = null;
-                        acc.CW_Address_Line_1__c = null;
-                        acc.CW_Address_Line_2__c = null;
-                    }
-
-                    //Company Name
-                    if(result.CompanyResponse.CompanyName.IsEnabled == True){
-                        acc.Name = result.CompanyResponse.CompanyName.Value;
-                        acc.CW_Name__c = result.CompanyResponse.CompanyName.Value;
-                    } else{
-                        acc.CW_Name__c = null;
-                    }
-                    //Prefered Language
-                    if(result.CompanyResponse.PreferredLanguages.IsEnabled == True){
-                        acc.CW_Preferred_Languages_PL__c = result.CompanyResponse.PreferredLanguages.Value.LanguageString;
-                    }else{
-                        acc.CW_Preferred_Languages_PL__c = null;
-                    }
-                    //VAT Number
-                    if(result.CompanyResponse.VatNumber.IsEnabled = True){
-                        if(fromPick) {
-                            acc.CW_VAT_Number__c = String.valueOf(result.CompanyResponse.VatNumber.Value);
-                            if (accountVATAPI != null) {
-                                    if (vatAccountFieldType != 'String') {
-                                    acc.put(accountVATAPI, result.CompanyResponse.VatNumber.Value);
-                                } else {
-                                    acc.put(accountVATAPI, String.valueOf(result.CompanyResponse.VatNumber.Value));
-                                }
-                            }
-                        } else {
-                            if (accountVATAPI != null) {
-                                acc.CW_VAT_Number__c = String.valueOf(result.CompanyResponse.VatNumber.Value);
-                            }
-                        }                   
-                    }else{
-                        acc.CW_VAT_Number__c = null;
-                        if(accountVatAPI != null){
-                            acc.put(accountVATAPI, null);
-                        }
-                    }
-
-                    //VAT NumberEnabled
-                    if(result.CompanyResponse.VatEnabled.IsEnabled = True){
-                        acc.CW_VAT_Liable__c = result.CompanyResponse.VatEnabled.Value;
-                    } else{
-                        acc.CW_VAT_Liable__c = false; 
-                    }
-                    //Phone number
-                    if(result.CompanyResponse.TelephoneNumber.IsEnabled == True){
-                        if (accountPhoneAPI != null) {
-                            if (phoneFieldType != 'String') {
-                                acc.put(accountPhoneAPI, result.CompanyResponse.TelephoneNumber.Value);
-                            } else {
-                                acc.put(accountPhoneAPI, String.valueOf(result.CompanyResponse.TelephoneNumber.Value));
-                            }
-                        } else {
-                            acc.CW_Phone__c = result.CompanyResponse.TelephoneNumber.Value;
-                        }
-                    }else{
-                        acc.CW_Phone__c = null;
-                        if(accountPhoneAPI != null){
-                            acc.put(accountPhoneAPI, null);
-                        }
-                    }
-                    //Legal form
-                    if(result.CompanyResponse.LegalForm.IsEnabled == True){
-                            acc.CW_Abbreviation__c = String.valueOf(result.CompanyResponse.LegalForm.Value.Abbreviation);
-                            if (legalFormFieldType != null) {
-                                acc.put(accountLegalFormAPI, String.valueOf(result.CompanyResponse.LegalForm.Value.Code));
-                            }
-                    } else{
-                        acc.CW_Abbreviation__c = null;
-                    }
-                    //Company Status 
-                    if(result.CompanyResponse.CompanyStatus.IsEnabled == True){
-                        acc.CW_Company_Status__c = result.CompanyResponse.CompanyStatus.Value.info;
-                    }
-                    else{
-                        acc.CW_Company_Status__c = null;
-                    }
-                    //Start Date 
-                    if(result.CompanyResponse.StartDate.IsEnabled == True){
-                        if(result.CompanyResponse.StartDate.Value != 0){
-                            String sStartDate = String.ValueOf(result.CompanyResponse.StartDate.Value);
-                            String fStartDate = sStartDate.right(2)+ '/' +sStartDate.mid(4,2) +'/'+ sStartDate.left(4);
-                            acc.CW_Start_Date__c = date.parse(fStartDate); 
-                        } else {
-                            acc.CW_Start_Date__c = null; 
-                        }
-                    }else{
-                        acc.CW_Start_Date__c = null; 
-                    }
-                    //End Date 
-                    if(result.CompanyResponse.EndDate.IsEnabled == True){
-                        if(result.CompanyResponse.EndDate.Value != 0){
-                            String sEndDate = String.ValueOf(result.CompanyResponse.EndDate.Value);
-                            String fEndDate = sEndDate.right(2)+ '/' +sEndDate.mid(4,2) +'/'+ sEndDate.left(4);
-                            acc.CW_End_Date__c = date.parse(fEndDate);
-                        } else{
-                            acc.CW_End_Date__c = null;
-                        }
-                    } else {
-                        acc.CW_End_Date__c = null;
-                    }
-
-                    //Score
-                    if(result.CompanyResponse.Score.IsEnabled == True){
-                        //Decimal Score
-                        acc.CW_Score__c = result.CompanyResponse.Score.Value.ScoreAsDecimal;
-                        if (accountScoreAPI != null) {
-                            if (scoreFieldType != 'String') {
-                                acc.put(accountScoreAPI, result.CompanyResponse.Score.Value.ScoreAsDecimal);
-                            } else {
-                                acc.put(accountScoreAPI, String.valueOf(result.CompanyResponse.Score.Value.ScoreAsDecimal));
-                            }
-                        }
-                        //Score Image
-                        acc.CW_Score_Image__c = result.CompanyResponse.Score.Value.ScoreImage;
-                    } else {
-                        acc.CW_Score__c = null;
-                        acc.CW_Score_Image__c = null;
-                        if(accountScoreAPI != null){
-                            acc.put(accountScoreAPI, null);
-                        }
-                    }
-                    
-                    //CreditLimit
-                    if(result.CompanyResponse.CreditLimit.IsEnabled == True){
-                        acc.CW_Credit_Limit__c= result.CompanyResponse.CreditLimit.Value.Limit_x;
-                        if (accountCreditLimitAPI != null) {
-                            if (creditLimitFieldType != 'String') {
-                                acc.put(accountCreditLimitAPI, result.CompanyResponse.CreditLimit.Value.Limit_x);
-                            } else {
-                                acc.put(accountCreditLimitAPI, String.valueOf(result.CompanyResponse.CreditLimit.Value.Limit_x));
-                            }
-                        }
-                        if (result.CompanyResponse.CreditLimit.Value.Limit_x == 0) {
-                            //CreditLimitReason
-                            acc.CW_Credit_Limit_Reason__c = result.CompanyResponse.CreditLimit.Value.Info;
-                        } else {
-                            acc.CW_Credit_Limit_Reason__c = null;
-                        }
-                    }else{
-                        acc.CW_Credit_Limit__c = null;
-                        acc.CW_Credit_Limit_Reason__c = null;
-                        if(accountCreditLimitAPI != null){
-                            acc.put(accountCreditLimitAPI, null);
-                        }
-                    }
-                    
-                    //Detail url
-                    if(result.CompanyResponse.DetailUrl.IsEnabled == True){
-                        acc.CW_Detail_URL__c = result.CompanyResponse.DetailUrl.Value;
-                    }else{
-                        acc.CW_Detail_URL__c = null;
-                    }
-                    //Report url
-                    if(result.CompanyResponse.ReportUrl.IsEnabled == True){
-                        acc.CW_Report_URL__c = result.CompanyResponse.ReportUrl.Value;
-                    }else{
-                        acc.CW_Report_URL__c = null;
-                    }
-                    //Kyc Report
-                    if(result.CompanyResponse.KycReportUrl.IsEnabled == True){
-                        acc.CW_Kyc_URL__c = result.CompanyResponse.KycReportUrl.Value;
-                    }else{
-                        acc.CW_Kyc_URL__c = null;
-                    }
-                    //Lastsync
-                    acc.CW_Last_Sync__c = System.now();
-                    //Balance
-                    if(result.CompanyResponse.Balances.IsEnabled == True){
-                        if(result.CompanyResponse.Balances.Value.Balans != null){
-                            //Balance Year
-                            acc.CW_Balance__c = String.valueOf(result.CompanyResponse.Balances.Value.Balans[0].BookYear);
-
-                            if (String.isNotBlank(result.CompanyResponse.Balances.Value.Balans[0].BalansData.BalansData[1].Value)){
-                                //Equity Year
-                                acc.CW_Equity__c = Decimal.valueOf(result.CompanyResponse.Balances.Value.Balans[0].BalansData.BalansData[1].Value);
-                            }
-                            else{
-                                acc.CW_Equity__c = null;
-                            }
-                            if (String.isNotBlank(result.CompanyResponse.Balances.Value.Balans[0].BalansData.BalansData[2].Value)){
-                                //Revenue
-                                if(accountAnnualRevenueAPI != null){
-                                    if (annualRevenueFieldType != 'String') {
-                                        acc.put(accountAnnualRevenueAPI, Decimal.valueOf(result.CompanyResponse.Balances.Value.Balans[0].BalansData.BalansData[2].Value));
-                                    } else {
-                                        acc.put(accountAnnualRevenueAPI, String.valueOf(Decimal.valueOf(result.CompanyResponse.Balances.Value.Balans[0].BalansData.BalansData[2].Value).round(RoundingMode.HALF_UP)));
-                                    }
-                                } else {
-                                    acc.CW_Revenue__c = Decimal.valueOf(result.CompanyResponse.Balances.Value.Balans[0].BalansData.BalansData[2].Value);
-                                }
-                            }
-                            else{
-                                acc.CW_Revenue__c = null;
-                                if(accountAnnualRevenueAPI != null){
-                                    acc.put(accountAnnualRevenueAPI, null);  
-                                }
-                            }
-                            if (String.isNotBlank(result.CompanyResponse.Balances.Value.Balans[0].BalansData.BalansData[3].Value)){
-                                //# Employees
-                                //acc.NumberOfEmployees = Integer.valueOf(Decimal.valueOf(result.CompanyResponse.Balances.Value.Balans[0].BalansData.BalansData[3].Value).round(RoundingMode.HALF_UP)); 
-
-                                if (accountNumberEmployeesAPI != null) {
-                                    if (numberEmployeesFieldType != 'String') {
-                                        acc.put(accountNumberEmployeesAPI, Integer.valueOf(Decimal.valueOf(result.CompanyResponse.Balances.Value.Balans[0].BalansData.BalansData[3].Value).round(RoundingMode.HALF_UP)));
-                                    } else {
-                                        acc.put(accountNumberEmployeesAPI, result.CompanyResponse.Balances.Value.Balans[0].BalansData.BalansData[3].Value);
-                                    }
-                                } else{
-                                    acc.CW_Employees__c = Decimal.valueOf(result.CompanyResponse.Balances.Value.Balans[0].BalansData.BalansData[3].Value);
-                                }
-                            }
-                            else{
-                                acc.CW_Employees__c = null;
-                                //acc.NumberOfEmployees = null;
-                                if(accountNumberEmployeesAPI != null){
-                                    acc.put(accountNumberEmployeesAPI, null);  
-                                }
-                            }
-
-                            if (String.isNotBlank(result.CompanyResponse.Balances.Value.Balans[0].BalansData.BalansData[4].Value)){
-                                //Gross margin
-                                acc.CW_Gross_Margin__c = Decimal.valueOf(result.CompanyResponse.Balances.Value.Balans[0].BalansData.BalansData[4].Value);
-                            }
-                            else{
-                                acc.CW_Gross_Margin__c = null;
-                            }
-                            system.debug('Result: '+ result.CompanyResponse.Balances.Value.Balans[0].BalansData.BalansData[5].Value);
-                            if (String.isNotBlank(result.CompanyResponse.Balances.Value.Balans[0].BalansData.BalansData[5].Value)){
-                                //Result
-                                acc.CW_Result__c = Decimal.valueOf(result.CompanyResponse.Balances.Value.Balans[0].BalansData.BalansData[5].Value);
-                            }
-                            else{
-                                acc.CW_Result__c = null;
-                            }
-                        } else{
-                            acc.CW_Balance__c = null;
-                            acc.CW_Equity__c = null;
-                            acc.CW_Revenue__c = null;
-                            acc.CW_Employees__c = null;
-                            acc.CW_Gross_Margin__c = null;
-                            acc.CW_Result__c = null; 
-                        }
-                    }else{
-                        acc.CW_Balance__c = null;
-                        acc.CW_Equity__c = null;
-                        acc.CW_Revenue__c = null;
-                        acc.CW_Employees__c = null;
-                        acc.CW_Gross_Margin__c = null;
-                        acc.CW_Result__c = null;
-                    }
-                    
-                    //Warnings
-                    if(result.CompanyResponse.WarningsOverview.IsEnabled == True){
-                        if (result.CompanyResponse.WarningsOverview.Value.Warnings.string_x != null) {
-                            System.debug('string_x = ' + result.CompanyResponse.WarningsOverview.Value.Warnings.string_x);
-                            warningsString = '<ul>';
-                            for (String warning : result.CompanyResponse.WarningsOverview.Value.Warnings.string_x) {
-                                //add warnings to a string
-                                System.debug('warning = ' + warning);
-                                warningsString += '<li>';
-                                warningsString += warning;
-                                warningsString += '</li>';
-                            }
-                            warningsString += '</ul>';
-                            acc.CW_Warnings__c = warningsString;
-                            System.debug('warningsString = ' + warningsString);
-                        }
-                    }else {
-                        acc.CW_Warnings__c = null;
-                    }
-                    
-                    //Social Security
-                    if(result.CompanyResponse.SocialSecurityInformation.IsEnabled == True){
-                        String delimiter = '-';
-                        String socialSecurityNumberPart1 = String.ValueOf(result.CompanyResponse.SocialSecurityInformation.Value.RegistrationId).substringBefore(delimiter);
-                        String socialSecurityNumberPart2 = String.ValueOf(result.CompanyResponse.SocialSecurityInformation.Value.RegistrationId).substringAfter(delimiter);
-
-                        String fullSocialSecurityNumber = socialSecurityNumberPart1+socialSecurityNumberPart2;
-                        
-                        if (accountSocialSecurityAPI != null) {
-                            if (socialSecurityFieldType != 'String') {
-                                acc.put(accountSocialSecurityAPI, fullSocialSecurityNumber);
-                            } else {
-                                acc.put(accountSocialSecurityAPI, fullSocialSecurityNumber);
-                            }
-                        } 
-                    } else {
-                        //acc.CW_Social_Security_Information__c = null;
-                        if(accountSocialSecurityAPI != null){
-                            acc.put(accountSocialSecurityAPI, null);
-                        }
-                    }
-
-
-                    //Join Commitees
-                    if(result.CompanyResponse.JointCommitees.IsEnabled == True){
-                        Integer JointCommiteeArraySize;
-                        String JointCommiteeFieldConcatBlue = ''; 
-                        String JointCommiteeFieldConcatWhite = '';
-
-                        if(result.CompanyResponse.JointCommitees.Value.JointCommitee != null){
-
-                            JointCommiteeArraySize = result.CompanyResponse.JointCommitees.Value.JointCommitee.size();
-
-                            for (Integer i = 0; i < JointCommiteeArraySize; i++) {
-                                if(result.CompanyResponse.JointCommitees.Value.JointCommitee[i].Code >= 100 && result.CompanyResponse.JointCommitees.Value.JointCommitee[i].Code < 200){
-                                    JointCommiteeFieldConcatBlue  = JointCommiteeFieldConcatBlue + result.CompanyResponse.JointCommitees.Value.JointCommitee[i].Code +' - '+result.CompanyResponse.JointCommitees.Value.JointCommitee[i].Description+'\n';
-                                } else{
-                                    JointCommiteeFieldConcatWhite  = JointCommiteeFieldConcatWhite + result.CompanyResponse.JointCommitees.Value.JointCommitee[i].Code +' - '+result.CompanyResponse.JointCommitees.Value.JointCommitee[i].Description+'\n';
-                                }        
-                            }
-
-                            if (accountJointCommitieesBlueAPI != null) {
-                                if (joinCommiteesBlueFieldType != 'String') {
-                                    acc.put(accountJointCommitieesBlueAPI, String.ValueOf(JointCommiteeFieldConcatBlue));
-                                    } else {
-                                        acc.put(accountJointCommitieesBlueAPI, JointCommiteeFieldConcatBlue);
-                                    }
-                            }
-    
-                            if(accountJointCommitieesWhiteAPI != null){
-                                if (joinCommiteesWhiteFieldType != 'String') {
-                                    acc.put(accountJointCommitieesWhiteAPI, String.ValueOf(JointCommiteeFieldConcatWhite));
-                                    } else {
-                                        acc.put(accountJointCommitieesWhiteAPI, JointCommiteeFieldConcatWhite);
-                                    }
-                            }
-                        }
-                    } else {
-
-                        if(accountJointCommitieesBlueAPI != null){
-                            acc.put(accountJointCommitieesBlueAPI, null);
-                        } 
-
-                        if(accountJointCommitieesWhiteAPI != null){
-                            acc.put(accountJointCommitieesWhiteAPI, null);
-                        } 
-                    }
-
-                    //Avoid call out
-                    acc.CW_Avoid_Callout__c = false;
-                    
+                    assignAccountFields(acc, result, fromPick);
                     //Update Account
                     update acc;
 
                 } else if (objectName == 'Lead'){
-                    String vatFieldType = String.valueOf(dt);
                     Lead lead = (Lead)genericObject;
-                        
-                    /* Schema.DisplayType dt; */
-                    if(leadVATAPI != null){
-                        dtLeadVAT = Schema.getGlobalDescribe().get('Lead').getDescribe().fields.getMap().get(leadVATAPI).getDescribe().getType();
-                    }
-                    
-                    if(leadScoreAPI != null){
-                        dtLeadScore = Schema.getGlobalDescribe().get('Lead').getDescribe().fields.getMap().get(leadScoreAPI).getDescribe().getType();
-                    }
-
-                    if(leadActivitiesAPI != null){
-                        dtLeadActivities = Schema.getGlobalDescribe().get('Lead').getDescribe().fields.getMap().get(leadActivitiesAPI).getDescribe().getType();
-                    }
-
-                    if(leadCreditLimitAPI != null){
-                        dtLeadCreditLimit = Schema.getGlobalDescribe().get('Lead').getDescribe().fields.getMap().get(leadCreditLimitAPI).getDescribe().getType();
-                    }
-
-                    if(leadJointCommitieesBlueAPI != null){
-                        dtLeadJointCommiteesBlue = Schema.getGlobalDescribe().get('Lead').getDescribe().fields.getMap().get(leadJointCommitieesBlueAPI).getDescribe().getType();
-                    }
-
-                    if(leadJointCommitieesWhiteAPI != null){
-                        dtLeadJointCommiteesWhite = Schema.getGlobalDescribe().get('Lead').getDescribe().fields.getMap().get(leadJointCommitieesWhiteAPI).getDescribe().getType();
-                    }
-
-                    if(leadLegalFormAPI != null){
-                        dtLeadLegalForm = Schema.getGlobalDescribe().get('Lead').getDescribe().fields.getMap().get(leadLegalFormAPI).getDescribe().getType();
-                    }
-
-                    if(leadMainActivityAPI != null){
-                        dtLeadMainActivity = Schema.getGlobalDescribe().get('Lead').getDescribe().fields.getMap().get(leadMainActivityAPI).getDescribe().getType();
-                    }
-
-                    if(leadNumberEmployeesAPI != null){
-                        dtLeadNumberEmployees = Schema.getGlobalDescribe().get('Lead').getDescribe().fields.getMap().get(leadNumberEmployeesAPI).getDescribe().getType();
-                    }
-
-                    if(leadSocialSecurityAPI != null){
-                        dtLeadSocialSecurity = Schema.getGlobalDescribe().get('Lead').getDescribe().fields.getMap().get(leadSocialSecurityAPI).getDescribe().getType();
-                    }
-
-                    if(leadPhoneAPI != null){
-                        dtLeadPhone = Schema.getGlobalDescribe().get('Lead').getDescribe().fields.getMap().get(leadPhoneAPI).getDescribe().getType();
-                    }
-
-                    if(leadAnnualRevenueAPI != null){
-                        dtLeadAnnualRevenue = Schema.getGlobalDescribe().get('Lead').getDescribe().fields.getMap().get(leadAnnualRevenueAPI).getDescribe().getType();
-                    }
-                    
-                    String vatLeadFieldType, scoreFieldType, activitiesFieldType,creditLimitFieldType,joinCommiteesBlueFieldType,joinCommiteesWhiteFieldType,legalFormFieldType,mainActivityFieldType,numberEmployeesFieldType,socialSecurityFieldType,phoneFieldType,annualRevenueFieldType;
-
-                    vatLeadFieldType = String.valueOf(dtLeadVAT);
-                    scoreFieldType = String.valueOf(dtLeadScore);
-                    activitiesFieldType = String.valueOf(dtLeadActivities);
-                    creditLimitFieldType = String.valueOf(dtLeadCreditLimit);
-                    joinCommiteesBlueFieldType= String.valueOf(dtLeadJointCommiteesBlue);
-                    joinCommiteesWhiteFieldType= String.valueOf(dtLeadJointCommiteesWhite);
-                    legalFormFieldType= String.valueOf(dtLeadLegalForm);
-                    mainActivityFieldType= String.valueOf(dtLeadMainActivity);
-                    numberEmployeesFieldType= String.valueOf(dtLeadNumberEmployees);
-                    socialSecurityFieldType= String.valueOf(dtLeadSocialSecurity);
-                    phoneFieldType = String.valueOf(dtLeadPhone);
-                    annualRevenueFieldType = String.valueOf(dtLeadAnnualRevenue);
-
-                    System.debug('vatFieldType = ' + vatLeadFieldType);
-                    System.debug('vatFieldType = ' + vatFieldType);
-                    
-                    //Address
-                    if(result.CompanyResponse.Address.IsEnabled == True){
-                        if(leadStreetAPI!=null) lead.put(leadStreetAPI, result.CompanyResponse.Address.Value.Street + ' ' + result.CompanyResponse.Address.Value.HouseNumber);
-                        if(leadCityAPI!=null) lead.put(leadCityAPI, result.CompanyResponse.Address.Value.City);
-                        if(leadPostalCodeAPI!=null) lead.put(leadPostalCodeAPI, result.CompanyResponse.Address.Value.PostalCode);
-                        if(leadCountryCodeAPI!=null) lead.put(leadCountryCodeAPI, result.CompanyResponse.Address.Value.CountryCode);
-                    } 
-                    //else {
-                    //     lead.CW_Street__c = null;
-                    //     lead.CW_City__c = null;
-                    //     lead.CW_PostalCode__c = null; 
-                    //     lead.CW_Country__c = null;
-                    //     lead.CW_Address_Line_1__c = null; 
-                    //     lead.CW_Address_Line_2__c = null;
-                    // }
-
-                    //Lead Name
-                    if(result.CompanyResponse.CompanyName.IsEnabled == True){
-                        lead.Company = result.CompanyResponse.CompanyName.Value;
-                        lead.CW_Name__c = result.CompanyResponse.CompanyName.Value;
-                    } else {
-                        lead.CW_Name__c = null;
-                    }
-
-                    //Prefered Language
-                    if(result.CompanyResponse.PreferredLanguages.IsEnabled == True){
-                        lead.CW_Preferred_Languages_PL__c = result.CompanyResponse.PreferredLanguages.Value.LanguageString;
-                    } else {
-                        lead.CW_Preferred_Languages_PL__c = null;
-                    }
-                    //VAT Number
-                    if(result.CompanyResponse.VatNumber.IsEnabled = True){
-                        if(fromPick) {
-                            lead.CW_VAT_Number__c = String.valueOf(result.CompanyResponse.VatNumber.Value);
-                            if (leadVATAPI != null) {
-                                if (vatFieldType != 'String') {
-                                    lead.put(leadVATAPI, result.CompanyResponse.VatNumber.Value);
-                                } else {
-                                    lead.put(leadVATAPI, String.valueOf(result.CompanyResponse.VatNumber.Value));
-                                }
-                            }
-                        } else {
-                            if (leadVATAPI != null) {
-                                lead.CW_VAT_Number__c = String.valueOf(result.CompanyResponse.VatNumber.Value);
-                            }
-                        }                   
-                    }
-                    
-                    //VAT NumberEnabled
-                    if(result.CompanyResponse.VatEnabled.IsEnabled = True){
-                        lead.CW_VAT_Liable__c = result.CompanyResponse.VatEnabled.Value;
-                    } else {
-                        lead.CW_VAT_Liable__c = false;
-                    }
-                    //Phone number
-                    if(result.CompanyResponse.TelephoneNumber.IsEnabled == True){
-                        if(leadPhoneAPI != null){
-                            if(phoneFieldType != 'String'){
-                                lead.put(leadPhoneAPI, result.CompanyResponse.TelephoneNumber.Value);
-                            } else {
-                                lead.put(leadPhoneAPI, String.ValueOf(result.CompanyResponse.TelephoneNumber.Value));
-                            }
-                        } else {
-                            lead.CW_Phone__c = result.CompanyResponse.TelephoneNumber.Value;
-                        }
-                    }
-                    //Legal form
-                    if(result.CompanyResponse.LegalForm.IsEnabled == True){
-                        lead.CW_Abbreviation__c = result.CompanyResponse.LegalForm.Value.Abbreviation;
-                    } else {
-                        lead.CW_Abbreviation__c = null;
-                    }
-                    // Company status
-                    if(result.CompanyResponse.CompanyStatus.IsEnabled == True){ 
-                        lead.CW_Company_Status__c = result.CompanyResponse.CompanyStatus.Value.info;
-                    } else {
-                        lead.CW_Company_Status__c = null;
-                    }
-                    //Start Date 
-                    if(result.CompanyResponse.StartDate.IsEnabled == True){ 
-                        if(result.CompanyResponse.StartDate.Value != 0){
-                            String sStartDate = String.ValueOf(result.CompanyResponse.StartDate.Value);
-                            String fStartDate = sStartDate.right(2)+ '/' +sStartDate.mid(4,2) +'/'+ sStartDate.left(4);
-                            lead.CW_Start_Date__c = date.parse(fStartDate);
-                        }
-                        else{
-                            lead.CW_Start_Date__c = null;
-                        }
-                    }else{
-                        lead.CW_Start_Date__c = null;
-                    }
-                    //End Date 
-                    if(result.CompanyResponse.EndDate.IsEnabled == True){
-                        if(result.CompanyResponse.EndDate.Value != 0){
-                            String sEndDate = String.ValueOf(result.CompanyResponse.EndDate.Value);
-                            String fEndDate = sEndDate.right(2)+ '/' +sEndDate.mid(4,2) +'/'+ sEndDate.left(4);
-                            lead.CW_End_Date__c = date.parse(fEndDate);
-                        } else{
-                            lead.CW_End_Date__c = null;
-                        }
-                    }else{
-                        lead.CW_End_Date__c = null;
-                    }
-
-                    //TF
-                    //Score
-                    if(result.CompanyResponse.Score.IsEnabled == True){
-                        //Decimal Score
-                        lead.CW_Score__c = result.CompanyResponse.Score.Value.ScoreAsDecimal;
-                        if (leadScoreAPI != null) {
-                            if (scoreFieldType != 'String') {
-                                lead.put(leadScoreAPI, result.CompanyResponse.Score.Value.ScoreAsDecimal);
-                            } else {
-                                lead.put(leadScoreAPI, String.valueOf(result.CompanyResponse.Score.Value.ScoreAsDecimal));
-                            }
-                        }
-                        //Score Image
-                        lead.CW_Score_Image__c = result.CompanyResponse.Score.Value.ScoreImage;
-                    } else {
-                        lead.CW_Score__c = null;
-                        lead.CW_Score_Image__c = null;
-                        if(leadScoreAPI != null){
-                            lead.put(leadScoreAPI, null);
-                        }
-                    }
-                    
-                    //CreditLimit
-                    if(result.CompanyResponse.CreditLimit.IsEnabled == True){
-                        lead.CW_Credit_Limit__c= result.CompanyResponse.CreditLimit.Value.Limit_x;
-                        if (leadCreditLimitAPI != null) {
-                            if (creditLimitFieldType != 'String') {
-                                lead.put(leadCreditLimitAPI, result.CompanyResponse.CreditLimit.Value.Limit_x);
-                            } else {
-                                lead.put(leadCreditLimitAPI, String.valueOf(result.CompanyResponse.CreditLimit.Value.Limit_x));
-                            }
-                        }
-                        if (result.CompanyResponse.CreditLimit.Value.Limit_x == 0) {
-                            //CreditLimitReason
-                            lead.CW_Credit_Limit_Reason__c = result.CompanyResponse.CreditLimit.Value.Info;
-                        } else {
-                            lead.CW_Credit_Limit_Reason__c = null;
-                        }
-                    }else{
-                        lead.CW_Credit_Limit__c = null;
-                        lead.CW_Credit_Limit_Reason__c = null;
-                        if(leadCreditLimitAPI != null){
-                            lead.put(leadCreditLimitAPI, null);
-                        }
-                    }
-                    //TF
-
-
-                    /*if(result.CompanyResponse.Score.IsEnabled == True){
-                        //Decimal Score
-                        lead.CW_Score__c = result.CompanyResponse.Score.Value.ScoreAsDecimal;
-                        
-                        //Score Image
-                        if (leadScoreAPI != null) {
-                            if (scoreFieldType != 'String') {
-                                lead.put(leadScoreAPI, result.CompanyResponse.Score.Value.ScoreAsDecimal);
-                            } else {
-                                lead.put(leadScoreAPI, String.valueOf(result.CompanyResponse.Score.Value.ScoreAsDecimal));
-                            }
-                        }
-                    } else {
-                        lead.CW_Score__c = null;
-                        lead.CW_Score_Image__c = null;
-                    }
-                    //CreditLimit
-                    if(result.CompanyResponse.CreditLimit.IsEnabled == True){
-                        if (leadCreditLimitAPI != null) {
-                            if (creditLimitFieldType != 'String') {
-                                lead.put(leadCreditLimitAPI, result.CompanyResponse.CreditLimit.Value.Limit_x);
-                            } else {
-                                lead.put(leadCreditLimitAPI, String.valueOf(result.CompanyResponse.CreditLimit.Value.Limit_x));
-                            }
-                        }
-                        
-                        if (result.CompanyResponse.CreditLimit.Value.Limit_x == 0) {
-                            //CreditLimitReason
-                            lead.CW_Credit_Limit_Reason__c = result.CompanyResponse.CreditLimit.Value.Info;
-                        } else {
-                            lead.CW_Credit_Limit_Reason__c = null;
-                        }
-                    }else{
-                        lead.CW_Credit_Limit__c = null;
-                        lead.CW_Credit_Limit_Reason__c = null;
-                    }*/
-
-                    //Detail url
-                    if(result.CompanyResponse.DetailUrl.IsEnabled == True){
-                        lead.CW_Detail_URL__c = result.CompanyResponse.DetailUrl.Value;
-                    } else {
-                        lead.CW_Detail_URL__c = null;
-                    }
-                    //Report url
-                    if(result.CompanyResponse.ReportUrl.IsEnabled == True){
-                        lead.CW_Report_URL__c = result.CompanyResponse.ReportUrl.Value;
-                    } else {
-                        lead.CW_Report_URL__c = null;
-                    }
-                    //Kyc Report
-                    if(result.CompanyResponse.KycReportUrl.IsEnabled == True){
-                        lead.CW_Kyc_URL__c = result.CompanyResponse.KycReportUrl.Value;
-                    } else {
-                        lead.CW_Kyc_URL__c = null;
-                    }
-                    //Lastsync
-                    lead.CW_Last_Sync__c = System.now();
-                    //Balance
-                    if(result.CompanyResponse.Balances.IsEnabled == True){
-                        if(result.CompanyResponse.Balances.Value.Balans != null){
-                            //Balance Year
-                            lead.CW_Balance__c = String.valueOf(result.CompanyResponse.Balances.Value.Balans[0].BookYear);
-
-                            if (String.isNotBlank(result.CompanyResponse.Balances.Value.Balans[0].BalansData.BalansData[1].Value)){
-                                //Equity
-                                lead.CW_Equity__c = Decimal.valueOf(result.CompanyResponse.Balances.Value.Balans[0].BalansData.BalansData[1].Value);
-                            }
-                            else{
-                                lead.CW_Equity__c = null;
-                            }
-                            if (String.isNotBlank(result.CompanyResponse.Balances.Value.Balans[0].BalansData.BalansData[2].Value)){
-                                //Revenue
-                                if(leadAnnualRevenueAPI != null){
-                                    if (annualRevenueFieldType != 'String') {
-                                        lead.put(leadAnnualRevenueAPI, Decimal.valueOf(result.CompanyResponse.Balances.Value.Balans[0].BalansData.BalansData[2].Value));
-                                    } else {
-                                        lead.put(leadAnnualRevenueAPI, Integer.valueOf(Decimal.valueOf(result.CompanyResponse.Balances.Value.Balans[0].BalansData.BalansData[2].Value).round(RoundingMode.HALF_UP)));
-                                    }
-                                } else {
-                                    lead.CW_Revenue__c = Decimal.valueOf(result.CompanyResponse.Balances.Value.Balans[0].BalansData.BalansData[2].Value);
-                                }
-                            }
-                            else{
-                                lead.CW_Revenue__c = null;
-                            }
-                            if (String.isNotBlank(result.CompanyResponse.Balances.Value.Balans[0].BalansData.BalansData[3].Value)){
-                                //# Employees
-                                //lead.NumberOfEmployees = Integer.valueOf(Decimal.valueOf(result.CompanyResponse.Balances.Value.Balans[0].BalansData.BalansData[3].Value).round(RoundingMode.HALF_UP)); 
-                                
-                                if (leadNumberEmployeesAPI != null) {
-                                    if (numberEmployeesFieldType != 'String') {
-                                        lead.put(leadNumberEmployeesAPI, Integer.valueOf(Decimal.valueOf(result.CompanyResponse.Balances.Value.Balans[0].BalansData.BalansData[3].Value).round(RoundingMode.HALF_UP)));
-                                    } else {
-                                        lead.put(leadNumberEmployeesAPI, result.CompanyResponse.Balances.Value.Balans[0].BalansData.BalansData[3].Value);
-                                    }
-                                } else {
-                                    lead.CW_Employees__c = Decimal.valueOf(result.CompanyResponse.Balances.Value.Balans[0].BalansData.BalansData[3].Value);
-                                }
-                            }
-                            else{
-                                lead.CW_Employees__c = null;
-                            }
-                            if (String.isNotBlank(result.CompanyResponse.Balances.Value.Balans[0].BalansData.BalansData[4].Value)){
-                                //Gross margin
-                                lead.CW_Gross_Margin__c = Decimal.valueOf(result.CompanyResponse.Balances.Value.Balans[0].BalansData.BalansData[4].Value);
-                            }
-                            else{
-                                lead.CW_Gross_Margin__c = null;
-                            }
-                            system.debug('Result: '+ result.CompanyResponse.Balances.Value.Balans[0].BalansData.BalansData[5].Value);
-                            if (String.isNotBlank(result.CompanyResponse.Balances.Value.Balans[0].BalansData.BalansData[5].Value)){
-                                //Result
-                                lead.CW_Result__c = Decimal.valueOf(result.CompanyResponse.Balances.Value.Balans[0].BalansData.BalansData[5].Value);
-                            }
-                            else{
-                                lead.CW_Result__c = null;
-                            }
-                        } else {
-                            lead.CW_Balance__c = null;
-                            lead.CW_Equity__c = null;
-                            lead.CW_Revenue__c = null;
-                            lead.CW_Employees__c = null;
-                            lead.CW_Gross_Margin__c = null;
-                            lead.CW_Result__c = null;
-                        }
-                    } else {
-                        lead.CW_Balance__c = null;
-                        lead.CW_Equity__c = null;
-                        lead.CW_Revenue__c = null;
-                        lead.CW_Employees__c = null;
-                        lead.CW_Gross_Margin__c = null;
-                        lead.CW_Result__c = null;
-                    }
-                    //Warnings
-                    if(result.CompanyResponse.WarningsOverview.IsEnabled == True){
-                        if (result.CompanyResponse.WarningsOverview.Value.Warnings.string_x != null) {
-                            System.debug('string_x = ' + result.CompanyResponse.WarningsOverview.Value.Warnings.string_x);
-                            warningsString = '<ul>';
-                            for (String warning : result.CompanyResponse.WarningsOverview.Value.Warnings.string_x) {
-                                //add warnings to a string
-                                System.debug('warning = ' + warning);
-                                warningsString += '<li>';
-                                warningsString += warning;
-                                warningsString += '</li>';
-                            }
-                            warningsString += '</ul>';
-                            lead.CW_Warnings__c = warningsString;
-                            System.debug('warningsString = ' + warningsString);
-                        }
-                    } else {
-                        lead.CW_Warnings__c= null;
-                    }
-
-                    //Social Security
-                    if(result.CompanyResponse.SocialSecurityInformation.IsEnabled == True){
-                        String delimiter = '-';
-                        String socialSecurityNumberPart1 = String.ValueOf(result.CompanyResponse.SocialSecurityInformation.Value.RegistrationId).substringBefore(delimiter);
-                        String socialSecurityNumberPart2 = String.ValueOf(result.CompanyResponse.SocialSecurityInformation.Value.RegistrationId).substringAfter(delimiter);
-
-                        String fullSocialSecurityNumber = socialSecurityNumberPart1+socialSecurityNumberPart2;
-                        
-                        lead.CW_Social_Security_Information__c = fullSocialSecurityNumber;
-                        
-                        if (leadSocialSecurityAPI != null) {
-                            if (socialSecurityFieldType != 'String') {
-                                lead.put(leadSocialSecurityAPI, fullSocialSecurityNumber);
-                            } else {
-                                lead.put(leadSocialSecurityAPI, fullSocialSecurityNumber);
-                            }
-                        } 
-                    } else {
-                        lead.CW_Social_Security_Information__c = null;
-                        if(leadSocialSecurityAPI != null){
-                            lead.put(leadSocialSecurityAPI, null);
-                        }
-                    }
-
-                    //Main Activity
-                    if(result.CompanyResponse.MainActivity.IsEnabled == True){
-                        lead.CW_Main_Activity__c = String.ValueOf(result.CompanyResponse.MainActivity.Value.Description);
-                        if (leadMainActivityAPI != null) {
-                            if (mainActivityFieldType != 'String') {
-                            lead.put(leadMainActivityAPI, String.ValueOf(result.CompanyResponse.MainActivity.Value.Description));
-                            } else {
-                                lead.put(leadMainActivityAPI, String.ValueOf(result.CompanyResponse.MainActivity.Value.Description));
-                            }
-                        } 
-                    } else {
-                        lead.CW_Main_Activity__c = null;
-                        if(leadMainActivityAPI != null){
-                            lead.put(leadMainActivityAPI, null);
-                        }
-                    }
-
-                    //Activities
-                    if(result.CompanyResponse.Activities.IsEnabled == True){
-                        Integer activitiesArraySize;
-                        String activitiesField = '';
-
-                        if(result.CompanyResponse.Activities.Value.ActivityV1_1 != null){
-
-                            activitiesArraySize = result.CompanyResponse.Activities.Value.ActivityV1_1.size();
-
-                            for (Integer i = 0; i < activitiesArraySize; i++) {
-                                activitiesField = activitiesField + result.CompanyResponse.Activities.Value.ActivityV1_1[i].Description+'\n' ;
-                            }
-                            system.debug('a activitiesField Inserir ->'+ activitiesField );
-
-                            lead.CW_Activities__c = activitiesField;
-
-                            if (leadActivitiesAPI != null) {
-                                if (activitiesFieldType != 'String') {
-                                    lead.put(leadActivitiesAPI, String.ValueOf(activitiesField));
-                                } else {
-                                    lead.put(leadActivitiesAPI, activitiesField);                        
-                                }
-                            }
-                        }
-                    } else {
-                       // lead.CW_Activities__c = null;
-                        if(leadActivitiesAPI != null){
-                            lead.put(leadActivitiesAPI, null);
-                        }
-                    }
-
-                     //Joint Commitees
-                     if(result.CompanyResponse.JointCommitees.IsEnabled == True){
-                        Integer JointCommiteeArraySize;
-                        String JointCommiteeFieldConcatBlue = ''; 
-                        String JointCommiteeFieldConcatWhite = '';
-
-                        if(result.CompanyResponse.JointCommitees.Value.JointCommitee != null){
-
-                            JointCommiteeArraySize = result.CompanyResponse.JointCommitees.Value.JointCommitee.size();
-
-                            for (Integer i = 0; i < JointCommiteeArraySize; i++) {
-                                if(result.CompanyResponse.JointCommitees.Value.JointCommitee[i].Code >= 100 && result.CompanyResponse.JointCommitees.Value.JointCommitee[i].Code < 200){
-                                    JointCommiteeFieldConcatBlue  = JointCommiteeFieldConcatBlue + result.CompanyResponse.JointCommitees.Value.JointCommitee[i].Code +' - '+result.CompanyResponse.JointCommitees.Value.JointCommitee[i].Description+'\n';
-                                } else{
-                                    JointCommiteeFieldConcatWhite  = JointCommiteeFieldConcatWhite + result.CompanyResponse.JointCommitees.Value.JointCommitee[i].Code +' - '+result.CompanyResponse.JointCommitees.Value.JointCommitee[i].Description+'\n';
-                                }        
-                            }
-                            
-                            lead.CW_Joint_Commitees__c = JointCommiteeFieldConcatBlue;
-                            lead.CW_Joint_Commitees_White_Collar__c = JointCommiteeFieldConcatWhite;
-
-                            if (leadJointCommitieesBlueAPI != null) {
-                                if (joinCommiteesBlueFieldType != 'String') {
-                                    lead.put(leadJointCommitieesBlueAPI, String.ValueOf(JointCommiteeFieldConcatBlue));
-                                 } else {
-                                     lead.put(leadJointCommitieesBlueAPI, JointCommiteeFieldConcatBlue);
-                                 }
-                            }
-    
-                            if(leadJointCommitieesWhiteAPI != null){
-                                if (joinCommiteesWhiteFieldType != 'String') {
-                                    lead.put(leadJointCommitieesWhiteAPI, String.ValueOf(JointCommiteeFieldConcatWhite));
-                                 } else {
-                                     lead.put(leadJointCommitieesWhiteAPI, JointCommiteeFieldConcatWhite);
-                                 }
-                            }
-                        }
-                    } else {
-                        lead.CW_Joint_Commitees__c = null;
-                        lead.CW_Joint_Commitees_White_Collar__c = null;
-                        if(leadJointCommitieesBlueAPI != null){
-                            lead.put(leadJointCommitieesBlueAPI, null);
-                        } 
-
-                        if(leadJointCommitieesWhiteAPI != null){
-                            lead.put(leadJointCommitieesWhiteAPI, null);
-                        } 
-                    }
-
-                    //Avoid Callout
-                    lead.CW_Avoid_Callout__c = false;
-
+                    assignLeadFields(lead, result, fromPick);
                     //Update Lead
                     update lead;
                 }
@@ -2209,14 +1330,13 @@ public with sharing class CompanyWebController {
         request1.CompanyWebLogin = oLoginSetup.CW_CompanyWebLogin__c;
         request1.CompanyWebPassword = oLoginSetup.CW_CompanyWebPassword__c;
         request1.ServiceIntegrator = oLoginSetup.CW_ServiceIntegrator__c;
-
-        //Authentication CompanyWeb
-        request1.LoginHash = getAuthenticationParametersCompanyWeb(oLoginSetup.CW_CompanyWebLogin__c, oLoginSetup.CW_CompanyWebPassword__c, oLoginSetup.CW_CompanyWebSecret__c);
+        request1.LoginHash = createCWLoginHash(oLoginSetup.CW_CompanyWebLogin__c, oLoginSetup.CW_CompanyWebPassword__c, oLoginSetup.CW_CompanyWebSecret__c);
         connectCompanywebBe.BasicHttpBinding_AlacarteServiceV1_3 httpreq = new connectCompanywebBe.BasicHttpBinding_AlacarteServiceV1_3();
 
         //Step 1: get Change Dates
         Map<Integer,String> mapOfStep2Token = getChangeDates(httpreq, request1);
         System.debug(mapOfStep2Token);
+        //List<connectCompanywebBe.RequestStep2> listOfStep2Requests = new List<connectCompanywebBe.RequestStep2>();
 
         for(Integer changeDate : mapOfStep2Token.keySet()){
             connectCompanywebBe.RequestStep2 request2 = new connectCompanywebBe.RequestStep2();
@@ -2226,6 +1346,9 @@ public with sharing class CompanyWebController {
             request2.LoginHash = request1.LoginHash;
             request2.ChangedDate = changeDate;
             request2.Step2Token = mapOfStep2Token.get(changeDate);
+            //listOfStep2Requests.add(request2);
+
+
 
             //Step 2: get Vat List
             Map<Integer,String> mapOfStep3Token = getVatList(httpreq, request2);
@@ -2236,7 +1359,19 @@ public with sharing class CompanyWebController {
                 request3.CompanyWebLogin = oLoginSetup.CW_CompanyWebLogin__c;
                 request3.CompanyWebPassword = oLoginSetup.CW_CompanyWebPassword__c;
                 request3.ServiceIntegrator = oLoginSetup.CW_ServiceIntegrator__c;
-                request3.Language = 'NL';
+                // User user Language
+                String userLanguage = UserInfo.getLanguage();
+                
+                if (userLanguage == 'en_US'){
+                    userLanguage = 'EN';
+                } else if(userLanguage == 'nl_NL'){
+                    userLanguage = 'NL';
+                } else if(userLanguage == 'fr'){
+                    userLanguage = 'FR';
+                } else {
+                    userLanguage = 'EN';
+                }
+                request3.Language = userLanguage;
                 request3.LoginHash = request1.LoginHash;
                 request3.ChangedDate = changeDate;
                 request3.VatNumber = String.valueOf(vatNumber);
@@ -2245,12 +1380,14 @@ public with sharing class CompanyWebController {
                 //Step 3: get Company Data
                 connectCompanywebBe.CompanyResponseV1_3 companyData = getCompanyData(httpreq, request3);
                 System.debug(companyData);
-                break;
-            }
 
-            break;
-        }
-        
+                if(companyData.VatNumber.IsEnabled){
+                    updateCompanyByResponse(oLoginSetup, companyData);
+                } else {
+                    System.debug('vatnumber is disabled, won\'t update the company');
+                }
+            }
+        }        
     }
 
     //Step 1: get Change Dates
@@ -2306,6 +1443,973 @@ public with sharing class CompanyWebController {
             return result.CompanyResponse; 
         }
         return null;
+    }
+
+    
+    public static void updateCompanyByResponse(CW_Login_Setup__mdt oLoginSetup, connectCompanywebBe.CompanyResponseV1_3 companyData){
+        Integer vatNumber = companyData.VatNumber.Value;
+        String qryString;
+
+        //find Account with given VAT Number
+        if(oLoginSetup.Account_VAT_Number_Field__c != null){
+            qryString = 'SELECT Id FROM Account WHERE ' + oLoginSetup.Account_VAT_Number_Field__c + ' =:vatNumber';
+        } else {
+            qryString = 'SELECT Id FROM Account WHERE CW_Vat_Number__c =: vatNumber';
+        }
+        Account acc = Database.query(qryString);
+
+        //find Lead with given VAT Number
+        if(oLoginSetup.Lead_VAT_Number_Field__c != null){
+            qryString = 'SELECT Id FROM Lead WHERE ' + oLoginSetup.Lead_VAT_Number_Field__c + ' =:vatNumber';
+        } else {
+            qryString = 'SELECT Id FROM Lead WHERE CW_Vat_Number__c =: vatNumber';
+        }
+        Lead lead = Database.query(qryString);
+
+        assignDynamicMappingFields(oLoginSetup);
+
+        connectCompanywebBe.ResponseCompanyByVatV1_3 result = new connectCompanywebBe.ResponseCompanyByVatV1_3();
+        result.CompanyResponse = companyData;
+
+        if(acc!=null){
+            assignAccountFields(acc, result, false);
+            //Update account
+            update acc;
+        }
+        if(lead!=null){
+            assignLeadFields(lead, result, false);
+            //Update lead
+            update lead;
+        }
+    }
+
+    public static void assignAccountFields(Account acc, connectCompanywebBe.ResponseCompanyByVatV1_3 result, Boolean fromPick){
+        Schema.DisplayType dt, dtAccountVAT, dtAccountScore, dtAccountActivities, dtAccountCreditLimit, dtAccountJointCommiteesBlue, dtAccountJointCommiteesWhite, dtAccountLegalForm, dtAccountMainActivity, dtAccountNumberEmployees, dtAccountSocialSecurity, dtAccountPhone, dtAccountAnnualRevenue;
+        String warningsString = '';
+
+        /* Schema.DisplayType dt; */
+        if(accountVATAPI != null){
+            dtAccountVAT = Schema.getGlobalDescribe().get('Account').getDescribe().fields.getMap().get(accountVATAPI).getDescribe().getType();
+        }
+            
+        if(accountScoreAPI != null){
+            dtAccountScore = Schema.getGlobalDescribe().get('Account').getDescribe().fields.getMap().get(accountScoreAPI).getDescribe().getType();
+        }
+
+        if(accountActivitiesAPI != null){
+            dtAccountActivities = Schema.getGlobalDescribe().get('Account').getDescribe().fields.getMap().get(accountActivitiesAPI).getDescribe().getType();
+        }
+
+        if(accountCreditLimitAPI != null){
+            dtAccountCreditLimit = Schema.getGlobalDescribe().get('Account').getDescribe().fields.getMap().get(accountCreditLimitAPI).getDescribe().getType();
+        }
+
+        if(accountJointCommitieesBlueAPI != null){
+            dtAccountJointCommiteesBlue = Schema.getGlobalDescribe().get('Account').getDescribe().fields.getMap().get(accountJointCommitieesBlueAPI).getDescribe().getType();
+        }
+
+        if(accountJointCommitieesWhiteAPI != null){
+            dtAccountJointCommiteesWhite = Schema.getGlobalDescribe().get('Account').getDescribe().fields.getMap().get(accountJointCommitieesWhiteAPI).getDescribe().getType();
+        }
+
+        if(accountLegalFormAPI != null){
+            dtAccountLegalForm = Schema.getGlobalDescribe().get('Account').getDescribe().fields.getMap().get(accountLegalFormAPI).getDescribe().getType();
+        }
+
+        if(accountMainActivityAPI != null){
+            dtAccountMainActivity = Schema.getGlobalDescribe().get('Account').getDescribe().fields.getMap().get(accountMainActivityAPI).getDescribe().getType();
+        }
+
+        if(accountNumberEmployeesAPI != null){
+            dtAccountNumberEmployees = Schema.getGlobalDescribe().get('Account').getDescribe().fields.getMap().get(accountNumberEmployeesAPI).getDescribe().getType();
+        }
+
+        if(accountSocialSecurityAPI != null){
+            dtAccountSocialSecurity = Schema.getGlobalDescribe().get('Account').getDescribe().fields.getMap().get(accountSocialSecurityAPI).getDescribe().getType();
+        }
+
+        if(accountPhoneAPI != null){
+            dtAccountPhone = Schema.getGlobalDescribe().get('Account').getDescribe().fields.getMap().get(accountPhoneAPI).getDescribe().getType();
+        }
+
+        if(accountAnnualRevenueAPI != null){
+            dtAccountAnnualRevenue = Schema.getGlobalDescribe().get('Account').getDescribe().fields.getMap().get(accountAnnualRevenueAPI).getDescribe().getType();
+        }
+        
+        String vatAccountFieldType,scoreFieldType,activitiesFieldType,creditLimitFieldType,joinCommiteesBlueFieldType,joinCommiteesWhiteFieldType,legalFormFieldType,mainActivityFieldType,numberEmployeesFieldType,socialSecurityFieldType,phoneFieldType,annualRevenueFieldType;
+
+        vatAccountFieldType = String.valueOf(dtAccountVAT);
+        scoreFieldType = String.valueOf(dtAccountScore);
+        activitiesFieldType = String.valueOf(dtAccountActivities);
+        creditLimitFieldType = String.valueOf(dtAccountCreditLimit);
+        joinCommiteesBlueFieldType= String.valueOf(dtAccountJointCommiteesBlue);
+        joinCommiteesWhiteFieldType= String.valueOf(dtAccountJointCommiteesWhite);
+        legalFormFieldType= String.valueOf(dtAccountLegalForm);
+        mainActivityFieldType= String.valueOf(dtAccountMainActivity);
+        numberEmployeesFieldType= String.valueOf(dtAccountNumberEmployees);
+        socialSecurityFieldType= String.valueOf(dtAccountSocialSecurity);
+        phoneFieldType = String.valueOf(dtAccountPhone);
+        annualRevenueFieldType = String.valueOf(dtAccountAnnualRevenue);
+
+        System.debug('vatFieldType = ' + vatAccountFieldType);
+        
+        //Address
+        if(result.CompanyResponse.Address.IsEnabled == True){
+            if(accountStreetAPI!=null) acc.put(accountStreetAPI, result.CompanyResponse.Address.Value.Street + ' ' + result.CompanyResponse.Address.Value.HouseNumber);
+            if(accountCityAPI!=null) acc.put(accountCityAPI, result.CompanyResponse.Address.Value.City);
+            if(accountPostalCodeAPI!=null) acc.put(accountPostalCodeAPI, result.CompanyResponse.Address.Value.PostalCode);
+            if(accountCountryCodeAPI!=null) acc.put(accountCountryCodeAPI, result.CompanyResponse.Address.Value.CountryCode);
+        }else{
+            acc.CW_Street__c = null;
+            acc.CW_City__c = null;
+            acc.CW_PostalCode__c = null;
+            acc.CW_Country__c = null;
+            acc.CW_Address_Line_1__c = null;
+            acc.CW_Address_Line_2__c = null;
+        }
+
+        //Company Name
+        if(result.CompanyResponse.CompanyName.IsEnabled == True){
+            acc.Name = result.CompanyResponse.CompanyName.Value;
+            acc.CW_Name__c = result.CompanyResponse.CompanyName.Value;
+        } else{
+            acc.CW_Name__c = null;
+        }
+        //Prefered Language
+        if(result.CompanyResponse.PreferredLanguages.IsEnabled == True){
+            acc.CW_Preferred_Languages_PL__c = result.CompanyResponse.PreferredLanguages.Value.LanguageString;
+        }else{
+            acc.CW_Preferred_Languages_PL__c = null;
+        }
+        //VAT Number
+        if(result.CompanyResponse.VatNumber.IsEnabled = True){
+            if(fromPick) {
+                acc.CW_VAT_Number__c = String.valueOf(result.CompanyResponse.VatNumber.Value);
+                if (accountVATAPI != null) {
+                        if (vatAccountFieldType != 'String') {
+                        acc.put(accountVATAPI, result.CompanyResponse.VatNumber.Value);
+                    } else {
+                        acc.put(accountVATAPI, String.valueOf(result.CompanyResponse.VatNumber.Value));
+                    }
+                }
+            } else {
+                if (accountVATAPI != null) {
+                    acc.CW_VAT_Number__c = String.valueOf(result.CompanyResponse.VatNumber.Value);
+                }
+            }                   
+        }else{
+            acc.CW_VAT_Number__c = null;
+            if(accountVatAPI != null){
+                acc.put(accountVATAPI, null);
+            }
+        }
+
+        //VAT NumberEnabled
+        if(result.CompanyResponse.VatEnabled.IsEnabled = True){
+            acc.CW_VAT_Liable__c = result.CompanyResponse.VatEnabled.Value;
+        } else{
+            acc.CW_VAT_Liable__c = false; 
+        }
+        //Phone number
+        if(result.CompanyResponse.TelephoneNumber.IsEnabled == True){
+            if (accountPhoneAPI != null) {
+                if (phoneFieldType != 'String') {
+                    acc.put(accountPhoneAPI, result.CompanyResponse.TelephoneNumber.Value);
+                } else {
+                    acc.put(accountPhoneAPI, String.valueOf(result.CompanyResponse.TelephoneNumber.Value));
+                }
+            } else {
+                acc.CW_Phone__c = result.CompanyResponse.TelephoneNumber.Value;
+            }
+        }else{
+            acc.CW_Phone__c = null;
+            if(accountPhoneAPI != null){
+                acc.put(accountPhoneAPI, null);
+            }
+        }
+        //Legal form
+        if(result.CompanyResponse.LegalForm.IsEnabled == True){
+                acc.CW_Abbreviation__c = String.valueOf(result.CompanyResponse.LegalForm.Value.Abbreviation);
+                if (legalFormFieldType != null) {
+                    acc.put(accountLegalFormAPI, String.valueOf(result.CompanyResponse.LegalForm.Value.Code));
+                }
+        } else{
+            acc.CW_Abbreviation__c = null;
+        }
+        //Company Status 
+        if(result.CompanyResponse.CompanyStatus.IsEnabled == True){
+            acc.CW_Company_Status__c = result.CompanyResponse.CompanyStatus.Value.info;
+        }
+        else{
+            acc.CW_Company_Status__c = null;
+        }
+        //Start Date 
+        if(result.CompanyResponse.StartDate.IsEnabled == True){
+            if(result.CompanyResponse.StartDate.Value != 0){
+                String sStartDate = String.ValueOf(result.CompanyResponse.StartDate.Value);
+                String fStartDate = sStartDate.right(2)+ '/' +sStartDate.mid(4,2) +'/'+ sStartDate.left(4);
+                acc.CW_Start_Date__c = date.parse(fStartDate); 
+            } else {
+                acc.CW_Start_Date__c = null; 
+            }
+        }else{
+            acc.CW_Start_Date__c = null; 
+        }
+        //End Date 
+        if(result.CompanyResponse.EndDate.IsEnabled == True){
+            if(result.CompanyResponse.EndDate.Value != 0){
+                String sEndDate = String.ValueOf(result.CompanyResponse.EndDate.Value);
+                String fEndDate = sEndDate.right(2)+ '/' +sEndDate.mid(4,2) +'/'+ sEndDate.left(4);
+                acc.CW_End_Date__c = date.parse(fEndDate);
+            } else{
+                acc.CW_End_Date__c = null;
+            }
+        } else {
+            acc.CW_End_Date__c = null;
+        }
+
+        //Score
+        if(result.CompanyResponse.Score.IsEnabled == True){
+            //Decimal Score
+            acc.CW_Score__c = result.CompanyResponse.Score.Value.ScoreAsDecimal;
+            if (accountScoreAPI != null) {
+                if (scoreFieldType != 'String') {
+                    acc.put(accountScoreAPI, result.CompanyResponse.Score.Value.ScoreAsDecimal);
+                } else {
+                    acc.put(accountScoreAPI, String.valueOf(result.CompanyResponse.Score.Value.ScoreAsDecimal));
+                }
+            }
+            //Score Image
+            acc.CW_Score_Image__c = result.CompanyResponse.Score.Value.ScoreImage;
+        } else {
+            acc.CW_Score__c = null;
+            acc.CW_Score_Image__c = null;
+            if(accountScoreAPI != null){
+                acc.put(accountScoreAPI, null);
+            }
+        }
+        
+        //CreditLimit
+        if(result.CompanyResponse.CreditLimit.IsEnabled == True){
+            acc.CW_Credit_Limit__c= result.CompanyResponse.CreditLimit.Value.Limit_x;
+            if (accountCreditLimitAPI != null) {
+                if (creditLimitFieldType != 'String') {
+                    acc.put(accountCreditLimitAPI, result.CompanyResponse.CreditLimit.Value.Limit_x);
+                } else {
+                    acc.put(accountCreditLimitAPI, String.valueOf(result.CompanyResponse.CreditLimit.Value.Limit_x));
+                }
+            }
+            if (result.CompanyResponse.CreditLimit.Value.Limit_x == 0) {
+                //CreditLimitReason
+                acc.CW_Credit_Limit_Reason__c = result.CompanyResponse.CreditLimit.Value.Info;
+            } else {
+                acc.CW_Credit_Limit_Reason__c = null;
+            }
+        }else{
+            acc.CW_Credit_Limit__c = null;
+            acc.CW_Credit_Limit_Reason__c = null;
+            if(accountCreditLimitAPI != null){
+                acc.put(accountCreditLimitAPI, null);
+            }
+        }
+        
+        //Detail url
+        if(result.CompanyResponse.DetailUrl.IsEnabled == True){
+            acc.CW_Detail_URL__c = result.CompanyResponse.DetailUrl.Value;
+        }else{
+            acc.CW_Detail_URL__c = null;
+        }
+        //Report url
+        if(result.CompanyResponse.ReportUrl.IsEnabled == True){
+            acc.CW_Report_URL__c = result.CompanyResponse.ReportUrl.Value;
+        }else{
+            acc.CW_Report_URL__c = null;
+        }
+        //Kyc Report
+        if(result.CompanyResponse.KycReportUrl.IsEnabled == True){
+            acc.CW_Kyc_URL__c = result.CompanyResponse.KycReportUrl.Value;
+        }else{
+            acc.CW_Kyc_URL__c = null;
+        }
+        //Lastsync
+        acc.CW_Last_Sync__c = System.now();
+        //Balance
+        if(result.CompanyResponse.Balances.IsEnabled == True){
+            if(result.CompanyResponse.Balances.Value.Balans != null){
+                //Balance Year
+                acc.CW_Balance__c = String.valueOf(result.CompanyResponse.Balances.Value.Balans[0].BookYear);
+
+                if (String.isNotBlank(result.CompanyResponse.Balances.Value.Balans[0].BalansData.BalansData[1].Value)){
+                    //Equity Year
+                    acc.CW_Equity__c = Decimal.valueOf(result.CompanyResponse.Balances.Value.Balans[0].BalansData.BalansData[1].Value);
+                }
+                else{
+                    acc.CW_Equity__c = null;
+                }
+                if (String.isNotBlank(result.CompanyResponse.Balances.Value.Balans[0].BalansData.BalansData[2].Value)){
+                    //Revenue
+                    if(accountAnnualRevenueAPI != null){
+                        if (annualRevenueFieldType != 'String') {
+                            acc.put(accountAnnualRevenueAPI, Decimal.valueOf(result.CompanyResponse.Balances.Value.Balans[0].BalansData.BalansData[2].Value));
+                        } else {
+                            acc.put(accountAnnualRevenueAPI, String.valueOf(Decimal.valueOf(result.CompanyResponse.Balances.Value.Balans[0].BalansData.BalansData[2].Value).round(RoundingMode.HALF_UP)));
+                        }
+                    } else {
+                        acc.CW_Revenue__c = Decimal.valueOf(result.CompanyResponse.Balances.Value.Balans[0].BalansData.BalansData[2].Value);
+                    }
+                }
+                else{
+                    acc.CW_Revenue__c = null;
+                    if(accountAnnualRevenueAPI != null){
+                        acc.put(accountAnnualRevenueAPI, null);  
+                    }
+                }
+                if (String.isNotBlank(result.CompanyResponse.Balances.Value.Balans[0].BalansData.BalansData[3].Value)){
+                    //# Employees
+                    //acc.NumberOfEmployees = Integer.valueOf(Decimal.valueOf(result.CompanyResponse.Balances.Value.Balans[0].BalansData.BalansData[3].Value).round(RoundingMode.HALF_UP)); 
+
+                    if (accountNumberEmployeesAPI != null) {
+                        if (numberEmployeesFieldType != 'String') {
+                            acc.put(accountNumberEmployeesAPI, Integer.valueOf(Decimal.valueOf(result.CompanyResponse.Balances.Value.Balans[0].BalansData.BalansData[3].Value).round(RoundingMode.HALF_UP)));
+                        } else {
+                            acc.put(accountNumberEmployeesAPI, result.CompanyResponse.Balances.Value.Balans[0].BalansData.BalansData[3].Value);
+                        }
+                    } else{
+                        acc.CW_Employees__c = Decimal.valueOf(result.CompanyResponse.Balances.Value.Balans[0].BalansData.BalansData[3].Value);
+                    }
+                }
+                else{
+                    acc.CW_Employees__c = null;
+                    //acc.NumberOfEmployees = null;
+                    if(accountNumberEmployeesAPI != null){
+                        acc.put(accountNumberEmployeesAPI, null);  
+                    }
+                }
+
+                if (String.isNotBlank(result.CompanyResponse.Balances.Value.Balans[0].BalansData.BalansData[4].Value)){
+                    //Gross margin
+                    acc.CW_Gross_Margin__c = Decimal.valueOf(result.CompanyResponse.Balances.Value.Balans[0].BalansData.BalansData[4].Value);
+                }
+                else{
+                    acc.CW_Gross_Margin__c = null;
+                }
+                system.debug('Result: '+ result.CompanyResponse.Balances.Value.Balans[0].BalansData.BalansData[5].Value);
+                if (String.isNotBlank(result.CompanyResponse.Balances.Value.Balans[0].BalansData.BalansData[5].Value)){
+                    //Result
+                    acc.CW_Result__c = Decimal.valueOf(result.CompanyResponse.Balances.Value.Balans[0].BalansData.BalansData[5].Value);
+                }
+                else{
+                    acc.CW_Result__c = null;
+                }
+            } else{
+                acc.CW_Balance__c = null;
+                acc.CW_Equity__c = null;
+                acc.CW_Revenue__c = null;
+                acc.CW_Employees__c = null;
+                acc.CW_Gross_Margin__c = null;
+                acc.CW_Result__c = null; 
+            }
+        }else{
+            acc.CW_Balance__c = null;
+            acc.CW_Equity__c = null;
+            acc.CW_Revenue__c = null;
+            acc.CW_Employees__c = null;
+            acc.CW_Gross_Margin__c = null;
+            acc.CW_Result__c = null;
+        }
+        
+        //Warnings
+        if(result.CompanyResponse.WarningsOverview.IsEnabled == True){
+            if (result.CompanyResponse.WarningsOverview.Value.Warnings.string_x != null) {
+                System.debug('string_x = ' + result.CompanyResponse.WarningsOverview.Value.Warnings.string_x);
+                warningsString = '<ul>';
+                for (String warning : result.CompanyResponse.WarningsOverview.Value.Warnings.string_x) {
+                    //add warnings to a string
+                    System.debug('warning = ' + warning);
+                    warningsString += '<li>';
+                    warningsString += warning;
+                    warningsString += '</li>';
+                }
+                warningsString += '</ul>';
+                acc.CW_Warnings__c = warningsString;
+                System.debug('warningsString = ' + warningsString);
+            }
+        }else {
+            acc.CW_Warnings__c = null;
+        }
+        
+        //Social Security
+        if(result.CompanyResponse.SocialSecurityInformation.IsEnabled == True){
+            String delimiter = '-';
+            String socialSecurityNumberPart1 = String.ValueOf(result.CompanyResponse.SocialSecurityInformation.Value.RegistrationId).substringBefore(delimiter);
+            String socialSecurityNumberPart2 = String.ValueOf(result.CompanyResponse.SocialSecurityInformation.Value.RegistrationId).substringAfter(delimiter);
+
+            String fullSocialSecurityNumber = socialSecurityNumberPart1+socialSecurityNumberPart2;
+            
+            if (accountSocialSecurityAPI != null) {
+                if (socialSecurityFieldType != 'String') {
+                    acc.put(accountSocialSecurityAPI, fullSocialSecurityNumber);
+                } else {
+                    acc.put(accountSocialSecurityAPI, fullSocialSecurityNumber);
+                }
+            } 
+        } else {
+            //acc.CW_Social_Security_Information__c = null;
+            if(accountSocialSecurityAPI != null){
+                acc.put(accountSocialSecurityAPI, null);
+            }
+        }
+
+
+        //Join Commitees
+        if(result.CompanyResponse.JointCommitees.IsEnabled == True){
+            Integer JointCommiteeArraySize;
+            String JointCommiteeFieldConcatBlue = ''; 
+            String JointCommiteeFieldConcatWhite = '';
+
+            if(result.CompanyResponse.JointCommitees.Value.JointCommitee != null){
+
+                JointCommiteeArraySize = result.CompanyResponse.JointCommitees.Value.JointCommitee.size();
+
+                for (Integer i = 0; i < JointCommiteeArraySize; i++) {
+                    if(result.CompanyResponse.JointCommitees.Value.JointCommitee[i].Code >= 100 && result.CompanyResponse.JointCommitees.Value.JointCommitee[i].Code < 200){
+                        JointCommiteeFieldConcatBlue  = JointCommiteeFieldConcatBlue + result.CompanyResponse.JointCommitees.Value.JointCommitee[i].Code +' - '+result.CompanyResponse.JointCommitees.Value.JointCommitee[i].Description+'\n';
+                    } else{
+                        JointCommiteeFieldConcatWhite  = JointCommiteeFieldConcatWhite + result.CompanyResponse.JointCommitees.Value.JointCommitee[i].Code +' - '+result.CompanyResponse.JointCommitees.Value.JointCommitee[i].Description+'\n';
+                    }        
+                }
+
+                if (accountJointCommitieesBlueAPI != null) {
+                    if (joinCommiteesBlueFieldType != 'String') {
+                        acc.put(accountJointCommitieesBlueAPI, String.ValueOf(JointCommiteeFieldConcatBlue));
+                        } else {
+                            acc.put(accountJointCommitieesBlueAPI, JointCommiteeFieldConcatBlue);
+                        }
+                }
+
+                if(accountJointCommitieesWhiteAPI != null){
+                    if (joinCommiteesWhiteFieldType != 'String') {
+                        acc.put(accountJointCommitieesWhiteAPI, String.ValueOf(JointCommiteeFieldConcatWhite));
+                        } else {
+                            acc.put(accountJointCommitieesWhiteAPI, JointCommiteeFieldConcatWhite);
+                        }
+                }
+            }
+        } else {
+
+            if(accountJointCommitieesBlueAPI != null){
+                acc.put(accountJointCommitieesBlueAPI, null);
+            } 
+
+            if(accountJointCommitieesWhiteAPI != null){
+                acc.put(accountJointCommitieesWhiteAPI, null);
+            } 
+        }
+
+        //Avoid call out
+        acc.CW_Avoid_Callout__c = false;
+    }
+
+    public static void assignLeadFields(Lead lead, connectCompanywebBe.ResponseCompanyByVatV1_3 result, Boolean fromPick){
+        Schema.DisplayType dt, dtLeadVAT, dtLeadScore, dtLeadActivities, dtLeadCreditLimit, dtLeadJointCommiteesBlue, dtLeadJointCommiteesWhite, dtLeadLegalForm, dtLeadMainActivity, dtLeadNumberEmployees, dtLeadSocialSecurity, dtLeadPhone, dtLeadAnnualRevenue;
+        String warningsString = '';
+        String vatFieldType = String.valueOf(dt);
+                        
+        /* Schema.DisplayType dt; */
+        if(leadVATAPI != null){
+            dtLeadVAT = Schema.getGlobalDescribe().get('Lead').getDescribe().fields.getMap().get(leadVATAPI).getDescribe().getType();
+        }
+        
+        if(leadScoreAPI != null){
+            dtLeadScore = Schema.getGlobalDescribe().get('Lead').getDescribe().fields.getMap().get(leadScoreAPI).getDescribe().getType();
+        }
+
+        if(leadActivitiesAPI != null){
+            dtLeadActivities = Schema.getGlobalDescribe().get('Lead').getDescribe().fields.getMap().get(leadActivitiesAPI).getDescribe().getType();
+        }
+
+        if(leadCreditLimitAPI != null){
+            dtLeadCreditLimit = Schema.getGlobalDescribe().get('Lead').getDescribe().fields.getMap().get(leadCreditLimitAPI).getDescribe().getType();
+        }
+
+        if(leadJointCommitieesBlueAPI != null){
+            dtLeadJointCommiteesBlue = Schema.getGlobalDescribe().get('Lead').getDescribe().fields.getMap().get(leadJointCommitieesBlueAPI).getDescribe().getType();
+        }
+
+        if(leadJointCommitieesWhiteAPI != null){
+            dtLeadJointCommiteesWhite = Schema.getGlobalDescribe().get('Lead').getDescribe().fields.getMap().get(leadJointCommitieesWhiteAPI).getDescribe().getType();
+        }
+
+        if(leadLegalFormAPI != null){
+            dtLeadLegalForm = Schema.getGlobalDescribe().get('Lead').getDescribe().fields.getMap().get(leadLegalFormAPI).getDescribe().getType();
+        }
+
+        if(leadMainActivityAPI != null){
+            dtLeadMainActivity = Schema.getGlobalDescribe().get('Lead').getDescribe().fields.getMap().get(leadMainActivityAPI).getDescribe().getType();
+        }
+
+        if(leadNumberEmployeesAPI != null){
+            dtLeadNumberEmployees = Schema.getGlobalDescribe().get('Lead').getDescribe().fields.getMap().get(leadNumberEmployeesAPI).getDescribe().getType();
+        }
+
+        if(leadSocialSecurityAPI != null){
+            dtLeadSocialSecurity = Schema.getGlobalDescribe().get('Lead').getDescribe().fields.getMap().get(leadSocialSecurityAPI).getDescribe().getType();
+        }
+
+        if(leadPhoneAPI != null){
+            dtLeadPhone = Schema.getGlobalDescribe().get('Lead').getDescribe().fields.getMap().get(leadPhoneAPI).getDescribe().getType();
+        }
+
+        if(leadAnnualRevenueAPI != null){
+            dtLeadAnnualRevenue = Schema.getGlobalDescribe().get('Lead').getDescribe().fields.getMap().get(leadAnnualRevenueAPI).getDescribe().getType();
+        }
+        
+        String vatLeadFieldType, scoreFieldType, activitiesFieldType,creditLimitFieldType,joinCommiteesBlueFieldType,joinCommiteesWhiteFieldType,legalFormFieldType,mainActivityFieldType,numberEmployeesFieldType,socialSecurityFieldType,phoneFieldType,annualRevenueFieldType;
+
+        vatLeadFieldType = String.valueOf(dtLeadVAT);
+        scoreFieldType = String.valueOf(dtLeadScore);
+        activitiesFieldType = String.valueOf(dtLeadActivities);
+        creditLimitFieldType = String.valueOf(dtLeadCreditLimit);
+        joinCommiteesBlueFieldType= String.valueOf(dtLeadJointCommiteesBlue);
+        joinCommiteesWhiteFieldType= String.valueOf(dtLeadJointCommiteesWhite);
+        legalFormFieldType= String.valueOf(dtLeadLegalForm);
+        mainActivityFieldType= String.valueOf(dtLeadMainActivity);
+        numberEmployeesFieldType= String.valueOf(dtLeadNumberEmployees);
+        socialSecurityFieldType= String.valueOf(dtLeadSocialSecurity);
+        phoneFieldType = String.valueOf(dtLeadPhone);
+        annualRevenueFieldType = String.valueOf(dtLeadAnnualRevenue);
+
+        System.debug('vatFieldType = ' + vatLeadFieldType);
+        System.debug('vatFieldType = ' + vatFieldType);
+        
+        //Address
+        if(result.CompanyResponse.Address.IsEnabled == True){
+            if(leadStreetAPI!=null) lead.put(leadStreetAPI, result.CompanyResponse.Address.Value.Street + ' ' + result.CompanyResponse.Address.Value.HouseNumber);
+            if(leadCityAPI!=null) lead.put(leadCityAPI, result.CompanyResponse.Address.Value.City);
+            if(leadPostalCodeAPI!=null) lead.put(leadPostalCodeAPI, result.CompanyResponse.Address.Value.PostalCode);
+            if(leadCountryCodeAPI!=null) lead.put(leadCountryCodeAPI, result.CompanyResponse.Address.Value.CountryCode);
+        } 
+        //else {
+        //     lead.CW_Street__c = null;
+        //     lead.CW_City__c = null;
+        //     lead.CW_PostalCode__c = null; 
+        //     lead.CW_Country__c = null;
+        //     lead.CW_Address_Line_1__c = null; 
+        //     lead.CW_Address_Line_2__c = null;
+        // }
+
+        //Lead Name
+        if(result.CompanyResponse.CompanyName.IsEnabled == True){
+            lead.Company = result.CompanyResponse.CompanyName.Value;
+            lead.CW_Name__c = result.CompanyResponse.CompanyName.Value;
+        } else {
+            lead.CW_Name__c = null;
+        }
+
+        //Prefered Language
+        if(result.CompanyResponse.PreferredLanguages.IsEnabled == True){
+            lead.CW_Preferred_Languages_PL__c = result.CompanyResponse.PreferredLanguages.Value.LanguageString;
+        } else {
+            lead.CW_Preferred_Languages_PL__c = null;
+        }
+        //VAT Number
+        if(result.CompanyResponse.VatNumber.IsEnabled = True){
+            if(fromPick) {
+                lead.CW_VAT_Number__c = String.valueOf(result.CompanyResponse.VatNumber.Value);
+                if (leadVATAPI != null) {
+                    if (vatFieldType != 'String') {
+                        lead.put(leadVATAPI, result.CompanyResponse.VatNumber.Value);
+                    } else {
+                        lead.put(leadVATAPI, String.valueOf(result.CompanyResponse.VatNumber.Value));
+                    }
+                }
+            } else {
+                if (leadVATAPI != null) {
+                    lead.CW_VAT_Number__c = String.valueOf(result.CompanyResponse.VatNumber.Value);
+                }
+            }                   
+        }
+        
+        //VAT NumberEnabled
+        if(result.CompanyResponse.VatEnabled.IsEnabled = True){
+            lead.CW_VAT_Liable__c = result.CompanyResponse.VatEnabled.Value;
+        } else {
+            lead.CW_VAT_Liable__c = false;
+        }
+        //Phone number
+        if(result.CompanyResponse.TelephoneNumber.IsEnabled == True){
+            if(leadPhoneAPI != null){
+                if(phoneFieldType != 'String'){
+                    lead.put(leadPhoneAPI, result.CompanyResponse.TelephoneNumber.Value);
+                } else {
+                    lead.put(leadPhoneAPI, String.ValueOf(result.CompanyResponse.TelephoneNumber.Value));
+                }
+            } else {
+                lead.CW_Phone__c = result.CompanyResponse.TelephoneNumber.Value;
+            }
+        }
+        //Legal form
+        if(result.CompanyResponse.LegalForm.IsEnabled == True){
+            lead.CW_Abbreviation__c = result.CompanyResponse.LegalForm.Value.Abbreviation;
+        } else {
+            lead.CW_Abbreviation__c = null;
+        }
+        // Company status
+        if(result.CompanyResponse.CompanyStatus.IsEnabled == True){ 
+            lead.CW_Company_Status__c = result.CompanyResponse.CompanyStatus.Value.info;
+        } else {
+            lead.CW_Company_Status__c = null;
+        }
+        //Start Date 
+        if(result.CompanyResponse.StartDate.IsEnabled == True){ 
+            if(result.CompanyResponse.StartDate.Value != 0){
+                String sStartDate = String.ValueOf(result.CompanyResponse.StartDate.Value);
+                String fStartDate = sStartDate.right(2)+ '/' +sStartDate.mid(4,2) +'/'+ sStartDate.left(4);
+                lead.CW_Start_Date__c = date.parse(fStartDate);
+            }
+            else{
+                lead.CW_Start_Date__c = null;
+            }
+        }else{
+            lead.CW_Start_Date__c = null;
+        }
+        //End Date 
+        if(result.CompanyResponse.EndDate.IsEnabled == True){
+            if(result.CompanyResponse.EndDate.Value != 0){
+                String sEndDate = String.ValueOf(result.CompanyResponse.EndDate.Value);
+                String fEndDate = sEndDate.right(2)+ '/' +sEndDate.mid(4,2) +'/'+ sEndDate.left(4);
+                lead.CW_End_Date__c = date.parse(fEndDate);
+            } else{
+                lead.CW_End_Date__c = null;
+            }
+        }else{
+            lead.CW_End_Date__c = null;
+        }
+
+        //TF
+        //Score
+        if(result.CompanyResponse.Score.IsEnabled == True){
+            //Decimal Score
+            lead.CW_Score__c = result.CompanyResponse.Score.Value.ScoreAsDecimal;
+            if (leadScoreAPI != null) {
+                if (scoreFieldType != 'String') {
+                    lead.put(leadScoreAPI, result.CompanyResponse.Score.Value.ScoreAsDecimal);
+                } else {
+                    lead.put(leadScoreAPI, String.valueOf(result.CompanyResponse.Score.Value.ScoreAsDecimal));
+                }
+            }
+            //Score Image
+            lead.CW_Score_Image__c = result.CompanyResponse.Score.Value.ScoreImage;
+        } else {
+            lead.CW_Score__c = null;
+            lead.CW_Score_Image__c = null;
+            if(leadScoreAPI != null){
+                lead.put(leadScoreAPI, null);
+            }
+        }
+        
+        //CreditLimit
+        if(result.CompanyResponse.CreditLimit.IsEnabled == True){
+            lead.CW_Credit_Limit__c= result.CompanyResponse.CreditLimit.Value.Limit_x;
+            if (leadCreditLimitAPI != null) {
+                if (creditLimitFieldType != 'String') {
+                    lead.put(leadCreditLimitAPI, result.CompanyResponse.CreditLimit.Value.Limit_x);
+                } else {
+                    lead.put(leadCreditLimitAPI, String.valueOf(result.CompanyResponse.CreditLimit.Value.Limit_x));
+                }
+            }
+            if (result.CompanyResponse.CreditLimit.Value.Limit_x == 0) {
+                //CreditLimitReason
+                lead.CW_Credit_Limit_Reason__c = result.CompanyResponse.CreditLimit.Value.Info;
+            } else {
+                lead.CW_Credit_Limit_Reason__c = null;
+            }
+        }else{
+            lead.CW_Credit_Limit__c = null;
+            lead.CW_Credit_Limit_Reason__c = null;
+            if(leadCreditLimitAPI != null){
+                lead.put(leadCreditLimitAPI, null);
+            }
+        }
+        //TF
+
+
+        /*if(result.CompanyResponse.Score.IsEnabled == True){
+            //Decimal Score
+            lead.CW_Score__c = result.CompanyResponse.Score.Value.ScoreAsDecimal;
+            
+            //Score Image
+            if (leadScoreAPI != null) {
+                if (scoreFieldType != 'String') {
+                    lead.put(leadScoreAPI, result.CompanyResponse.Score.Value.ScoreAsDecimal);
+                } else {
+                    lead.put(leadScoreAPI, String.valueOf(result.CompanyResponse.Score.Value.ScoreAsDecimal));
+                }
+            }
+        } else {
+            lead.CW_Score__c = null;
+            lead.CW_Score_Image__c = null;
+        }
+        //CreditLimit
+        if(result.CompanyResponse.CreditLimit.IsEnabled == True){
+            if (leadCreditLimitAPI != null) {
+                if (creditLimitFieldType != 'String') {
+                    lead.put(leadCreditLimitAPI, result.CompanyResponse.CreditLimit.Value.Limit_x);
+                } else {
+                    lead.put(leadCreditLimitAPI, String.valueOf(result.CompanyResponse.CreditLimit.Value.Limit_x));
+                }
+            }
+            
+            if (result.CompanyResponse.CreditLimit.Value.Limit_x == 0) {
+                //CreditLimitReason
+                lead.CW_Credit_Limit_Reason__c = result.CompanyResponse.CreditLimit.Value.Info;
+            } else {
+                lead.CW_Credit_Limit_Reason__c = null;
+            }
+        }else{
+            lead.CW_Credit_Limit__c = null;
+            lead.CW_Credit_Limit_Reason__c = null;
+        }*/
+
+        //Detail url
+        if(result.CompanyResponse.DetailUrl.IsEnabled == True){
+            lead.CW_Detail_URL__c = result.CompanyResponse.DetailUrl.Value;
+        } else {
+            lead.CW_Detail_URL__c = null;
+        }
+        //Report url
+        if(result.CompanyResponse.ReportUrl.IsEnabled == True){
+            lead.CW_Report_URL__c = result.CompanyResponse.ReportUrl.Value;
+        } else {
+            lead.CW_Report_URL__c = null;
+        }
+        //Kyc Report
+        if(result.CompanyResponse.KycReportUrl.IsEnabled == True){
+            lead.CW_Kyc_URL__c = result.CompanyResponse.KycReportUrl.Value;
+        } else {
+            lead.CW_Kyc_URL__c = null;
+        }
+        //Lastsync
+        lead.CW_Last_Sync__c = System.now();
+        //Balance
+        if(result.CompanyResponse.Balances.IsEnabled == True){
+            if(result.CompanyResponse.Balances.Value.Balans != null){
+                //Balance Year
+                lead.CW_Balance__c = String.valueOf(result.CompanyResponse.Balances.Value.Balans[0].BookYear);
+
+                if (String.isNotBlank(result.CompanyResponse.Balances.Value.Balans[0].BalansData.BalansData[1].Value)){
+                    //Equity
+                    lead.CW_Equity__c = Decimal.valueOf(result.CompanyResponse.Balances.Value.Balans[0].BalansData.BalansData[1].Value);
+                }
+                else{
+                    lead.CW_Equity__c = null;
+                }
+                if (String.isNotBlank(result.CompanyResponse.Balances.Value.Balans[0].BalansData.BalansData[2].Value)){
+                    //Revenue
+                    if(leadAnnualRevenueAPI != null){
+                        if (annualRevenueFieldType != 'String') {
+                            lead.put(leadAnnualRevenueAPI, Decimal.valueOf(result.CompanyResponse.Balances.Value.Balans[0].BalansData.BalansData[2].Value));
+                        } else {
+                            lead.put(leadAnnualRevenueAPI, Integer.valueOf(Decimal.valueOf(result.CompanyResponse.Balances.Value.Balans[0].BalansData.BalansData[2].Value).round(RoundingMode.HALF_UP)));
+                        }
+                    } else {
+                        lead.CW_Revenue__c = Decimal.valueOf(result.CompanyResponse.Balances.Value.Balans[0].BalansData.BalansData[2].Value);
+                    }
+                }
+                else{
+                    lead.CW_Revenue__c = null;
+                }
+                if (String.isNotBlank(result.CompanyResponse.Balances.Value.Balans[0].BalansData.BalansData[3].Value)){
+                    //# Employees
+                    //lead.NumberOfEmployees = Integer.valueOf(Decimal.valueOf(result.CompanyResponse.Balances.Value.Balans[0].BalansData.BalansData[3].Value).round(RoundingMode.HALF_UP)); 
+                    
+                    if (leadNumberEmployeesAPI != null) {
+                        if (numberEmployeesFieldType != 'String') {
+                            lead.put(leadNumberEmployeesAPI, Integer.valueOf(Decimal.valueOf(result.CompanyResponse.Balances.Value.Balans[0].BalansData.BalansData[3].Value).round(RoundingMode.HALF_UP)));
+                        } else {
+                            lead.put(leadNumberEmployeesAPI, result.CompanyResponse.Balances.Value.Balans[0].BalansData.BalansData[3].Value);
+                        }
+                    } else {
+                        lead.CW_Employees__c = Decimal.valueOf(result.CompanyResponse.Balances.Value.Balans[0].BalansData.BalansData[3].Value);
+                    }
+                }
+                else{
+                    lead.CW_Employees__c = null;
+                }
+                if (String.isNotBlank(result.CompanyResponse.Balances.Value.Balans[0].BalansData.BalansData[4].Value)){
+                    //Gross margin
+                    lead.CW_Gross_Margin__c = Decimal.valueOf(result.CompanyResponse.Balances.Value.Balans[0].BalansData.BalansData[4].Value);
+                }
+                else{
+                    lead.CW_Gross_Margin__c = null;
+                }
+                system.debug('Result: '+ result.CompanyResponse.Balances.Value.Balans[0].BalansData.BalansData[5].Value);
+                if (String.isNotBlank(result.CompanyResponse.Balances.Value.Balans[0].BalansData.BalansData[5].Value)){
+                    //Result
+                    lead.CW_Result__c = Decimal.valueOf(result.CompanyResponse.Balances.Value.Balans[0].BalansData.BalansData[5].Value);
+                }
+                else{
+                    lead.CW_Result__c = null;
+                }
+            } else {
+                lead.CW_Balance__c = null;
+                lead.CW_Equity__c = null;
+                lead.CW_Revenue__c = null;
+                lead.CW_Employees__c = null;
+                lead.CW_Gross_Margin__c = null;
+                lead.CW_Result__c = null;
+            }
+        } else {
+            lead.CW_Balance__c = null;
+            lead.CW_Equity__c = null;
+            lead.CW_Revenue__c = null;
+            lead.CW_Employees__c = null;
+            lead.CW_Gross_Margin__c = null;
+            lead.CW_Result__c = null;
+        }
+        //Warnings
+        if(result.CompanyResponse.WarningsOverview.IsEnabled == True){
+            if (result.CompanyResponse.WarningsOverview.Value.Warnings.string_x != null) {
+                System.debug('string_x = ' + result.CompanyResponse.WarningsOverview.Value.Warnings.string_x);
+                warningsString = '<ul>';
+                for (String warning : result.CompanyResponse.WarningsOverview.Value.Warnings.string_x) {
+                    //add warnings to a string
+                    System.debug('warning = ' + warning);
+                    warningsString += '<li>';
+                    warningsString += warning;
+                    warningsString += '</li>';
+                }
+                warningsString += '</ul>';
+                lead.CW_Warnings__c = warningsString;
+                System.debug('warningsString = ' + warningsString);
+            }
+        } else {
+            lead.CW_Warnings__c= null;
+        }
+
+        //Social Security
+        if(result.CompanyResponse.SocialSecurityInformation.IsEnabled == True){
+            String delimiter = '-';
+            String socialSecurityNumberPart1 = String.ValueOf(result.CompanyResponse.SocialSecurityInformation.Value.RegistrationId).substringBefore(delimiter);
+            String socialSecurityNumberPart2 = String.ValueOf(result.CompanyResponse.SocialSecurityInformation.Value.RegistrationId).substringAfter(delimiter);
+
+            String fullSocialSecurityNumber = socialSecurityNumberPart1+socialSecurityNumberPart2;
+            
+            lead.CW_Social_Security_Information__c = fullSocialSecurityNumber;
+            
+            if (leadSocialSecurityAPI != null) {
+                if (socialSecurityFieldType != 'String') {
+                    lead.put(leadSocialSecurityAPI, fullSocialSecurityNumber);
+                } else {
+                    lead.put(leadSocialSecurityAPI, fullSocialSecurityNumber);
+                }
+            } 
+        } else {
+            lead.CW_Social_Security_Information__c = null;
+            if(leadSocialSecurityAPI != null){
+                lead.put(leadSocialSecurityAPI, null);
+            }
+        }
+
+        //Main Activity
+        if(result.CompanyResponse.MainActivity.IsEnabled == True){
+            lead.CW_Main_Activity__c = String.ValueOf(result.CompanyResponse.MainActivity.Value.Description);
+            if (leadMainActivityAPI != null) {
+                if (mainActivityFieldType != 'String') {
+                lead.put(leadMainActivityAPI, String.ValueOf(result.CompanyResponse.MainActivity.Value.Description));
+                } else {
+                    lead.put(leadMainActivityAPI, String.ValueOf(result.CompanyResponse.MainActivity.Value.Description));
+                }
+            } 
+        } else {
+            lead.CW_Main_Activity__c = null;
+            if(leadMainActivityAPI != null){
+                lead.put(leadMainActivityAPI, null);
+            }
+        }
+
+        //Activities
+        if(result.CompanyResponse.Activities.IsEnabled == True){
+            Integer activitiesArraySize;
+            String activitiesField = '';
+
+            if(result.CompanyResponse.Activities.Value.ActivityV1_1 != null){
+
+                activitiesArraySize = result.CompanyResponse.Activities.Value.ActivityV1_1.size();
+
+                for (Integer i = 0; i < activitiesArraySize; i++) {
+                    activitiesField = activitiesField + result.CompanyResponse.Activities.Value.ActivityV1_1[i].Description+'\n' ;
+                }
+                system.debug('a activitiesField Inserir ->'+ activitiesField );
+
+                lead.CW_Activities__c = activitiesField;
+
+                if (leadActivitiesAPI != null) {
+                    if (activitiesFieldType != 'String') {
+                        lead.put(leadActivitiesAPI, String.ValueOf(activitiesField));
+                    } else {
+                        lead.put(leadActivitiesAPI, activitiesField);                        
+                    }
+                }
+            }
+        } else {
+            // lead.CW_Activities__c = null;
+            if(leadActivitiesAPI != null){
+                lead.put(leadActivitiesAPI, null);
+            }
+        }
+
+            //Joint Commitees
+            if(result.CompanyResponse.JointCommitees.IsEnabled == True){
+            Integer JointCommiteeArraySize;
+            String JointCommiteeFieldConcatBlue = ''; 
+            String JointCommiteeFieldConcatWhite = '';
+
+            if(result.CompanyResponse.JointCommitees.Value.JointCommitee != null){
+
+                JointCommiteeArraySize = result.CompanyResponse.JointCommitees.Value.JointCommitee.size();
+
+                for (Integer i = 0; i < JointCommiteeArraySize; i++) {
+                    if(result.CompanyResponse.JointCommitees.Value.JointCommitee[i].Code >= 100 && result.CompanyResponse.JointCommitees.Value.JointCommitee[i].Code < 200){
+                        JointCommiteeFieldConcatBlue  = JointCommiteeFieldConcatBlue + result.CompanyResponse.JointCommitees.Value.JointCommitee[i].Code +' - '+result.CompanyResponse.JointCommitees.Value.JointCommitee[i].Description+'\n';
+                    } else{
+                        JointCommiteeFieldConcatWhite  = JointCommiteeFieldConcatWhite + result.CompanyResponse.JointCommitees.Value.JointCommitee[i].Code +' - '+result.CompanyResponse.JointCommitees.Value.JointCommitee[i].Description+'\n';
+                    }        
+                }
+                
+                lead.CW_Joint_Commitees__c = JointCommiteeFieldConcatBlue;
+                lead.CW_Joint_Commitees_White_Collar__c = JointCommiteeFieldConcatWhite;
+
+                if (leadJointCommitieesBlueAPI != null) {
+                    if (joinCommiteesBlueFieldType != 'String') {
+                        lead.put(leadJointCommitieesBlueAPI, String.ValueOf(JointCommiteeFieldConcatBlue));
+                        } else {
+                            lead.put(leadJointCommitieesBlueAPI, JointCommiteeFieldConcatBlue);
+                        }
+                }
+
+                if(leadJointCommitieesWhiteAPI != null){
+                    if (joinCommiteesWhiteFieldType != 'String') {
+                        lead.put(leadJointCommitieesWhiteAPI, String.ValueOf(JointCommiteeFieldConcatWhite));
+                        } else {
+                            lead.put(leadJointCommitieesWhiteAPI, JointCommiteeFieldConcatWhite);
+                        }
+                }
+            }
+        } else {
+            lead.CW_Joint_Commitees__c = null;
+            lead.CW_Joint_Commitees_White_Collar__c = null;
+            if(leadJointCommitieesBlueAPI != null){
+                lead.put(leadJointCommitieesBlueAPI, null);
+            } 
+
+            if(leadJointCommitieesWhiteAPI != null){
+                lead.put(leadJointCommitieesWhiteAPI, null);
+            } 
+        }
+
+        //Avoid Callout
+        lead.CW_Avoid_Callout__c = false;
     }
 
 }
