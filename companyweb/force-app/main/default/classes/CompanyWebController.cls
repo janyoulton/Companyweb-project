@@ -42,6 +42,48 @@ public with sharing class CompanyWebController {
             getCompanyInfo(Id, VatNumber, objectName, false);
         }
     }
+
+    private static String getAuthenticationParametersCompanyWeb(String login, String password, String secret){
+        //Date Handling
+        DateTime dtTodayDate = System.today();
+        String sMonth;
+        String sDay;
+        Integer Day =  dtTodayDate.day();
+        Integer Month = dtTodayDate.Month();
+
+        if(Day < 10){
+            sDay = String.valueOf('0'+ Day);
+        }else{
+            sDay = String.valueOf(Day);
+        }
+        
+        if(Month < 10){
+            sMonth = String.valueOf('0'+ Month);
+        }else{
+            sMonth = String.valueOf(Month);
+        }
+
+        Integer Year = dtTodayDate.Year();
+
+        //String to be passed for SHA1 hash generation
+        String targetString = (
+            Year +
+            sMonth +
+            sDay +
+            login +
+            password +
+            secret
+        ).toLowercase();
+        // Convert to BLOB
+        Blob targetBlob = Blob.valueOf(targetString);
+        // Generate SHA1 digest
+        Blob hashSHA1 = Crypto.generateDigest('SHA1', targetBlob);
+        // For Rackspace Compatiblity encode the binary into BASE 64
+        // this will result in 28 chars long string 
+        String hashBase64SHA1 = EncodingUtil.base64encode(hashSHA1);
+        System.debug(EncodingUtil.convertToHex(hashSHA1));
+        return EncodingUtil.convertToHex(hashSHA1);
+    }
     
     @AuraEnabled
     public static object getCompanyInfo(String Id, String VatNumber, String objectName, Boolean fromPick){
@@ -177,58 +219,18 @@ public with sharing class CompanyWebController {
             reqByVAT.CompanyWebPassword = oLoginSetup.CW_CompanyWebPassword__c;
             reqByVAT.ServiceIntegrator = oLoginSetup.CW_ServiceIntegrator__c;
 
-            //Date Handling
-            DateTime dtTodayDate = System.today();
-            String sMonth;
-            String sDay;
-            Integer Day =  dtTodayDate.day();
-            Integer Month = dtTodayDate.Month();
-
-            if(Day < 10){
-                sDay = String.valueOf('0'+ Day);
-            }else{
-                sDay = String.valueOf(Day);
-            }
-            
-            if(Month < 10){
-                sMonth = String.valueOf('0'+ Month);
-            }else{
-                sMonth = String.valueOf(Month);
-            }
-
-            Integer Year = dtTodayDate.Year();
-
-            //String to be passed for SHA1 hash generation
-            String targetString = (
-                Year +
-                sMonth +
-                sDay +
-                oLoginSetup.CW_CompanyWebLogin__c +
-                oLoginSetup.CW_CompanyWebPassword__c +
-                oLoginSetup.CW_CompanyWebSecret__c
-            ).toLowercase();
-            // Convert to BLOB
-            Blob targetBlob = Blob.valueOf(targetString);
-            // Generate SHA1 digest
-            Blob hashSHA1 = Crypto.generateDigest('SHA1', targetBlob);
-            // For Rackspace Compatiblity encode the binary into BASE 64
-            // this will result in 28 chars long string 
-            String hashBase64SHA1 = EncodingUtil.base64encode (hashSHA1);
-            System.debug(EncodingUtil.convertToHex(hashSHA1));
-            reqByVAT.LoginHash = EncodingUtil.convertToHex(hashSHA1);
+            //Authentication CompanyWeb
+            reqByVAT.LoginHash = getAuthenticationParametersCompanyWeb(oLoginSetup.CW_CompanyWebLogin__c, oLoginSetup.CW_CompanyWebPassword__c, oLoginSetup.CW_CompanyWebSecret__c);
             connectCompanywebBe.BasicHttpBinding_AlacarteServiceV1_3 httpreq = new connectCompanywebBe.BasicHttpBinding_AlacarteServiceV1_3();
             //http Reponse
-                result = httpreq.GetCompanyByVat(reqByVAT);
-
-            //system.debug('Result:' +result);
-            //system.debug('Status Code:' +result.StatusCode);
+            result = httpreq.GetCompanyByVat(reqByVAT);
 
             String warningsString = '';
+            System.debug('statuscode = ' + result.StatusCode);
 
             Schema.DisplayType dt,dtAccountVAT, dtAccountScore, dtAccountActivities, dtAccountCreditLimit, dtAccountJointCommiteesBlue, dtAccountJointCommiteesWhite, dtAccountLegalForm, dtAccountMainActivity, dtAccountNumberEmployees, dtAccountSocialSecurity,dtLeadVAT, dtLeadScore, dtLeadActivities, dtLeadCreditLimit, dtLeadJointCommiteesBlue, dtLeadJointCommiteesWhite, dtLeadLegalForm, dtLeadMainActivity, dtLeadNumberEmployees, dtLeadSocialSecurity;
             Schema.DisplayType dtAccountPhone, dtAccountAnnualRevenue, dtLeadPhone, dtLeadAnnualRevenue;
-            System.debug('statuscode = ' + result.StatusCode);
-        
+
             if(result.StatusCode  == 0){
                 if(objectName == 'Account'){
                     Account acc = (Account)genericObject;
@@ -2186,5 +2188,45 @@ public with sharing class CompanyWebController {
         }
         system.debug('ERROR: '+errorMessage);
         return errorMessage;
+    }
+
+    public static void getAlertsALaCarte(){
+        oLoginSetup = [SELECT Id, CW_CompanyWebLogin__c, CW_CompanyWebPassword__c, CW_CompanyWebSecret__c, CW_ServiceIntegrator__c, Account_VAT_Number_Field__c,
+             Lead_VAT_Number_Field__c,Account_Score_Field__c,Account_Activities_Field__c,Account_Credit_Limit_Field__c,Account_Joint_Commitees_Field__c,
+             Account_Joint_Commitees_White_Field__c,Account_Legal_Form_Field__c,Account_Main_Activity_Field__c,Account_Number_Employees_Field__c,
+             Account_Social_Security_Field__c,Account_Phone_Field__c,Account_Street_Field__c,Account_PostalCode_Field__c,Account_City_Field__c,Account_CountryCode_Field__c,
+             Account_Line1_Field__c,Account_Line2_Field__c,Account_Annual_Revenue_Field__c,CW_Duplicate_Check_Creation__c,
+             CW_Duplicate_Check_Refresh__c,Lead_Score_Field__c,Lead_Activities_Field__c,Lead_Credit_Limit_Field__c,Lead_Joint_Commitees_Field__c,
+             Lead_Joint_Commitees_White_Field__c,Lead_Legal_Form_Field__c,Lead_Main_Activity_Field__c,Lead_Number_Employees_Field__c,Lead_Social_Security_Field__c,
+             Lead_Phone_Field__c,Lead_Annual_Revenue_Field__c,Lead_Street_Field__c,Lead_PostalCode_Field__c,Lead_City_Field__c,Lead_CountryCode_Field__c,
+             Lead_Line1_Field__c,Lead_Line2_Field__c FROM CW_Login_Setup__mdt WHERE DeveloperName = 'CW_Login'];
+
+        system.debug('Result of loginSetup '+ oLoginSetup);
+        system.debug('objectName '+ objectName);
+
+        connectCompanywebBe.Alerts_Step1_GetChangeDates_element getChangeDates = new connectCompanywebBe.Alerts_Step1_GetChangeDates_element();
+        connectCompanywebBe.RequestStep1 request = new connectCompanywebBe.RequestStep1();
+        request.CompanyWebLogin = oLoginSetup.CW_CompanyWebLogin__c;
+        request.CompanyWebPassword = oLoginSetup.CW_CompanyWebPassword__c;
+        request.ServiceIntegrator = oLoginSetup.CW_ServiceIntegrator__c;
+
+        //Authentication CompanyWeb
+        request.LoginHash = getAuthenticationParametersCompanyWeb(oLoginSetup.CW_CompanyWebLogin__c, oLoginSetup.CW_CompanyWebPassword__c, oLoginSetup.CW_CompanyWebSecret__c);
+        connectCompanywebBe.BasicHttpBinding_AlacarteServiceV1_3 httpreq = new connectCompanywebBe.BasicHttpBinding_AlacarteServiceV1_3();
+        //http Reponse
+        result = httpreq.GetCompanyByVat(request);
+
+        String warningsString = '';
+        System.debug('statuscode = ' + result.StatusCode);
+
+        if(result.StatusCode == 0){
+            String[] arrayOfStep2Token;
+
+            for(connectCompanywebBe.ChangeDate changeDate : result.ChangeDates.ChangeDate){
+                System.debug(changeDate);
+                arrayOfStep2Token.add(changeDate.Step2Token);
+            }
+            
+        }
     }
 }

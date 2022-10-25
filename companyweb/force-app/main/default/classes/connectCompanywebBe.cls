@@ -71,12 +71,12 @@ public class connectCompanywebBe {
         private String[] apex_schema_type_info = new String[]{'http://connect.companyweb.be/','true','false'};
         private String[] field_order_type_info = new String[]{'Code','Info'};
     }
-    /*public class Alerts_Step3_CompanyOnVat_element {
+    public class Alerts_Step3_CompanyOnVat_element {
         public connectCompanywebBe.RequestStep3_CompanyOnVat request;
         private String[] request_type_info = new String[]{'request','http://connect.companyweb.be/',null,'0','1','false'};
         private String[] apex_schema_type_info = new String[]{'http://connect.companyweb.be/','true','false'};
         private String[] field_order_type_info = new String[]{'request'};
-    }*/
+    }
     public class JudicialAgreementsListResponseFragment {
         public Boolean IsEnabled;
         public connectCompanywebBe.ArrayOfJudicialAgreement Value;
@@ -85,12 +85,12 @@ public class connectCompanywebBe {
         private String[] apex_schema_type_info = new String[]{'http://connect.companyweb.be/','true','false'};
         private String[] field_order_type_info = new String[]{'IsEnabled','Value'};
     }
-    /*public class Alerts_Step2_GetVatListResponse_element {
+    public class Alerts_Step2_GetVatListResponse_element {
         public connectCompanywebBe.ResponseStep2 Alerts_Step2_GetVatListResult;
         private String[] Alerts_Step2_GetVatListResult_type_info = new String[]{'Alerts_Step2_GetVatListResult','http://connect.companyweb.be/',null,'0','1','false'};
         private String[] apex_schema_type_info = new String[]{'http://connect.companyweb.be/','true','false'};
         private String[] field_order_type_info = new String[]{'Alerts_Step2_GetVatListResult'};
-    }*/
+    }
     public class WarningsOverviewResponseFragment {
         public Boolean IsEnabled;
         public connectCompanywebBe.WarningsOverview Value;
@@ -99,7 +99,7 @@ public class connectCompanywebBe {
         private String[] apex_schema_type_info = new String[]{'http://connect.companyweb.be/','true','false'};
         private String[] field_order_type_info = new String[]{'IsEnabled','Value'};
     }
-    /*public class ChangeDate {
+    public class ChangeDate {
         public Integer DateOfChange;
         public Integer NumberOfChanges;
         public String Step2Token;
@@ -108,7 +108,7 @@ public class connectCompanywebBe {
         private String[] Step2Token_type_info = new String[]{'Step2Token','http://connect.companyweb.be/',null,'0','1','false'};
         private String[] apex_schema_type_info = new String[]{'http://connect.companyweb.be/','true','false'};
         private String[] field_order_type_info = new String[]{'DateOfChange','NumberOfChanges','Step2Token'};
-    }*/
+    }
     public class Publication {
         public Integer Id;
         public String Type_x;
@@ -205,7 +205,7 @@ public class connectCompanywebBe {
         private String[] apex_schema_type_info = new String[]{'http://connect.companyweb.be/','true','false'};
         private String[] field_order_type_info = new String[]{'JointCommitee'};
     }
-    /*public class ResponseAddListToAlerts {
+    public class ResponseAddListToAlerts {
         public Integer StatusCode;
         public String StatusMessage;
         public Integer Count_ActiveAlerts;
@@ -220,7 +220,7 @@ public class connectCompanywebBe {
         private String[] Count_Invalids_type_info = new String[]{'Count_Invalids','http://connect.companyweb.be/',null,'1','1','false'};
         private String[] apex_schema_type_info = new String[]{'http://connect.companyweb.be/','true','false'};
         private String[] field_order_type_info = new String[]{'StatusCode','StatusMessage','Count_ActiveAlerts','Count_Adds','Count_Updates','Count_Invalids'};
-    }*/
+    }
     public class CompanyStatusResponseFragment {
         public Boolean IsEnabled;
         public connectCompanywebBe.Status Value;
@@ -237,7 +237,7 @@ public class connectCompanywebBe {
         private String[] apex_schema_type_info = new String[]{'http://connect.companyweb.be/','true','false'};
         private String[] field_order_type_info = new String[]{'IsEnabled','Value'};
     }
-    /*public class RequestAddToAlerts {
+    public class RequestAddToAlerts {
         public String VatNumber;
         public String CompanyWebLogin;
         public String CompanyWebPassword;
@@ -250,7 +250,7 @@ public class connectCompanywebBe {
         private String[] LoginHash_type_info = new String[]{'LoginHash','http://connect.companyweb.be/',null,'0','1','false'};
         private String[] apex_schema_type_info = new String[]{'http://connect.companyweb.be/','true','false'};
         private String[] field_order_type_info = new String[]{'VatNumber','CompanyWebLogin','CompanyWebPassword','ServiceIntegrator','LoginHash'};
-    }*/
+    }
     public class ArrayOfKycLink {
         public connectCompanywebBe.KycLink[] KycLink;
         private String[] KycLink_type_info = new String[]{'KycLink','http://connect.companyweb.be/',null,'0','-1','true'};
@@ -403,26 +403,26 @@ public class connectCompanywebBe {
         private String[] apex_schema_type_info = new String[]{'http://connect.companyweb.be/','true','false'};
         private String[] field_order_type_info = new String[]{'Management'};
     }
-    /*public class ResponseAddToAlerts {
+    public class ResponseAddToAlerts {
         public Integer StatusCode;
         public String StatusMessage;
         private String[] StatusCode_type_info = new String[]{'StatusCode','http://connect.companyweb.be/',null,'1','1','false'};
         private String[] StatusMessage_type_info = new String[]{'StatusMessage','http://connect.companyweb.be/',null,'0','1','false'};
         private String[] apex_schema_type_info = new String[]{'http://connect.companyweb.be/','true','false'};
         private String[] field_order_type_info = new String[]{'StatusCode','StatusMessage'};
-    }*/
+    }
     public class ArrayOfActivityV1_1 {
         public connectCompanywebBe.ActivityV1_1[] ActivityV1_1;
         private String[] ActivityV1_1_type_info = new String[]{'ActivityV1_1','http://connect.companyweb.be/',null,'0','-1','true'};
         private String[] apex_schema_type_info = new String[]{'http://connect.companyweb.be/','true','false'};
         private String[] field_order_type_info = new String[]{'ActivityV1_1'};
     }
-    /*public class Alerts_AddCompanyResponse_element {
+    public class Alerts_AddCompanyResponse_element {
         public connectCompanywebBe.ResponseAddToAlerts Alerts_AddCompanyResult;
         private String[] Alerts_AddCompanyResult_type_info = new String[]{'Alerts_AddCompanyResult','http://connect.companyweb.be/',null,'0','1','false'};
         private String[] apex_schema_type_info = new String[]{'http://connect.companyweb.be/','true','false'};
         private String[] field_order_type_info = new String[]{'Alerts_AddCompanyResult'};
-    }*/
+    }
     public class SocialSecurityInformation {
         public String RegistrationId;
         private String[] RegistrationId_type_info = new String[]{'RegistrationId','http://connect.companyweb.be/',null,'0','1','false'};
@@ -805,12 +805,12 @@ public class connectCompanywebBe {
         private String[] apex_schema_type_info = new String[]{'http://connect.companyweb.be/','true','false'};
         private String[] field_order_type_info = new String[]{'UsesDutch','UsesFrench','UsesGerman','LanguageString'};
     }
-    /*public class Alerts_AddCompany_element {
+    public class Alerts_AddCompany_element {
         public connectCompanywebBe.RequestAddToAlerts request;
         private String[] request_type_info = new String[]{'request','http://connect.companyweb.be/',null,'0','1','false'};
         private String[] apex_schema_type_info = new String[]{'http://connect.companyweb.be/','true','false'};
         private String[] field_order_type_info = new String[]{'request'};
-    }*/
+    }
     public class ArrayOfParticipation {
         public connectCompanywebBe.Participation[] Participation;
         private String[] Participation_type_info = new String[]{'Participation','http://connect.companyweb.be/',null,'0','-1','true'};
@@ -853,12 +853,12 @@ public class connectCompanywebBe {
         private String[] apex_schema_type_info = new String[]{'http://connect.companyweb.be/','true','false'};
         private String[] field_order_type_info = new String[]{'VatNumbers','CompanyWebLogin','CompanyWebPassword','ServiceIntegrator','LoginHash'};
     }
-    /*public class Alerts_Step1_GetChangeDatesResponse_element {
+    public class Alerts_Step1_GetChangeDatesResponse_element {
         public connectCompanywebBe.ResponseStep1 Alerts_Step1_GetChangeDatesResult;
         private String[] Alerts_Step1_GetChangeDatesResult_type_info = new String[]{'Alerts_Step1_GetChangeDatesResult','http://connect.companyweb.be/',null,'0','1','false'};
         private String[] apex_schema_type_info = new String[]{'http://connect.companyweb.be/','true','false'};
         private String[] field_order_type_info = new String[]{'Alerts_Step1_GetChangeDatesResult'};
-    }*/
+    }
     public class BankrupcyPublication {
         public String Griffie;
         public Integer Date_x;
@@ -935,13 +935,13 @@ public class connectCompanywebBe {
         private String[] apex_schema_type_info = new String[]{'http://connect.companyweb.be/','true','false'};
         private String[] field_order_type_info = new String[]{'StatusCode','StatusMessage','ChangedVatList'};
     }
-    /*public class ArrayOfChangeDate {
+    public class ArrayOfChangeDate {
         public connectCompanywebBe.ChangeDate[] ChangeDate;
         private String[] ChangeDate_type_info = new String[]{'ChangeDate','http://connect.companyweb.be/',null,'0','-1','true'};
         private String[] apex_schema_type_info = new String[]{'http://connect.companyweb.be/','true','false'};
         private String[] field_order_type_info = new String[]{'ChangeDate'};
-    }*/
-    /*public class ResponseStep1 {
+    }
+    public class ResponseStep1 {
         public Integer StatusCode;
         public String StatusMessage;
         public connectCompanywebBe.ArrayOfChangeDate ChangeDates;
@@ -950,7 +950,7 @@ public class connectCompanywebBe {
         private String[] ChangeDates_type_info = new String[]{'ChangeDates','http://connect.companyweb.be/',null,'0','1','true'};
         private String[] apex_schema_type_info = new String[]{'http://connect.companyweb.be/','true','false'};
         private String[] field_order_type_info = new String[]{'StatusCode','StatusMessage','ChangeDates'};
-    }*/
+    }
     public class ArrayOfBalansData {
         public connectCompanywebBe.BalansData[] BalansData;
         private String[] BalansData_type_info = new String[]{'BalansData','http://connect.companyweb.be/',null,'0','-1','true'};
@@ -1041,12 +1041,12 @@ public class connectCompanywebBe {
         private String[] apex_schema_type_info = new String[]{'http://connect.companyweb.be/','true','false'};
         private String[] field_order_type_info = new String[]{'string_x'};
     }
-    /*public class Alerts_AddListOfCompaniesResponse_element {
+    public class Alerts_AddListOfCompaniesResponse_element {
         public connectCompanywebBe.ResponseAddListToAlerts Alerts_AddListOfCompaniesResult;
         private String[] Alerts_AddListOfCompaniesResult_type_info = new String[]{'Alerts_AddListOfCompaniesResult','http://connect.companyweb.be/',null,'0','1','false'};
         private String[] apex_schema_type_info = new String[]{'http://connect.companyweb.be/','true','false'};
         private String[] field_order_type_info = new String[]{'Alerts_AddListOfCompaniesResult'};
-    }*/
+    }
     public class BasicHttpBinding_AlacarteServiceV1_3 {
         public String endpoint_x = 'https://connect.companyweb.be/V1.3/alacarteservice.asmx';
         public Map<String,String> inputHttpHeaders_x;
@@ -1077,7 +1077,7 @@ public class connectCompanywebBe {
             response_x = response_map_x.get('response_x');
             return response_x.GetCompanyByVatResult;
         }
-        /*public connectCompanywebBe.ResponseStep1 Alerts_Step1_GetChangeDates(connectCompanywebBe.RequestStep1 request) {
+        public connectCompanywebBe.ResponseStep1 Alerts_Step1_GetChangeDates(connectCompanywebBe.RequestStep1 request) {
             connectCompanywebBe.Alerts_Step1_GetChangeDates_element request_x = new connectCompanywebBe.Alerts_Step1_GetChangeDates_element();
             request_x.request = request;
             connectCompanywebBe.Alerts_Step1_GetChangeDatesResponse_element response_x;
@@ -1097,8 +1097,8 @@ public class connectCompanywebBe {
             );
             response_x = response_map_x.get('response_x');
             return response_x.Alerts_Step1_GetChangeDatesResult;
-        }*/
-        /*public connectCompanywebBe.ResponseAddListToAlerts Alerts_AddListOfCompanies(connectCompanywebBe.RequestAddListToAlerts request) {
+        }
+        public connectCompanywebBe.ResponseAddListToAlerts Alerts_AddListOfCompanies(connectCompanywebBe.RequestAddListToAlerts request) {
             connectCompanywebBe.Alerts_AddListOfCompanies_element request_x = new connectCompanywebBe.Alerts_AddListOfCompanies_element();
             request_x.request = request;
             connectCompanywebBe.Alerts_AddListOfCompaniesResponse_element response_x;
@@ -1118,8 +1118,8 @@ public class connectCompanywebBe {
             );
             response_x = response_map_x.get('response_x');
             return response_x.Alerts_AddListOfCompaniesResult;
-        }*/
-        /*public connectCompanywebBe.ResponseCompanyByVatV1_3 Alerts_Step3_CompanyOnVat(connectCompanywebBe.RequestStep3_CompanyOnVat request) {
+        }
+        public connectCompanywebBe.ResponseCompanyByVatV1_3 Alerts_Step3_CompanyOnVat(connectCompanywebBe.RequestStep3_CompanyOnVat request) {
             connectCompanywebBe.Alerts_Step3_CompanyOnVat_element request_x = new connectCompanywebBe.Alerts_Step3_CompanyOnVat_element();
             request_x.request = request;
             connectCompanywebBe.Alerts_Step3_CompanyOnVatResponse_element response_x;
@@ -1139,8 +1139,8 @@ public class connectCompanywebBe {
             );
             response_x = response_map_x.get('response_x');
             return response_x.Alerts_Step3_CompanyOnVatResult;
-        }*/
-        /*public connectCompanywebBe.ResponseAddToAlerts Alerts_AddCompany(connectCompanywebBe.RequestAddToAlerts request) {
+        }
+        public connectCompanywebBe.ResponseAddToAlerts Alerts_AddCompany(connectCompanywebBe.RequestAddToAlerts request) {
             connectCompanywebBe.Alerts_AddCompany_element request_x = new connectCompanywebBe.Alerts_AddCompany_element();
             request_x.request = request;
             connectCompanywebBe.Alerts_AddCompanyResponse_element response_x;
@@ -1160,7 +1160,7 @@ public class connectCompanywebBe {
             );
             response_x = response_map_x.get('response_x');
             return response_x.Alerts_AddCompanyResult;
-        }*/
+        }
         public connectCompanywebBe.ResponseSearch SearchCompanies(connectCompanywebBe.RequestSearch request) {
             connectCompanywebBe.SearchCompanies_element request_x = new connectCompanywebBe.SearchCompanies_element();
             request_x.request = request;
@@ -1182,7 +1182,7 @@ public class connectCompanywebBe {
             response_x = response_map_x.get('response_x');
             return response_x.SearchCompaniesResult;
         }
-        /*public connectCompanywebBe.ResponseStep2 Alerts_Step2_GetVatList(connectCompanywebBe.RequestStep2 request) {
+        public connectCompanywebBe.ResponseStep2 Alerts_Step2_GetVatList(connectCompanywebBe.RequestStep2 request) {
             connectCompanywebBe.Alerts_Step2_GetVatList_element request_x = new connectCompanywebBe.Alerts_Step2_GetVatList_element();
             request_x.request = request;
             connectCompanywebBe.Alerts_Step2_GetVatListResponse_element response_x;
@@ -1202,7 +1202,7 @@ public class connectCompanywebBe {
             );
             response_x = response_map_x.get('response_x');
             return response_x.Alerts_Step2_GetVatListResult;
-        }*/
+        }
         /*public connectCompanywebBe.ResponseRemoveFromAlerts Alerts_RemoveCompany(connectCompanywebBe.RequestRemoveFromAlerts request) {
             connectCompanywebBe.Alerts_RemoveCompany_element request_x = new connectCompanywebBe.Alerts_RemoveCompany_element();
             request_x.request = request;
