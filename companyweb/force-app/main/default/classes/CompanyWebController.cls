@@ -2191,42 +2191,121 @@ public with sharing class CompanyWebController {
     }
 
     public static void getAlertsALaCarte(){
+        CW_Login_Setup__mdt oLoginSetup = new CW_Login_Setup__mdt();
+
         oLoginSetup = [SELECT Id, CW_CompanyWebLogin__c, CW_CompanyWebPassword__c, CW_CompanyWebSecret__c, CW_ServiceIntegrator__c, Account_VAT_Number_Field__c,
              Lead_VAT_Number_Field__c,Account_Score_Field__c,Account_Activities_Field__c,Account_Credit_Limit_Field__c,Account_Joint_Commitees_Field__c,
              Account_Joint_Commitees_White_Field__c,Account_Legal_Form_Field__c,Account_Main_Activity_Field__c,Account_Number_Employees_Field__c,
              Account_Social_Security_Field__c,Account_Phone_Field__c,Account_Street_Field__c,Account_PostalCode_Field__c,Account_City_Field__c,Account_CountryCode_Field__c,
-             Account_Line1_Field__c,Account_Line2_Field__c,Account_Annual_Revenue_Field__c,CW_Duplicate_Check_Creation__c,
+             Account_Annual_Revenue_Field__c,CW_Duplicate_Check_Creation__c,
              CW_Duplicate_Check_Refresh__c,Lead_Score_Field__c,Lead_Activities_Field__c,Lead_Credit_Limit_Field__c,Lead_Joint_Commitees_Field__c,
              Lead_Joint_Commitees_White_Field__c,Lead_Legal_Form_Field__c,Lead_Main_Activity_Field__c,Lead_Number_Employees_Field__c,Lead_Social_Security_Field__c,
-             Lead_Phone_Field__c,Lead_Annual_Revenue_Field__c,Lead_Street_Field__c,Lead_PostalCode_Field__c,Lead_City_Field__c,Lead_CountryCode_Field__c,
-             Lead_Line1_Field__c,Lead_Line2_Field__c FROM CW_Login_Setup__mdt WHERE DeveloperName = 'CW_Login'];
+             Lead_Phone_Field__c,Lead_Annual_Revenue_Field__c,Lead_Street_Field__c,Lead_PostalCode_Field__c,Lead_City_Field__c,Lead_CountryCode_Field__c
+             FROM CW_Login_Setup__mdt WHERE DeveloperName = 'CW_Login'];
 
         system.debug('Result of loginSetup '+ oLoginSetup);
-        system.debug('objectName '+ objectName);
 
-        connectCompanywebBe.Alerts_Step1_GetChangeDates_element getChangeDates = new connectCompanywebBe.Alerts_Step1_GetChangeDates_element();
-        connectCompanywebBe.RequestStep1 request = new connectCompanywebBe.RequestStep1();
-        request.CompanyWebLogin = oLoginSetup.CW_CompanyWebLogin__c;
-        request.CompanyWebPassword = oLoginSetup.CW_CompanyWebPassword__c;
-        request.ServiceIntegrator = oLoginSetup.CW_ServiceIntegrator__c;
+        connectCompanywebBe.RequestStep1 request1 = new connectCompanywebBe.RequestStep1();
+        request1.CompanyWebLogin = oLoginSetup.CW_CompanyWebLogin__c;
+        request1.CompanyWebPassword = oLoginSetup.CW_CompanyWebPassword__c;
+        request1.ServiceIntegrator = oLoginSetup.CW_ServiceIntegrator__c;
 
         //Authentication CompanyWeb
-        request.LoginHash = getAuthenticationParametersCompanyWeb(oLoginSetup.CW_CompanyWebLogin__c, oLoginSetup.CW_CompanyWebPassword__c, oLoginSetup.CW_CompanyWebSecret__c);
+        request1.LoginHash = getAuthenticationParametersCompanyWeb(oLoginSetup.CW_CompanyWebLogin__c, oLoginSetup.CW_CompanyWebPassword__c, oLoginSetup.CW_CompanyWebSecret__c);
         connectCompanywebBe.BasicHttpBinding_AlacarteServiceV1_3 httpreq = new connectCompanywebBe.BasicHttpBinding_AlacarteServiceV1_3();
+
+        //Step 1: get Change Dates
+        Map<Integer,String> mapOfStep2Token = getChangeDates(httpreq, request1);
+        System.debug(mapOfStep2Token);
+
+        for(Integer changeDate : mapOfStep2Token.keySet()){
+            connectCompanywebBe.RequestStep2 request2 = new connectCompanywebBe.RequestStep2();
+            request2.CompanyWebLogin = oLoginSetup.CW_CompanyWebLogin__c;
+            request2.CompanyWebPassword = oLoginSetup.CW_CompanyWebPassword__c;
+            request2.ServiceIntegrator = oLoginSetup.CW_ServiceIntegrator__c;
+            request2.LoginHash = request1.LoginHash;
+            request2.ChangedDate = changeDate;
+            request2.Step2Token = mapOfStep2Token.get(changeDate);
+
+            //Step 2: get Vat List
+            Map<Integer,String> mapOfStep3Token = getVatList(httpreq, request2);
+            System.debug(mapOfStep3Token);
+            
+            for(Integer vatNumber : mapOfStep3Token.keySet()){
+                connectCompanywebBe.RequestStep3_CompanyOnVat request3 = new connectCompanywebBe.RequestStep3_CompanyOnVat();
+                request3.CompanyWebLogin = oLoginSetup.CW_CompanyWebLogin__c;
+                request3.CompanyWebPassword = oLoginSetup.CW_CompanyWebPassword__c;
+                request3.ServiceIntegrator = oLoginSetup.CW_ServiceIntegrator__c;
+                request3.Language = 'NL';
+                request3.LoginHash = request1.LoginHash;
+                request3.ChangedDate = changeDate;
+                request3.VatNumber = String.valueOf(vatNumber);
+                request3.Step3Token = mapOfStep3Token.get(vatNumber);
+
+                //Step 3: get Company Data
+                connectCompanywebBe.CompanyResponseV1_3 companyData = getCompanyData(httpreq, request3);
+                System.debug(companyData);
+                break;
+            }
+
+            break;
+        }
+        
+    }
+
+    //Step 1: get Change Dates
+    public static Map<Integer,String> getChangeDates(connectCompanywebBe.BasicHttpBinding_AlacarteServiceV1_3 httpreq, connectCompanywebBe.RequestStep1 request){
         //http Reponse
-        result = httpreq.GetCompanyByVat(request);
+        connectCompanywebBe.ResponseStep1 result = new connectCompanywebBe.ResponseStep1();
+        result = httpreq.Alerts_Step1_GetChangeDates(request);
+        Map<Integer,String> mapOfStep2Token = new Map<Integer,String>();
 
         String warningsString = '';
-        System.debug('statuscode = ' + result.StatusCode);
+        System.debug('getChangeDates statuscode = ' + result.StatusCode);
 
         if(result.StatusCode == 0){
-            String[] arrayOfStep2Token;
-
-            for(connectCompanywebBe.ChangeDate changeDate : result.ChangeDates.ChangeDate){
-                System.debug(changeDate);
-                arrayOfStep2Token.add(changeDate.Step2Token);
+            if(result.ChangeDates!=null){
+                for(connectCompanywebBe.ChangeDate changeDate : result.ChangeDates.ChangeDate){
+                    mapOfStep2Token.put(changeDate.DateOfChange,changeDate.Step2Token);
+                }
             }
-            
         }
+        return mapOfStep2Token;
     }
+
+    //Step 2: get Vat List
+    public static Map<Integer,String> getVatList(connectCompanywebBe.BasicHttpBinding_AlacarteServiceV1_3 httpreq, connectCompanywebBe.RequestStep2 request){
+        //http Reponse
+        connectCompanywebBe.ResponseStep2 result = new connectCompanywebBe.ResponseStep2();
+        result = httpreq.Alerts_Step2_GetVatList(request);
+        Map<Integer,String> mapOfStep3Token = new Map<Integer,String>();
+
+        String warningsString = '';
+        System.debug('getVatList statuscode = ' + result.StatusCode);
+
+        if(result.StatusCode == 0){
+            if(result.ChangedVatList!=null){
+                for(connectCompanywebBe.ChangedVat changedVat : result.ChangedVatList.ChangedVat){
+                    mapOfStep3Token.put(changedVat.VatNumber,changedVat.Step3Token);
+                }
+            }
+        }
+        return mapOfStep3Token;
+    }
+
+    //Step 3: get Company Data
+    public static connectCompanywebBe.CompanyResponseV1_3 getCompanyData(connectCompanywebBe.BasicHttpBinding_AlacarteServiceV1_3 httpreq, connectCompanywebBe.RequestStep3_CompanyOnVat request){
+        //http Reponse
+        connectCompanywebBe.ResponseCompanyByVatV1_3 result = new connectCompanywebBe.ResponseCompanyByVatV1_3();
+        result = httpreq.Alerts_Step3_CompanyOnVat(request);
+        
+        String warningsString = '';
+        System.debug('getCompanyData statuscode = ' + result.StatusCode);
+
+        if(result.StatusCode == 0){
+            return result.CompanyResponse; 
+        }
+        return null;
+    }
+
 }
