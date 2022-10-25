@@ -1311,6 +1311,53 @@ public with sharing class CompanyWebController {
         return errorMessage;
     }
 
+    public static Boolean addCompanyToAlerts(String vatNumber){
+        CW_Login_Setup__mdt oLoginSetup = new CW_Login_Setup__mdt();
+        oLoginSetup = [SELECT Id, CW_CompanyWebLogin__c, CW_CompanyWebPassword__c, CW_CompanyWebSecret__c, CW_ServiceIntegrator__c FROM CW_Login_Setup__mdt WHERE DeveloperName = 'CW_Login'];
+
+        connectCompanywebBe.RequestAddToAlerts request = new connectCompanywebBe.RequestAddToAlerts();
+        request.CompanyWebLogin = oLoginSetup.CW_CompanyWebLogin__c;
+        request.CompanyWebPassword = oLoginSetup.CW_CompanyWebPassword__c;
+        request.ServiceIntegrator = oLoginSetup.CW_ServiceIntegrator__c;
+        request.LoginHash = createCWLoginHash(oLoginSetup.CW_CompanyWebLogin__c, oLoginSetup.CW_CompanyWebPassword__c, oLoginSetup.CW_CompanyWebSecret__c);
+        request.VatNumber = vatNumber;
+        connectCompanywebBe.BasicHttpBinding_AlacarteServiceV1_3 httpreq = new connectCompanywebBe.BasicHttpBinding_AlacarteServiceV1_3();
+        connectCompanywebBe.ResponseAddToAlerts result = httpreq.Alerts_AddCompany(request);
+
+        System.debug('addCompanyToAlerts StatusCode: ' + result.StatusCode);
+        if(result.StatusCode == 0){
+            return true;
+        }
+        return false;
+    }
+
+    public static Boolean addCompanyListToAlerts(List<String> vatNumbersList){
+        connectCompanywebBe.ArrayOfString vatNumbers = new connectCompanywebBe.ArrayOfString();
+        vatNumbers.string_x = vatNumbersList;
+
+        CW_Login_Setup__mdt oLoginSetup = new CW_Login_Setup__mdt();
+        oLoginSetup = [SELECT Id, CW_CompanyWebLogin__c, CW_CompanyWebPassword__c, CW_CompanyWebSecret__c, CW_ServiceIntegrator__c FROM CW_Login_Setup__mdt WHERE DeveloperName = 'CW_Login'];
+
+        connectCompanywebBe.RequestAddListToAlerts request = new connectCompanywebBe.RequestAddListToAlerts();
+        request.CompanyWebLogin = oLoginSetup.CW_CompanyWebLogin__c;
+        request.CompanyWebPassword = oLoginSetup.CW_CompanyWebPassword__c;
+        request.ServiceIntegrator = oLoginSetup.CW_ServiceIntegrator__c;
+        request.LoginHash = createCWLoginHash(oLoginSetup.CW_CompanyWebLogin__c, oLoginSetup.CW_CompanyWebPassword__c, oLoginSetup.CW_CompanyWebSecret__c);
+        request.VatNumbers = vatNumbers;
+        connectCompanywebBe.BasicHttpBinding_AlacarteServiceV1_3 httpreq = new connectCompanywebBe.BasicHttpBinding_AlacarteServiceV1_3();
+        connectCompanywebBe.ResponseAddListToAlerts result = httpreq.Alerts_AddListOfCompanies(request);
+
+        System.debug('addCompanyListToAlerts StatusCode: ' + result.StatusCode);
+        if(result.StatusCode == 0){
+            System.debug('Count_ActiveAlerts: ' + result.Count_ActiveAlerts);
+            System.debug('Count_Adds: ' + result.Count_Adds);
+            System.debug('Count_Updates: ' + result.Count_Updates);
+            System.debug('Count_Invalids: ' + result.Count_Invalids);
+            return true;
+        }
+        return false;
+    }
+
     public static void getAlertsALaCarte(){
         CW_Login_Setup__mdt oLoginSetup = new CW_Login_Setup__mdt();
 
