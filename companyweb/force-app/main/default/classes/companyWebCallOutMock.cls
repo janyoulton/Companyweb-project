@@ -118,16 +118,21 @@ global class companyWebCallOutMock implements WebServiceMock {
         cEstablishments.Value = cArrayOfEstablishmentV1_1;
         
         connectCompanywebBe.JointCommitee cJointCommitee = new connectCompanywebBe.JointCommitee();
+        cJointCommitee.Code = 200;
+        cJointCommitee.Description = 'test description jointcommitee';    
         List<connectCompanywebBe.JointCommitee> lJointCommitee = new List<connectCompanywebBe.JointCommitee>();
         lJointCommitee.add(cJointCommitee);
         connectCompanywebBe.ArrayOfJointCommitee cArrayOfJointCommitee =new connectCompanywebBe.ArrayOfJointCommitee();
         cArrayOfJointCommitee.JointCommitee = lJointCommitee;
         connectCompanywebBe.JointCommiteesListResponseFragment cJointCommiteesListResponseFragment = new connectCompanywebBe.JointCommiteesListResponseFragment();
+        cJointCommiteesListResponseFragment.IsEnabled = true;
         cJointCommiteesListResponseFragment.Value=cArrayOfJointCommitee;
 
         connectCompanywebBe.SocialSecurityInformation cSocialSecurityInformation = new connectCompanywebBe.SocialSecurityInformation();
+        cSocialSecurityInformation.RegistrationId = '01234-56789';
         connectCompanywebBe.SocialSecurityResponseFragment SocialSecurityResponseFragment = new connectCompanywebBe.SocialSecurityResponseFragment();
         SocialSecurityResponseFragment.Value = cSocialSecurityInformation;
+        SocialSecurityResponseFragment.IsEnabled = true;
 
         connectCompanywebBe.Participation cParticipation = new connectCompanywebBe.Participation();
         List<connectCompanywebBe.Participation> lParticipation = new List<connectCompanywebBe.Participation>();

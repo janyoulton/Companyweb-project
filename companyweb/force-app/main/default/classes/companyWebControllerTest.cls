@@ -198,9 +198,19 @@ private class companyWebControllerTest {
             Test.stopTest();
     }
 
+    @isTest static Void companyWebControllerJointCommitteeTestcall() {
+        Test.startTest();
+        Account account = new Account (Name = 'test12', CW_VAT_Number__c= '458213449');
+        insert account;
+     
+        Test.setMock(WebServiceMock.class, new companyWebNegativeCallOutMock());
+        calloutGetCompanyByVAT(account.Id,'458213449','Account');
+        Test.stopTest();
+}
+
     @isTest static Void companyWebControllerNegativeLeadTestcall() {
         Test.startTest();
-        Lead lead = new Lead (LastName = 'test12', Company='Test LLC', CW_VAT_Number__c= '423584152');
+        Lead lead = new Lead (LastName = 'test13', Company='Test LLC', CW_VAT_Number__c= '423584152');
         insert lead;
      
         Test.setMock(WebServiceMock.class, new companyWebNegativeCallOutMock());
