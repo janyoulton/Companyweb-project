@@ -1311,7 +1311,8 @@ public with sharing class CompanyWebController {
         return errorMessage;
     }
 
-    public static Boolean addCompanyToAlerts(String vatNumber){
+    @future(callout=true)
+    public static void addCompanyToAlerts(String vatNumber){
         CW_Login_Setup__mdt oLoginSetup = new CW_Login_Setup__mdt();
         oLoginSetup = [SELECT Id, CW_CompanyWebLogin__c, CW_CompanyWebPassword__c, CW_CompanyWebSecret__c, CW_ServiceIntegrator__c FROM CW_Login_Setup__mdt WHERE DeveloperName = 'CW_Login'];
 
@@ -1325,10 +1326,6 @@ public with sharing class CompanyWebController {
         connectCompanywebBe.ResponseAddToAlerts result = httpreq.Alerts_AddCompany(request);
 
         System.debug('addCompanyToAlerts StatusCode: ' + result.StatusCode);
-        if(result.StatusCode == 0){
-            return true;
-        }
-        return false;
     }
 
     public static Boolean addCompanyListToAlerts(List<String> vatNumbersList){
@@ -1359,8 +1356,10 @@ public with sharing class CompanyWebController {
     }
 
     public static void getAlertsALaCarte(){
-        CW_Login_Setup__mdt oLoginSetup = new CW_Login_Setup__mdt();
+        List<Account> listOfAccountsToUpdate = new List<Account>();
+        List<Lead> listOfLeadsToUpdate = new List<Lead>();
 
+        CW_Login_Setup__mdt oLoginSetup = new CW_Login_Setup__mdt();
         oLoginSetup = [SELECT Id, CW_CompanyWebLogin__c, CW_CompanyWebPassword__c, CW_CompanyWebSecret__c, CW_ServiceIntegrator__c, Account_VAT_Number_Field__c,
              Lead_VAT_Number_Field__c,Account_Score_Field__c,Account_Activities_Field__c,Account_Credit_Limit_Field__c,Account_Joint_Commitees_Field__c,
              Account_Joint_Commitees_White_Field__c,Account_Legal_Form_Field__c,Account_Main_Activity_Field__c,Account_Number_Employees_Field__c,
@@ -1370,7 +1369,6 @@ public with sharing class CompanyWebController {
              Lead_Joint_Commitees_White_Field__c,Lead_Legal_Form_Field__c,Lead_Main_Activity_Field__c,Lead_Number_Employees_Field__c,Lead_Social_Security_Field__c,
              Lead_Phone_Field__c,Lead_Annual_Revenue_Field__c,Lead_Street_Field__c,Lead_PostalCode_Field__c,Lead_City_Field__c,Lead_CountryCode_Field__c
              FROM CW_Login_Setup__mdt WHERE DeveloperName = 'CW_Login'];
-
         system.debug('Result of loginSetup '+ oLoginSetup);
 
         connectCompanywebBe.RequestStep1 request1 = new connectCompanywebBe.RequestStep1();
@@ -1383,58 +1381,12 @@ public with sharing class CompanyWebController {
         //Step 1: get Change Dates
         Map<Integer,String> mapOfStep2Token = getChangeDates(httpreq, request1);
         System.debug(mapOfStep2Token);
-        //List<connectCompanywebBe.RequestStep2> listOfStep2Requests = new List<connectCompanywebBe.RequestStep2>();
 
-        for(Integer changeDate : mapOfStep2Token.keySet()){
-            connectCompanywebBe.RequestStep2 request2 = new connectCompanywebBe.RequestStep2();
-            request2.CompanyWebLogin = oLoginSetup.CW_CompanyWebLogin__c;
-            request2.CompanyWebPassword = oLoginSetup.CW_CompanyWebPassword__c;
-            request2.ServiceIntegrator = oLoginSetup.CW_ServiceIntegrator__c;
-            request2.LoginHash = request1.LoginHash;
-            request2.ChangedDate = changeDate;
-            request2.Step2Token = mapOfStep2Token.get(changeDate);
-            //listOfStep2Requests.add(request2);
-
-
-
-            //Step 2: get Vat List
-            Map<Integer,String> mapOfStep3Token = getVatList(httpreq, request2);
-            System.debug(mapOfStep3Token);
-            
-            for(Integer vatNumber : mapOfStep3Token.keySet()){
-                connectCompanywebBe.RequestStep3_CompanyOnVat request3 = new connectCompanywebBe.RequestStep3_CompanyOnVat();
-                request3.CompanyWebLogin = oLoginSetup.CW_CompanyWebLogin__c;
-                request3.CompanyWebPassword = oLoginSetup.CW_CompanyWebPassword__c;
-                request3.ServiceIntegrator = oLoginSetup.CW_ServiceIntegrator__c;
-                // User user Language
-                String userLanguage = UserInfo.getLanguage();
-                
-                if (userLanguage == 'en_US'){
-                    userLanguage = 'EN';
-                } else if(userLanguage == 'nl_NL'){
-                    userLanguage = 'NL';
-                } else if(userLanguage == 'fr'){
-                    userLanguage = 'FR';
-                } else {
-                    userLanguage = 'EN';
-                }
-                request3.Language = userLanguage;
-                request3.LoginHash = request1.LoginHash;
-                request3.ChangedDate = changeDate;
-                request3.VatNumber = String.valueOf(vatNumber);
-                request3.Step3Token = mapOfStep3Token.get(vatNumber);
-
-                //Step 3: get Company Data
-                connectCompanywebBe.CompanyResponseV1_3 companyData = getCompanyData(httpreq, request3);
-                System.debug(companyData);
-
-                if(companyData.VatNumber.IsEnabled){
-                    updateCompanyByResponse(oLoginSetup, companyData);
-                } else {
-                    System.debug('vatnumber is disabled, won\'t update the company');
-                }
+        if(!mapOfStep2Token.isEmpty()){
+            for(Integer changeDate : mapOfStep2Token.keySet()){
+                System.enqueueJob(new companyWebAlertsBatch(changeDate, mapOfStep2Token, request1.LoginHash, httpreq, oLoginSetup));
             }
-        }        
+        }
     }
 
     //Step 1: get Change Dates
@@ -1442,18 +1394,28 @@ public with sharing class CompanyWebController {
         //http Reponse
         connectCompanywebBe.ResponseStep1 result = new connectCompanywebBe.ResponseStep1();
         result = httpreq.Alerts_Step1_GetChangeDates(request);
+
         Map<Integer,String> mapOfStep2Token = new Map<Integer,String>();
 
         String warningsString = '';
-        System.debug('getChangeDates statuscode = ' + result.StatusCode);
+        System.debug('getChangeDates statuscode = ' + result?.StatusCode);
 
-        if(result.StatusCode == 0){
-            if(result.ChangeDates!=null){
+        if(result?.StatusCode == 0){
+            if(result?.ChangeDates?.ChangeDate!=null){
                 for(connectCompanywebBe.ChangeDate changeDate : result.ChangeDates.ChangeDate){
                     mapOfStep2Token.put(changeDate.DateOfChange,changeDate.Step2Token);
                 }
             }
         }
+
+        // Map<String,String> mapOfStep2TokenByDateString = new Map<String,String>();
+        // for(Integer dateInt : mapOfStep2Token.keySet()){
+        //     String dateString = String.valueOf(dateInt);
+        //     dateString = dateString.substring(0,4) + '-' + dateString.substring(4,6) + '-' + dateString.substring(6,8);
+        //     System.debug(dateString);
+        //     mapOfStep2TokenByDateString.put(dateString,mapOfStep2Token.get(dateInt));
+        // }
+        // System.debug(mapOfStep2TokenByDateString);
         return mapOfStep2Token;
     }
 
@@ -1461,14 +1423,18 @@ public with sharing class CompanyWebController {
     public static Map<Integer,String> getVatList(connectCompanywebBe.BasicHttpBinding_AlacarteServiceV1_3 httpreq, connectCompanywebBe.RequestStep2 request){
         //http Reponse
         connectCompanywebBe.ResponseStep2 result = new connectCompanywebBe.ResponseStep2();
-        result = httpreq.Alerts_Step2_GetVatList(request);
+        if(Limits.getCallouts()<100){
+            result = httpreq.Alerts_Step2_GetVatList(request);
+        } else {
+            System.debug('Callout limit of 100 reached');
+        }
         Map<Integer,String> mapOfStep3Token = new Map<Integer,String>();
 
         String warningsString = '';
-        System.debug('getVatList statuscode = ' + result.StatusCode);
+        //System.debug('getVatList statuscode = ' + result?.StatusCode);
 
-        if(result.StatusCode == 0){
-            if(result.ChangedVatList!=null){
+        if(result?.StatusCode == 0){
+            if(result?.ChangedVatList?.ChangedVat!=null){
                 for(connectCompanywebBe.ChangedVat changedVat : result.ChangedVatList.ChangedVat){
                     mapOfStep3Token.put(changedVat.VatNumber,changedVat.Step3Token);
                 }
@@ -1481,20 +1447,23 @@ public with sharing class CompanyWebController {
     public static connectCompanywebBe.CompanyResponseV1_3 getCompanyData(connectCompanywebBe.BasicHttpBinding_AlacarteServiceV1_3 httpreq, connectCompanywebBe.RequestStep3_CompanyOnVat request){
         //http Reponse
         connectCompanywebBe.ResponseCompanyByVatV1_3 result = new connectCompanywebBe.ResponseCompanyByVatV1_3();
-        result = httpreq.Alerts_Step3_CompanyOnVat(request);
+        if(Limits.getCallouts()<100){
+            result = httpreq.Alerts_Step3_CompanyOnVat(request);
+        } else {
+            System.debug('Callout limit of 100 reached');
+        }
         
         String warningsString = '';
-        System.debug('getCompanyData statuscode = ' + result.StatusCode);
+        //System.debug('getCompanyData statuscode = ' + result.StatusCode);
 
-        if(result.StatusCode == 0){
+        if(result?.StatusCode == 0){
             return result.CompanyResponse; 
         }
         return null;
     }
 
-    
-    public static void updateCompanyByResponse(CW_Login_Setup__mdt oLoginSetup, connectCompanywebBe.CompanyResponseV1_3 companyData){
-        Integer vatNumber = companyData.VatNumber.Value;
+    public static void updateCompanyByResponse(CW_Login_Setup__mdt oLoginSetup, connectCompanywebBe.CompanyResponseV1_3 companyData, List<Account> listOfAccountsToUpdate, List<Lead> listOfLeadsToUpdate){
+        String vatNumber = String.valueOf(companyData.VatNumber.Value);
         String qryString;
 
         //find Account with given VAT Number
@@ -1503,7 +1472,7 @@ public with sharing class CompanyWebController {
         } else {
             qryString = 'SELECT Id FROM Account WHERE CW_Vat_Number__c =: vatNumber';
         }
-        Account acc = Database.query(qryString);
+        List<Account> acc = Database.query(qryString);
 
         //find Lead with given VAT Number
         if(oLoginSetup.Lead_VAT_Number_Field__c != null){
@@ -1511,22 +1480,37 @@ public with sharing class CompanyWebController {
         } else {
             qryString = 'SELECT Id FROM Lead WHERE CW_Vat_Number__c =: vatNumber';
         }
-        Lead lead = Database.query(qryString);
+        List<Lead> lead = Database.query(qryString);
 
         assignDynamicMappingFields(oLoginSetup);
 
         connectCompanywebBe.ResponseCompanyByVatV1_3 result = new connectCompanywebBe.ResponseCompanyByVatV1_3();
         result.CompanyResponse = companyData;
 
-        if(acc!=null){
-            assignAccountFields(acc, result, false);
-            //Update account
-            update acc;
+        if(acc.size()>0){
+            System.debug('Found account to update: ' + acc[0].Id);
+            assignAccountFields(acc[0], result, false);
+            listOfAccountsToUpdate.add(acc[0]);
         }
-        if(lead!=null){
-            assignLeadFields(lead, result, false);
-            //Update lead
-            update lead;
+        if(lead.size()>0){
+            System.debug('Found lead to update: ' + lead[0].Id);
+            assignLeadFields(lead[0], result, false);
+            listOfLeadsToUpdate.add(lead[0]);
+        }
+    }
+
+    public static void updateCompanyOperation(List<Account> listOfAccountsToUpdate, List<Lead> listOfLeadsToUpdate){
+        if(!listOfAccountsToUpdate.isEmpty()){
+            //update accounts
+            System.debug(listOfAccountsToUpdate);
+            Database.SaveResult[] srl = Database.update(listOfAccountsToUpdate, false);
+            System.debug('srl accounts: ' + srl);
+        }
+        if(!listOfLeadsToUpdate.isEmpty()){
+            //update leads
+            System.debug(listOfLeadsToUpdate);
+            Database.SaveResult[] srl = Database.update(listOfLeadsToUpdate, false);
+            System.debug('srl leads: ' + srl);
         }
     }
 
