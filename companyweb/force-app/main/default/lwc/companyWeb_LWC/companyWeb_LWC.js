@@ -28,10 +28,12 @@ import getCWFields from '@salesforce/apex/CompanyWebController.getCWFields';
 //import copyData from '@salesforce/apex/CompanyWebController.copyData';
 import clearData from '@salesforce/apex/CompanyWebController.clearData';
 import errorHandler from '@salesforce/apex/CompanyWebController.errorHandler';
+import addCompanyToAlerts from '@salesforce/apex/CompanyWebController.addCompanyToAlerts';
 //Resources
 import SCORE_IMAGES from '@salesforce/resourceUrl/CWScoreImages';
 //Lables
 import detailsBtn from '@salesforce/label/c.Details_Button';
+import addCompanyBtn from '@salesforce/label/c.AddCompany_Button';
 import refreshBtn from '@salesforce/label/c.Refresh_Button';
 import reportBtn from '@salesforce/label/c.Report_Button';
 import searchBtn from '@salesforce/label/c.Search_Button';
@@ -85,6 +87,7 @@ export default class CompanyWeb_LWC extends NavigationMixin(LightningElement) {
 
     label = {
         detailsBtn,
+        addCompanyBtn,
         refreshBtn,
         reportBtn,
         searchBtn,
@@ -564,6 +567,32 @@ export default class CompanyWeb_LWC extends NavigationMixin(LightningElement) {
         if (component.which == 13) {
             this.search();
         }
+    }
+
+    addCompany(){
+        console.log('addCompanyToAlerts method');
+
+        let oVatNumber;
+
+        if (this.objectApiName == 'Account') {
+            oVatNumber = this.accountVATNumber;
+        } else if (this.objectApiName == 'Lead') {
+            oVatNumber = this.leadVATNumber;
+        }
+
+        addCompanyToAlerts({'vatNumber' : oVatNumber})
+            .then(result => {
+                this.showNotification('Add Company To Alerts', result ? 'Company successfully added to Companyweb Alerts' : 'Company could not be added to Companyweb Alerts', result ? 'success' : 'error');
+            })
+            .catch(error => {
+                window.console.log('Error Occured', error);
+                if(Object.values(error.body.fieldErrors).length > 0)
+                {
+                    this.showNotification('Oops', Object.values(error.body.fieldErrors)[0][0].message, 'error');
+                } else if (error.body.pageErrors.length > 0){
+                    this.showNotification('Oops', error.body.pageErrors[0].message, 'error');
+                }
+            });
     }
 
     checkVisibility(jsonResponse) {

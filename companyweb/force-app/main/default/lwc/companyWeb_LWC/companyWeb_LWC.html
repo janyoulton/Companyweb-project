@@ -32,6 +32,8 @@
                     <lightning-menu-item value={label.detailsBtn} label={label.detailsBtn} onclick={openDetailsURL}>
                     </lightning-menu-item>
                 </template>
+                <lightning-menu-item value={label.addCompanyBtn} label={label.addCompanyBtn} onclick={addCompany}>
+                </lightning-menu-item>
                 <template if:true={isReportURL}>
                     <lightning-menu-item value={label.reportBtn} label={label.reportBtn} onclick={openReportURL}>
                     </lightning-menu-item>

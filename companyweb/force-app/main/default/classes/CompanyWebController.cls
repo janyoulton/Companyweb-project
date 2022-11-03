@@ -1311,8 +1311,8 @@ public with sharing class CompanyWebController {
         return errorMessage;
     }
 
-    @future(callout=true)
-    public static void addCompanyToAlerts(String vatNumber){
+    @AuraEnabled
+    public static Boolean addCompanyToAlerts(String vatNumber){
         CW_Login_Setup__mdt oLoginSetup = new CW_Login_Setup__mdt();
         oLoginSetup = [SELECT Id, CW_CompanyWebLogin__c, CW_CompanyWebPassword__c, CW_CompanyWebSecret__c, CW_ServiceIntegrator__c FROM CW_Login_Setup__mdt WHERE DeveloperName = 'CW_Login'];
 
@@ -1326,6 +1326,10 @@ public with sharing class CompanyWebController {
         connectCompanywebBe.ResponseAddToAlerts result = httpreq.Alerts_AddCompany(request);
 
         System.debug('addCompanyToAlerts StatusCode: ' + result.StatusCode);
+        if(result.StatusCode == 0){
+            return true;
+        }
+        return false;
     }
 
     public static Boolean addCompanyListToAlerts(List<String> vatNumbersList){
@@ -1384,7 +1388,7 @@ public with sharing class CompanyWebController {
 
         if(!mapOfStep2Token.isEmpty()){
             for(Integer changeDate : mapOfStep2Token.keySet()){
-                System.enqueueJob(new companyWebAlertsBatch(changeDate, mapOfStep2Token, request1.LoginHash, httpreq, oLoginSetup));
+                System.enqueueJob(new companyWebAlertsQueueable(changeDate, mapOfStep2Token, request1.LoginHash, httpreq, oLoginSetup));
             }
         }
     }
@@ -1407,15 +1411,6 @@ public with sharing class CompanyWebController {
                 }
             }
         }
-
-        // Map<String,String> mapOfStep2TokenByDateString = new Map<String,String>();
-        // for(Integer dateInt : mapOfStep2Token.keySet()){
-        //     String dateString = String.valueOf(dateInt);
-        //     dateString = dateString.substring(0,4) + '-' + dateString.substring(4,6) + '-' + dateString.substring(6,8);
-        //     System.debug(dateString);
-        //     mapOfStep2TokenByDateString.put(dateString,mapOfStep2Token.get(dateInt));
-        // }
-        // System.debug(mapOfStep2TokenByDateString);
         return mapOfStep2Token;
     }
 
