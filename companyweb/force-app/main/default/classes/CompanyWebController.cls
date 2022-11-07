@@ -1332,12 +1332,34 @@ public with sharing class CompanyWebController {
         return false;
     }
 
-    public static Boolean addCompanyListToAlerts(List<String> vatNumbersList){
+    @AuraEnabled
+    public static Boolean addCompanyListToAlerts(List<String> listViewIds){
+        System.debug('addCompanyListToAlerts method');
+        System.debug('param listViewIds: ' + listViewIds);
+        CW_Login_Setup__mdt oLoginSetup = new CW_Login_Setup__mdt();
+        oLoginSetup = [SELECT Id, CW_CompanyWebLogin__c, CW_CompanyWebPassword__c, CW_CompanyWebSecret__c, CW_ServiceIntegrator__c,  Account_VAT_Number_Field__c, Lead_VAT_Number_Field__c  FROM CW_Login_Setup__mdt WHERE DeveloperName = 'CW_Login'];
+
+        String accountVATAPI = oLoginSetup.Account_VAT_Number_Field__c!=null ? oLoginSetup.Account_VAT_Number_Field__c : 'companyweb__CW_VAT_Number__c';
+        String leadVATAPI = oLoginSetup.Lead_VAT_Number_Field__c!=null ? oLoginSetup.Lead_VAT_Number_Field__c : 'companyweb__CW_VAT_Number__c';
+        String queryString = 'SELECT ' + accountVATAPI + ' FROM Account WHERE Id IN :listViewIds';
+        System.debug(queryString);
+        List<Account> accountList = Database.query(queryString);
+        queryString = 'SELECT ' + leadVATAPI + ' FROM Lead WHERE Id IN :listViewIds';
+        System.debug(queryString);
+        List<Lead> leadList = Database.query(queryString);
+
+        List<String> vatNumbersList = new List<String>();
+        for(Account acc : accountList){
+            vatNumbersList.add(String.valueOf(acc.get(accountVATAPI)));
+        }
+        for(Lead lead: leadList){
+            vatNumbersList.add(String.valueOf(lead.get(leadVATAPI)));
+        }
+
+        System.debug('vatNumbersList: ' + vatNumbersList);
+            
         connectCompanywebBe.ArrayOfString vatNumbers = new connectCompanywebBe.ArrayOfString();
         vatNumbers.string_x = vatNumbersList;
-
-        CW_Login_Setup__mdt oLoginSetup = new CW_Login_Setup__mdt();
-        oLoginSetup = [SELECT Id, CW_CompanyWebLogin__c, CW_CompanyWebPassword__c, CW_CompanyWebSecret__c, CW_ServiceIntegrator__c FROM CW_Login_Setup__mdt WHERE DeveloperName = 'CW_Login'];
 
         connectCompanywebBe.RequestAddListToAlerts request = new connectCompanywebBe.RequestAddListToAlerts();
         request.CompanyWebLogin = oLoginSetup.CW_CompanyWebLogin__c;
