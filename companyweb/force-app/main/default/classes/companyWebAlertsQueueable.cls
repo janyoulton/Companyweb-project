@@ -70,7 +70,12 @@ public class companyWebAlertsQueueable implements Queueable, Database.AllowsCall
                         companyData = CompanyWebController.getCompanyData(httpreq, request3);
                         mapOfStep3TokenExcess.remove(vatNumber);
                     } else {
-                        System.enqueueJob(new companyWebAlertsQueueable(httpreq, request3, oLoginSetup, mapOfStep3TokenExcess));
+                        DateTime nextRunTime = DateTime.now().addMinutes(2);
+                        String cronString = '' + nextRunTime.second() + ' ' + nextRunTime.minute() + ' ' + 
+                            nextRunTime.hour() + ' ' + nextRunTime.day() + ' ' + 
+                            nextRunTime.month() + ' ? ' + nextRunTime.year(); 
+                        System.schedule(companyWebScheduledAlerts.class.getName() + '-' + nextRunTime.format(), cronString, new companyWebScheduledAlerts(httpreq, request, oLoginSetup, mapOfStep3TokenExcess));
+                        //System.enqueueJob(new companyWebAlertsQueueable(httpreq, request3, oLoginSetup, mapOfStep3TokenExcess));
                         break;
                     }
                     if(companyData!=null && companyData?.VatNumber?.IsEnabled){
@@ -86,10 +91,24 @@ public class companyWebAlertsQueueable implements Queueable, Database.AllowsCall
             }
         } else {
             if(!mapOfStep3Token.isEmpty()){
+                Map<Integer,String> mapOfStep3TokenExcess = mapOfStep3Token;
                 for(Integer vatNumber : mapOfStep3Token.keySet()){
                     request.Step3Token = mapOfStep3Token.get(vatNumber);
                     request.VatNumber = String.valueOf(vatNumber);
-                    connectCompanywebBe.CompanyResponseV1_3 companyData = CompanyWebController.getCompanyData(httpreq, request);
+
+                    connectCompanywebBe.CompanyResponseV1_3 companyData;
+                    if(Limits.getCallouts()<100){
+                        companyData = CompanyWebController.getCompanyData(httpreq, request3);
+                        mapOfStep3TokenExcess.remove(vatNumber);
+                    } else {
+                        DateTime nextRunTime = DateTime.now().addMinutes(2);
+                        String cronString = '' + nextRunTime.second() + ' ' + nextRunTime.minute() + ' ' + 
+                            nextRunTime.hour() + ' ' + nextRunTime.day() + ' ' + 
+                            nextRunTime.month() + ' ? ' + nextRunTime.year(); 
+                        System.schedule(companyWebScheduledAlerts.class.getName() + '-' + nextRunTime.format(), cronString, new companyWebScheduledAlerts(httpreq, request, oLoginSetup, mapOfStep3TokenExcess));
+                        //System.enqueueJob(new companyWebAlertsQueueable(httpreq, request3, oLoginSetup, mapOfStep3TokenExcess));
+                        break;
+                    }
 
                     if(companyData!=null && companyData?.VatNumber?.IsEnabled){
                         System.debug('companyData.VatNumber.Value : ' + companyData.VatNumber.Value);
