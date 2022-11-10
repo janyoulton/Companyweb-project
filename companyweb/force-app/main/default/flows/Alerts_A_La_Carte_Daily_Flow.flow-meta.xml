@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionCalls>
+        <description>Daily job to monitor changes on the followed companies and update respective accounts and leads with said changes.</description>
+        <name>get_Alerts_A_La_Carte</name>
+        <label>get Alerts A La Carte</label>
+        <locationX>176</locationX>
+        <locationY>276</locationY>
+        <actionName>CompanyWebAlertsController</actionName>
+        <actionType>apex</actionType>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+    </actionCalls>
+    <apiVersion>56.0</apiVersion>
+    <description>Changed start time</description>
+    <environments>Default</environments>
+    <interviewLabel>Alerts A La Carte Daily Flow {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Alerts A La Carte Daily Flow</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <start>
+        <locationX>50</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>get_Alerts_A_La_Carte</targetReference>
+        </connector>
+        <schedule>
+            <frequency>Daily</frequency>
+            <startDate>2022-11-10</startDate>
+            <startTime>04:00:00.000Z</startTime>
+        </schedule>
+        <triggerType>Scheduled</triggerType>
+    </start>
+    <status>Active</status>
+</Flow>
