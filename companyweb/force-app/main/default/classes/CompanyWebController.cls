@@ -1405,8 +1405,7 @@ public with sharing class CompanyWebController {
         connectCompanywebBe.BasicHttpBinding_AlacarteServiceV1_6_soap httpreq = new connectCompanywebBe.BasicHttpBinding_AlacarteServiceV1_6_soap();
         connectCompanywebBe.ResponseAddListToAlerts result = httpreq.Alerts_AddListOfCompanies(request);
 
-        System.debug('addCompanyListToAlerts StatusCode: ' + result.StatusCode);
-        if(result.StatusCode == 0){ //check if statuscode 0 also happens if some companies were added but others were not (see count_invalids field)
+        if(result?.StatusCode == 0){ //check if statuscode 0 also happens if some companies were added but others were not (see count_invalids field)
             System.debug('Count_ActiveAlerts: ' + result.Count_ActiveAlerts);
             System.debug('Count_Adds: ' + result.Count_Adds);
             System.debug('Count_Updates: ' + result.Count_Updates);
@@ -1423,7 +1422,7 @@ public with sharing class CompanyWebController {
 
             return true;
         } else {
-            //result only shows Count info so no distinction which companies were added or not. Don't make changes here until CW API is updated to handle distinction.
+            System.debug('add list of companies unsuccessful: statuscode = ' + String.valueOf(result?.StatusCode) + ', message = ' + result?.StatusMessage);
         }
         return false;
     }
