@@ -14,15 +14,15 @@ global class companyWebCallOutMockEmpty implements WebServiceMock {
         // structure constructed by multiple functions
         connectCompanywebBe.GetCompanyByVatResponse_element main = new connectCompanywebBe.GetCompanyByVatResponse_element();
         system.debug('response main: '+ main);
-        connectCompanywebBe.ResponseCompanyByVatV1_3 subMain = new connectCompanywebBe.ResponseCompanyByVatV1_3 ();
+        connectCompanywebBe.ResponseCompanyByVatV1_5 subMain = new connectCompanywebBe.ResponseCompanyByVatV1_5();
         system.debug('response subMain: '+ subMain);
         connectCompanywebBe.Status cStatus =  new connectCompanywebBe.Status();
         cStatus.Code = 0;
         subMain.StatusCode = cStatus.Code;
         system.debug('response cStatus: ' + cStatus);
-        connectCompanywebBe.CompanyResponseV1_3 subMain2 = new connectCompanywebBe.CompanyResponseV1_3 ();
+        connectCompanywebBe.CompanyResponseV1_5 subMain2 = new connectCompanywebBe.CompanyResponseV1_5();
         system.debug('response subMain2: '+subMain2);
-        connectCompanywebBe.CompanyResponseMetaData cMetaData = new connectCompanywebBe.CompanyResponseMetaData();
+        //connectCompanywebBe.CompanyResponseMetaData cMetaData = new connectCompanywebBe.CompanyResponseMetaData();
 
         connectCompanywebBe.PreferredLanguages cPreferredLanguages = new connectCompanywebBe.PreferredLanguages();
     
@@ -86,13 +86,20 @@ global class companyWebCallOutMockEmpty implements WebServiceMock {
         cWarningsOverviewResponseFragment.Value = cWarningsOverview;
         
         connectCompanywebBe.Management cManagement= new connectCompanywebBe.Management();
+        connectCompanywebBe.ManagementV1_5 cManagementV1_5= new connectCompanywebBe.ManagementV1_5();
         List<connectCompanywebBe.Management> lManagement = new List<connectCompanywebBe.Management>();
+        List<connectCompanywebBe.ManagementV1_5> lManagementV1_5 = new List<connectCompanywebBe.ManagementV1_5>();
         lManagement.add(cManagement);
+        lManagementV1_5.add(cManagementV1_5);
         connectCompanywebBe.ArrayOfManagement cArrayOfManagement= new connectCompanywebBe.ArrayOfManagement();
+        connectCompanywebBe.ArrayOfManagementV1_5 cArrayOfManagementV1_5 = new connectCompanywebBe.ArrayOfManagementV1_5();
         cArrayOfManagement.Management = lManagement;
-        connectCompanywebBe.ManagementListResponseFragment cCurrentManagementListResponseFragment = new connectCompanywebBe.ManagementListResponseFragment();
+        cArrayOfManagementV1_5.ManagementV1_5 = lManagementV1_5;
+        connectCompanywebBe.ManagementList cManagementList = new connectCompanywebBe.ManagementList();
+        cManagementList.Management = cArrayOfManagementV1_5;
+        connectCompanywebBe.ManagementListResponseFragmentV1_5 cCurrentManagementListResponseFragment = new connectCompanywebBe.ManagementListResponseFragmentV1_5();
         connectCompanywebBe.ManagementListResponseFragment cExternalManagementListResponseFragment = new connectCompanywebBe.ManagementListResponseFragment();
-        cCurrentManagementListResponseFragment.Value = cArrayOfManagement;
+        cCurrentManagementListResponseFragment.Value = cManagementList;
         cExternalManagementListResponseFragment.Value = cArrayOfManagement;
         cCurrentManagementListResponseFragment.IsEnabled = true;
          
@@ -288,7 +295,7 @@ global class companyWebCallOutMockEmpty implements WebServiceMock {
         subMain2.StartDate = cStartDate;
         subMain2.PaymentExperience = cPaymentExperienceResponseFragment;
         subMain2.WarningsOverview = cWarningsOverviewResponseFragment;
-        subMain2.CurrentManagement = cCurrentManagementListResponseFragment;
+        //subMain2.CurrentManagement = cCurrentManagementListResponseFragment;
         subMain2.ExternalManagement = cExternalManagementListResponseFragment;
         subMain2.MainActivity = cMainActivity;
         subMain2.Activities = cActivities;
@@ -304,7 +311,7 @@ global class companyWebCallOutMockEmpty implements WebServiceMock {
         subMain2.BankruptcyClose = cBankruptcyClose;
         subMain2.CommercialName = cCommercialName;
         subMain2.PreferredLanguages=cPreferredLanguagesResponseFragment;
-        subMain2.MetaData = cMetaData;
+        //subMain2.MetaData = cMetaData;
         subMain.CompanyResponse = subMain2;
         main.GetCompanyByVatResult = subMain;
         

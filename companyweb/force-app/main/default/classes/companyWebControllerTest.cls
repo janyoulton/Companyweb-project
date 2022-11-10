@@ -41,8 +41,8 @@ private class companyWebControllerTest {
         reqByVAT.LoginHash = EncodingUtil.convertToHex(hashSHA1);
 
         Test.setMock(WebServiceMock.class, new companyWebCallOutMock());
-        connectCompanywebBe.BasicHttpBinding_AlacarteServiceV1_3 httpreq = new connectCompanywebBe.BasicHttpBinding_AlacarteServiceV1_3();
-        connectCompanywebBe.ResponseCompanyByVatV1_3 result = httpreq.GetCompanyByVat(reqByVAT);
+        connectCompanywebBe.BasicHttpBinding_AlacarteServiceV1_6_soap httpreq = new connectCompanywebBe.BasicHttpBinding_AlacarteServiceV1_6_soap();
+        connectCompanywebBe.ResponseCompanyByVatV1_5 result = httpreq.GetCompanyByVat(reqByVAT);
 
         system.debug(JSON.serialize(result));
     }
@@ -277,7 +277,7 @@ private class companyWebControllerTest {
         reqSearch.LoginHash = EncodingUtil.convertToHex(hashSHA1);
     
         Test.setMock(WebServiceMock.class, new companyWebSearchNegativeCallOutMock());
-        connectCompanywebBe.BasicHttpBinding_AlacarteServiceV1_3 httpreq = new connectCompanywebBe.BasicHttpBinding_AlacarteServiceV1_3();
+        connectCompanywebBe.BasicHttpBinding_AlacarteServiceV1_6_soap httpreq = new connectCompanywebBe.BasicHttpBinding_AlacarteServiceV1_6_soap();
         connectCompanywebBe.ResponseSearch result = httpreq.SearchCompanies(reqSearch);
 
         system.debug(JSON.serialize(result));
