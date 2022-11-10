@@ -1583,6 +1583,7 @@ public with sharing class CompanyWebController {
         CW_Login_Setup__mdt oLoginSetup = [SELECT CW_API_Email_Recipient__c FROM CW_Login_Setup__mdt WHERE DeveloperName = 'CW_Login'];
         Messaging.reserveSingleEmailCapacity(1);
         Messaging.SingleEmailMessage mail = new Messaging.SingleEmailMessage();
+        mail.setSaveAsActivity(false);
         mail.setToAddresses(new List<String>{oLoginSetup.CW_API_Email_Recipient__c});
         mail.setSenderDisplayName('Companyweb Support');
         mail.setSubject('Unexpected outcome during companyweb alerts batch');
@@ -1597,6 +1598,8 @@ public with sharing class CompanyWebController {
         mail.setPlainTextBody(baseMessage);
         if(oLoginSetup.CW_API_Email_Recipient__c!=null && !Test.isRunningTest()){
             Messaging.sendEmail(new Messaging.SingleEmailMessage[] { mail });
+        }else{
+            System.debug('The recipient for email is not set!');
         }
     }
 
