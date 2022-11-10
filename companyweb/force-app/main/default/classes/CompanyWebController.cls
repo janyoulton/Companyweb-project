@@ -125,7 +125,7 @@ public with sharing class CompanyWebController {
         }
     }
 
-    private static String createCWLoginHash(String login, String password, String secret){
+    public static String createCWLoginHash(String login, String password, String secret){
         //Date Handling
         DateTime dtTodayDate = System.today();
         String sMonth;
@@ -175,7 +175,7 @@ public with sharing class CompanyWebController {
                 VatNumber = getVATNumber(Id, objectName);
             }
 
-            connectCompanywebBe.ResponseCompanyByVatV1_3 result = new connectCompanywebBe.ResponseCompanyByVatV1_3();
+            connectCompanywebBe.ResponseCompanyByVatV1_5 result = new connectCompanywebBe.ResponseCompanyByVatV1_5();
             List<Account> accts = new List<Account>();
             String accQueryString;
             string functionResponse;
@@ -263,7 +263,7 @@ public with sharing class CompanyWebController {
             reqByVAT.CompanyWebPassword = oLoginSetup.CW_CompanyWebPassword__c;
             reqByVAT.ServiceIntegrator = oLoginSetup.CW_ServiceIntegrator__c;
             reqByVAT.LoginHash = createCWLoginHash(oLoginSetup.CW_CompanyWebLogin__c, oLoginSetup.CW_CompanyWebPassword__c, oLoginSetup.CW_CompanyWebSecret__c);
-            connectCompanywebBe.BasicHttpBinding_AlacarteServiceV1_3 httpreq = new connectCompanywebBe.BasicHttpBinding_AlacarteServiceV1_3();
+            connectCompanywebBe.BasicHttpBinding_AlacarteServiceV1_6_soap httpreq = new connectCompanywebBe.BasicHttpBinding_AlacarteServiceV1_6_soap();
             //http Reponse
             result = httpreq.GetCompanyByVat(reqByVAT);
 
@@ -301,7 +301,7 @@ public with sharing class CompanyWebController {
                 functionResponse = JSON.serialize(result);
             } else{
                 connectCompanywebBe.GetCompanyByVatResponse_element main = new connectCompanywebBe.GetCompanyByVatResponse_element();
-                connectCompanywebBe.ResponseCompanyByVatV1_3 subMain = new connectCompanywebBe.ResponseCompanyByVatV1_3 ();
+                connectCompanywebBe.ResponseCompanyByVatV1_5 subMain = new connectCompanywebBe.ResponseCompanyByVatV1_5 ();
                 connectCompanywebBe.Status cStatus =  new connectCompanywebBe.Status();
                 cStatus.Code = 999;
                 subMain.StatusCode = cStatus.Code;
@@ -384,7 +384,7 @@ public with sharing class CompanyWebController {
             String hashBase64SHA1 = EncodingUtil.base64encode (hashSHA1);
             System.debug(EncodingUtil.convertToHex(hashSHA1));
             reqSearch.LoginHash = EncodingUtil.convertToHex(hashSHA1);
-            connectCompanywebBe.BasicHttpBinding_AlacarteServiceV1_3 httpreq = new connectCompanywebBe.BasicHttpBinding_AlacarteServiceV1_3();
+            connectCompanywebBe.BasicHttpBinding_AlacarteServiceV1_6_soap httpreq = new connectCompanywebBe.BasicHttpBinding_AlacarteServiceV1_6_soap();
             //http Reponse
             connectCompanywebBe.ResponseSearch result = httpreq.SearchCompanies(reqSearch);
             
@@ -1208,16 +1208,16 @@ public with sharing class CompanyWebController {
         switch on objectName {
             when 'Account' {
                 if (accountVATAPI != null) {
-                    queryString = 'SELECT Id, companyweb__CW_Full_Name__c, companyweb__CW_Phone__c,companyweb__CW_Address_Line_1__c, companyweb__CW_Address_Line_2__c, companyweb__CW_Name__c, ' + accountVATAPI + ', companyweb__CW_VAT_Liable__c, companyweb__CW_Abbreviation__c, companyweb__CW_Company_Status__c, companyweb__CW_Score_Image__c, companyweb__CW_Score__c, companyweb__CW_Credit_Limit__c, companyweb__CW_Detail_URL__c, companyweb__CW_Report_URL__c, companyweb__CW_Balance__c, companyweb__CW_Equity__c, companyweb__CW_Last_Sync__c, companyweb__CW_Revenue__c, companyweb__CW_Employees__c, companyweb__CW_Gross_Margin__c, companyweb__CW_Result__c, companyweb__CW_Warnings__c,companyweb__CW_Kyc_URL__c,companyweb__CW_Credit_Limit_Reason__c,companyweb__CW_Start_Date__c,companyweb__CW_End_Date__c,companyweb__CW_Preferred_Languages__c,companyweb__CW_Preferred_Languages_PL__c,companyweb__CW_Avoid_Callout__c,companyweb__CW_Main_Activity__c, companyweb__CW_Activities__c, companyweb__CW_Joint_Commitees__c, companyweb__CW_Social_Security_Information__c FROM Account WHERE Id = :recordId';
+                    queryString = 'SELECT Id, companyweb__CW_Full_Name__c, companyweb__CW_Phone__c,companyweb__CW_Address_Line_1__c, companyweb__CW_Address_Line_2__c, companyweb__CW_Name__c, ' + accountVATAPI + ', companyweb__CW_VAT_Liable__c, companyweb__CW_Abbreviation__c, companyweb__CW_Company_Status__c, companyweb__CW_Score_Image__c, companyweb__CW_Score__c, companyweb__CW_Credit_Limit__c, companyweb__CW_Detail_URL__c, companyweb__CW_Report_URL__c, companyweb__CW_Balance__c, companyweb__CW_Equity__c, companyweb__CW_Last_Sync__c, companyweb__CW_Revenue__c, companyweb__CW_Employees__c, companyweb__CW_Gross_Margin__c, companyweb__CW_Result__c, companyweb__CW_Warnings__c,companyweb__CW_Kyc_URL__c,companyweb__CW_Credit_Limit_Reason__c,companyweb__CW_Start_Date__c,companyweb__CW_End_Date__c,companyweb__CW_Preferred_Languages__c,companyweb__CW_Preferred_Languages_PL__c,companyweb__CW_Avoid_Callout__c,companyweb__CW_Main_Activity__c, companyweb__CW_Activities__c, companyweb__CW_Joint_Commitees__c, companyweb__CW_Social_Security_Information__c, companyweb__CW_In_Follow_Up__c FROM Account WHERE Id = :recordId';
                 } else {
-                    queryString = 'SELECT Id, companyweb__CW_Full_Name__c, companyweb__CW_Phone__c,companyweb__CW_Address_Line_1__c, companyweb__CW_Address_Line_2__c, companyweb__CW_Name__c, companyweb__CW_VAT_Number__c, companyweb__CW_VAT_Liable__c, companyweb__CW_Abbreviation__c, companyweb__CW_Company_Status__c, companyweb__CW_Score_Image__c, companyweb__CW_Score__c, companyweb__CW_Credit_Limit__c, companyweb__CW_Detail_URL__c, companyweb__CW_Report_URL__c, companyweb__CW_Balance__c, companyweb__CW_Equity__c, companyweb__CW_Last_Sync__c, companyweb__CW_Revenue__c, companyweb__CW_Employees__c, companyweb__CW_Gross_Margin__c, companyweb__CW_Result__c, companyweb__CW_Warnings__c,companyweb__CW_Kyc_URL__c,companyweb__CW_Credit_Limit_Reason__c,companyweb__CW_Start_Date__c,companyweb__CW_End_Date__c,companyweb__CW_Preferred_Languages__c,companyweb__CW_Preferred_Languages_PL__c,companyweb__CW_Avoid_Callout__c,companyweb__CW_Main_Activity__c, companyweb__CW_Activities__c, companyweb__CW_Joint_Commitees__c, companyweb__CW_Social_Security_Information__c FROM Account WHERE Id = :recordId';
+                    queryString = 'SELECT Id, companyweb__CW_Full_Name__c, companyweb__CW_Phone__c,companyweb__CW_Address_Line_1__c, companyweb__CW_Address_Line_2__c, companyweb__CW_Name__c, companyweb__CW_VAT_Number__c, companyweb__CW_VAT_Liable__c, companyweb__CW_Abbreviation__c, companyweb__CW_Company_Status__c, companyweb__CW_Score_Image__c, companyweb__CW_Score__c, companyweb__CW_Credit_Limit__c, companyweb__CW_Detail_URL__c, companyweb__CW_Report_URL__c, companyweb__CW_Balance__c, companyweb__CW_Equity__c, companyweb__CW_Last_Sync__c, companyweb__CW_Revenue__c, companyweb__CW_Employees__c, companyweb__CW_Gross_Margin__c, companyweb__CW_Result__c, companyweb__CW_Warnings__c,companyweb__CW_Kyc_URL__c,companyweb__CW_Credit_Limit_Reason__c,companyweb__CW_Start_Date__c,companyweb__CW_End_Date__c,companyweb__CW_Preferred_Languages__c,companyweb__CW_Preferred_Languages_PL__c,companyweb__CW_Avoid_Callout__c,companyweb__CW_Main_Activity__c, companyweb__CW_Activities__c, companyweb__CW_Joint_Commitees__c, companyweb__CW_Social_Security_Information__c, companyweb__CW_In_Follow_Up__c FROM Account WHERE Id = :recordId';
                 }
             }
             when 'Lead' {
                 if (leadVATAPI != null) {
-                    queryString = 'SELECT Id, companyweb__CW_Full_Name__c, companyweb__CW_Phone__c,companyweb__CW_Address_Line_1__c, companyweb__CW_Address_Line_2__c, companyweb__CW_Name__c, ' + leadVATAPI + ', companyweb__CW_VAT_Liable__c, companyweb__CW_Abbreviation__c, companyweb__CW_Company_Status__c, companyweb__CW_Score_Image__c, companyweb__CW_Score__c, companyweb__CW_Credit_Limit__c, companyweb__CW_Detail_URL__c, companyweb__CW_Report_URL__c, companyweb__CW_Balance__c, companyweb__CW_Equity__c, companyweb__CW_Last_Sync__c, companyweb__CW_Revenue__c, companyweb__CW_Employees__c, companyweb__CW_Gross_Margin__c, companyweb__CW_Result__c, companyweb__CW_Warnings__c,companyweb__CW_Kyc_URL__c,companyweb__CW_Credit_Limit_Reason__c,companyweb__CW_Start_Date__c,companyweb__CW_End_Date__c,companyweb__CW_Preferred_Languages__c,companyweb__CW_Preferred_Languages_PL__c,companyweb__CW_Avoid_Callout__c,companyweb__CW_Main_Activity__c, companyweb__CW_Activities__c, companyweb__CW_Joint_Commitees__c, companyweb__CW_Social_Security_Information__c FROM Lead WHERE Id = :recordId';
+                    queryString = 'SELECT Id, companyweb__CW_Full_Name__c, companyweb__CW_Phone__c,companyweb__CW_Address_Line_1__c, companyweb__CW_Address_Line_2__c, companyweb__CW_Name__c, ' + leadVATAPI + ', companyweb__CW_VAT_Liable__c, companyweb__CW_Abbreviation__c, companyweb__CW_Company_Status__c, companyweb__CW_Score_Image__c, companyweb__CW_Score__c, companyweb__CW_Credit_Limit__c, companyweb__CW_Detail_URL__c, companyweb__CW_Report_URL__c, companyweb__CW_Balance__c, companyweb__CW_Equity__c, companyweb__CW_Last_Sync__c, companyweb__CW_Revenue__c, companyweb__CW_Employees__c, companyweb__CW_Gross_Margin__c, companyweb__CW_Result__c, companyweb__CW_Warnings__c,companyweb__CW_Kyc_URL__c,companyweb__CW_Credit_Limit_Reason__c,companyweb__CW_Start_Date__c,companyweb__CW_End_Date__c,companyweb__CW_Preferred_Languages__c,companyweb__CW_Preferred_Languages_PL__c,companyweb__CW_Avoid_Callout__c,companyweb__CW_Main_Activity__c, companyweb__CW_Activities__c, companyweb__CW_Joint_Commitees__c, companyweb__CW_Social_Security_Information__c, companyweb__CW_In_Follow_Up__c FROM Lead WHERE Id = :recordId';
                 } else {
-                    queryString = 'SELECT Id, companyweb__CW_Full_Name__c, companyweb__CW_Phone__c,companyweb__CW_Address_Line_1__c, companyweb__CW_Address_Line_2__c, companyweb__CW_Name__c, companyweb__CW_VAT_Number__c, companyweb__CW_VAT_Liable__c, companyweb__CW_Abbreviation__c, companyweb__CW_Company_Status__c, companyweb__CW_Score_Image__c, companyweb__CW_Score__c, companyweb__CW_Credit_Limit__c, companyweb__CW_Detail_URL__c, companyweb__CW_Report_URL__c, companyweb__CW_Balance__c, companyweb__CW_Equity__c, companyweb__CW_Last_Sync__c, companyweb__CW_Revenue__c, companyweb__CW_Employees__c, companyweb__CW_Gross_Margin__c, companyweb__CW_Result__c, companyweb__CW_Warnings__c,companyweb__CW_Kyc_URL__c,companyweb__CW_Credit_Limit_Reason__c,companyweb__CW_Start_Date__c,companyweb__CW_End_Date__c,companyweb__CW_Preferred_Languages__c,companyweb__CW_Preferred_Languages_PL__c,companyweb__CW_Avoid_Callout__c,companyweb__CW_Main_Activity__c, companyweb__CW_Activities__c, companyweb__CW_Joint_Commitees__c, companyweb__CW_Social_Security_Information__c FROM Lead WHERE Id = :recordId';                
+                    queryString = 'SELECT Id, companyweb__CW_Full_Name__c, companyweb__CW_Phone__c,companyweb__CW_Address_Line_1__c, companyweb__CW_Address_Line_2__c, companyweb__CW_Name__c, companyweb__CW_VAT_Number__c, companyweb__CW_VAT_Liable__c, companyweb__CW_Abbreviation__c, companyweb__CW_Company_Status__c, companyweb__CW_Score_Image__c, companyweb__CW_Score__c, companyweb__CW_Credit_Limit__c, companyweb__CW_Detail_URL__c, companyweb__CW_Report_URL__c, companyweb__CW_Balance__c, companyweb__CW_Equity__c, companyweb__CW_Last_Sync__c, companyweb__CW_Revenue__c, companyweb__CW_Employees__c, companyweb__CW_Gross_Margin__c, companyweb__CW_Result__c, companyweb__CW_Warnings__c,companyweb__CW_Kyc_URL__c,companyweb__CW_Credit_Limit_Reason__c,companyweb__CW_Start_Date__c,companyweb__CW_End_Date__c,companyweb__CW_Preferred_Languages__c,companyweb__CW_Preferred_Languages_PL__c,companyweb__CW_Avoid_Callout__c,companyweb__CW_Main_Activity__c, companyweb__CW_Activities__c, companyweb__CW_Joint_Commitees__c, companyweb__CW_Social_Security_Information__c, companyweb__CW_In_Follow_Up__c FROM Lead WHERE Id = :recordId';                
                 }
             }
         }
@@ -1314,7 +1314,7 @@ public with sharing class CompanyWebController {
     @AuraEnabled
     public static Boolean addCompanyToAlerts(String vatNumber){
         CW_Login_Setup__mdt oLoginSetup = new CW_Login_Setup__mdt();
-        oLoginSetup = [SELECT Id, CW_CompanyWebLogin__c, CW_CompanyWebPassword__c, CW_CompanyWebSecret__c, CW_ServiceIntegrator__c FROM CW_Login_Setup__mdt WHERE DeveloperName = 'CW_Login'];
+        oLoginSetup = [SELECT Id, CW_CompanyWebLogin__c, CW_CompanyWebPassword__c, CW_CompanyWebSecret__c, CW_ServiceIntegrator__c, Account_VAT_Number_Field__c, Account_In_Follow_Up_Field__c, Lead_VAT_Number_Field__c, Lead_In_Follow_Up_Field__c FROM CW_Login_Setup__mdt WHERE DeveloperName = 'CW_Login'];
 
         connectCompanywebBe.RequestAddToAlerts request = new connectCompanywebBe.RequestAddToAlerts();
         request.CompanyWebLogin = oLoginSetup.CW_CompanyWebLogin__c;
@@ -1322,13 +1322,45 @@ public with sharing class CompanyWebController {
         request.ServiceIntegrator = oLoginSetup.CW_ServiceIntegrator__c;
         request.LoginHash = createCWLoginHash(oLoginSetup.CW_CompanyWebLogin__c, oLoginSetup.CW_CompanyWebPassword__c, oLoginSetup.CW_CompanyWebSecret__c);
         request.VatNumber = vatNumber;
-        connectCompanywebBe.BasicHttpBinding_AlacarteServiceV1_3 httpreq = new connectCompanywebBe.BasicHttpBinding_AlacarteServiceV1_3();
+        connectCompanywebBe.BasicHttpBinding_AlacarteServiceV1_6_soap httpreq = new connectCompanywebBe.BasicHttpBinding_AlacarteServiceV1_6_soap();
         connectCompanywebBe.ResponseAddToAlerts result = httpreq.Alerts_AddCompany(request);
 
         System.debug('addCompanyToAlerts StatusCode: ' + result.StatusCode);
+
+        //find Account with given VAT Number
+        String accountInFollowUpAPI = !String.isEmpty(oLoginSetup.Account_In_Follow_Up_Field__c) ? oLoginSetup.Account_In_Follow_Up_Field__c : 'CW_In_Follow_Up__c';
+        String accountVATAPI = oLoginSetup.Account_VAT_Number_Field__c!=null ? oLoginSetup.Account_VAT_Number_Field__c : 'companyweb__CW_VAT_Number__c';
+        String qryString = 'SELECT Id, ' + AccountInFollowUpAPI + ' FROM Account WHERE ' + accountVATAPI + '=:vatNumber';
+        List<Account> acc = Database.query(qryString);
+
+        //find Lead with given VAT Number
+        String leadInFollowUpAPI = !String.isEmpty(oLoginSetup.Lead_In_Follow_Up_Field__c) ? oLoginSetup.Lead_In_Follow_Up_Field__c : 'CW_In_Follow_Up__c';
+        String leadVATAPI = oLoginSetup.Lead_VAT_Number_Field__c!=null ? oLoginSetup.Lead_VAT_Number_Field__c : 'companyweb__CW_VAT_Number__c';
+        qryString = 'SELECT Id, ' + LeadInFollowUpAPI + ' FROM Lead WHERE ' + LeadVATAPI + '=:vatNumber';
+        List<Lead> lead = Database.query(qryString);
+        
         if(result.StatusCode == 0){
+            if(acc.size()>0){
+                acc[0].put(accountInFollowUpAPI, true);
+                update acc;
+            }
+            if(lead.size()>0){
+                lead[0].put(leadInFollowUpAPI, true);
+                update lead;
+            }
+
             return true;
+        } else {
+            if(acc.size()>0){
+                acc[0].put(accountInFollowUpAPI, false); 
+                update acc;
+            }
+            if(lead.size()>0){
+                lead[0].put(leadInFollowUpAPI, false);
+                update lead;
+            }
         }
+        
         return false;
     }
 
@@ -1337,14 +1369,17 @@ public with sharing class CompanyWebController {
         System.debug('addCompanyListToAlerts method');
         System.debug('param listViewIds: ' + listViewIds);
         CW_Login_Setup__mdt oLoginSetup = new CW_Login_Setup__mdt();
-        oLoginSetup = [SELECT Id, CW_CompanyWebLogin__c, CW_CompanyWebPassword__c, CW_CompanyWebSecret__c, CW_ServiceIntegrator__c,  Account_VAT_Number_Field__c, Lead_VAT_Number_Field__c  FROM CW_Login_Setup__mdt WHERE DeveloperName = 'CW_Login'];
+        oLoginSetup = [SELECT Id, CW_CompanyWebLogin__c, CW_CompanyWebPassword__c, CW_CompanyWebSecret__c, CW_ServiceIntegrator__c, Account_VAT_Number_Field__c, Account_In_Follow_Up_Field__c, Lead_VAT_Number_Field__c, Lead_In_Follow_Up_Field__c FROM CW_Login_Setup__mdt WHERE DeveloperName = 'CW_Login'];
 
         String accountVATAPI = oLoginSetup.Account_VAT_Number_Field__c!=null ? oLoginSetup.Account_VAT_Number_Field__c : 'companyweb__CW_VAT_Number__c';
+        String accountInFollowUpAPI = !String.isEmpty(oLoginSetup.Account_In_Follow_Up_Field__c) ? oLoginSetup.Account_In_Follow_Up_Field__c : 'CW_In_Follow_Up__c';
         String leadVATAPI = oLoginSetup.Lead_VAT_Number_Field__c!=null ? oLoginSetup.Lead_VAT_Number_Field__c : 'companyweb__CW_VAT_Number__c';
-        String queryString = 'SELECT ' + accountVATAPI + ' FROM Account WHERE Id IN :listViewIds';
+        String leadInFollowUpAPI = !String.isEmpty(oLoginSetup.Lead_In_Follow_Up_Field__c) ? oLoginSetup.Lead_In_Follow_Up_Field__c : 'CW_In_Follow_Up__c';
+
+        String queryString = 'SELECT Id, ' + accountVATAPI + ', ' + accountInFollowUpAPI + ' FROM Account WHERE Id IN :listViewIds';
         System.debug(queryString);
         List<Account> accountList = Database.query(queryString);
-        queryString = 'SELECT ' + leadVATAPI + ' FROM Lead WHERE Id IN :listViewIds';
+        queryString = 'SELECT Id, ' + leadVATAPI + ', ' + leadInFollowUpAPI + ' FROM Lead WHERE Id IN :listViewIds';
         System.debug(queryString);
         List<Lead> leadList = Database.query(queryString);
 
@@ -1367,56 +1402,34 @@ public with sharing class CompanyWebController {
         request.ServiceIntegrator = oLoginSetup.CW_ServiceIntegrator__c;
         request.LoginHash = createCWLoginHash(oLoginSetup.CW_CompanyWebLogin__c, oLoginSetup.CW_CompanyWebPassword__c, oLoginSetup.CW_CompanyWebSecret__c);
         request.VatNumbers = vatNumbers;
-        connectCompanywebBe.BasicHttpBinding_AlacarteServiceV1_3 httpreq = new connectCompanywebBe.BasicHttpBinding_AlacarteServiceV1_3();
+        connectCompanywebBe.BasicHttpBinding_AlacarteServiceV1_6_soap httpreq = new connectCompanywebBe.BasicHttpBinding_AlacarteServiceV1_6_soap();
         connectCompanywebBe.ResponseAddListToAlerts result = httpreq.Alerts_AddListOfCompanies(request);
 
         System.debug('addCompanyListToAlerts StatusCode: ' + result.StatusCode);
-        if(result.StatusCode == 0){
+        if(result.StatusCode == 0){ //check if statuscode 0 also happens if some companies were added but others were not (see count_invalids field)
             System.debug('Count_ActiveAlerts: ' + result.Count_ActiveAlerts);
             System.debug('Count_Adds: ' + result.Count_Adds);
             System.debug('Count_Updates: ' + result.Count_Updates);
             System.debug('Count_Invalids: ' + result.Count_Invalids);
+
+            for(Account acc : accountList){
+                acc.put(accountInFollowUpAPI, true);
+            }
+            for(Lead lead: leadList){
+                lead.put(leadInFollowUpAPI, true);
+            }
+            update accountList;
+            update leadList;
+
             return true;
+        } else {
+            //result only shows Count info so no distinction which companies were added or not. Don't make changes here until CW API is updated to handle distinction.
         }
         return false;
     }
 
-    public static void getAlertsALaCarte(){
-        List<Account> listOfAccountsToUpdate = new List<Account>();
-        List<Lead> listOfLeadsToUpdate = new List<Lead>();
-
-        CW_Login_Setup__mdt oLoginSetup = new CW_Login_Setup__mdt();
-        oLoginSetup = [SELECT Id, CW_CompanyWebLogin__c, CW_CompanyWebPassword__c, CW_CompanyWebSecret__c, CW_ServiceIntegrator__c, Account_VAT_Number_Field__c,
-             Lead_VAT_Number_Field__c,Account_Score_Field__c,Account_Activities_Field__c,Account_Credit_Limit_Field__c,Account_Joint_Commitees_Field__c,
-             Account_Joint_Commitees_White_Field__c,Account_Legal_Form_Field__c,Account_Main_Activity_Field__c,Account_Number_Employees_Field__c,
-             Account_Social_Security_Field__c,Account_Phone_Field__c,Account_Street_Field__c,Account_PostalCode_Field__c,Account_City_Field__c,Account_CountryCode_Field__c,
-             Account_Annual_Revenue_Field__c,CW_Duplicate_Check_Creation__c,
-             CW_Duplicate_Check_Refresh__c,Lead_Score_Field__c,Lead_Activities_Field__c,Lead_Credit_Limit_Field__c,Lead_Joint_Commitees_Field__c,
-             Lead_Joint_Commitees_White_Field__c,Lead_Legal_Form_Field__c,Lead_Main_Activity_Field__c,Lead_Number_Employees_Field__c,Lead_Social_Security_Field__c,
-             Lead_Phone_Field__c,Lead_Annual_Revenue_Field__c,Lead_Street_Field__c,Lead_PostalCode_Field__c,Lead_City_Field__c,Lead_CountryCode_Field__c
-             FROM CW_Login_Setup__mdt WHERE DeveloperName = 'CW_Login'];
-        system.debug('Result of loginSetup '+ oLoginSetup);
-
-        connectCompanywebBe.RequestStep1 request1 = new connectCompanywebBe.RequestStep1();
-        request1.CompanyWebLogin = oLoginSetup.CW_CompanyWebLogin__c;
-        request1.CompanyWebPassword = oLoginSetup.CW_CompanyWebPassword__c;
-        request1.ServiceIntegrator = oLoginSetup.CW_ServiceIntegrator__c;
-        request1.LoginHash = createCWLoginHash(oLoginSetup.CW_CompanyWebLogin__c, oLoginSetup.CW_CompanyWebPassword__c, oLoginSetup.CW_CompanyWebSecret__c);
-        connectCompanywebBe.BasicHttpBinding_AlacarteServiceV1_3 httpreq = new connectCompanywebBe.BasicHttpBinding_AlacarteServiceV1_3();
-
-        //Step 1: get Change Dates
-        Map<Integer,String> mapOfStep2Token = getChangeDates(httpreq, request1);
-        System.debug(mapOfStep2Token);
-
-        if(!mapOfStep2Token.isEmpty()){
-            for(Integer changeDate : mapOfStep2Token.keySet()){
-                System.enqueueJob(new companyWebAlertsQueueable(changeDate, mapOfStep2Token, request1.LoginHash, httpreq, oLoginSetup));
-            }
-        }
-    }
-
     //Step 1: get Change Dates
-    public static Map<Integer,String> getChangeDates(connectCompanywebBe.BasicHttpBinding_AlacarteServiceV1_3 httpreq, connectCompanywebBe.RequestStep1 request){
+    public static Map<Integer,String> getChangeDates(connectCompanywebBe.BasicHttpBinding_AlacarteServiceV1_6_soap httpreq, connectCompanywebBe.RequestStep1 request){
         //http Reponse
         connectCompanywebBe.ResponseStep1 result = new connectCompanywebBe.ResponseStep1();
         result = httpreq.Alerts_Step1_GetChangeDates(request);
@@ -1426,18 +1439,24 @@ public with sharing class CompanyWebController {
         String warningsString = '';
         System.debug('getChangeDates statuscode = ' + result?.StatusCode);
 
-        if(result?.StatusCode == 0){
-            if(result?.ChangeDates?.ChangeDate!=null){
-                for(connectCompanywebBe.ChangeDate changeDate : result.ChangeDates.ChangeDate){
-                    mapOfStep2Token.put(changeDate.DateOfChange,changeDate.Step2Token);
+        if(result!=null){
+            if(result?.StatusCode == 0){
+                if(result?.ChangeDates?.ChangeDate!=null){
+                    for(connectCompanywebBe.ChangeDate changeDate : result.ChangeDates.ChangeDate){
+                        mapOfStep2Token.put(changeDate.DateOfChange,changeDate.Step2Token);
+                    }
                 }
+            }else{
+                sendEmail('getChangeDates', result.StatusCode, result.StatusMessage);
             }
+        }else{
+            sendEmail('getChangeDates', null, 'No response returned');
         }
         return mapOfStep2Token;
     }
 
     //Step 2: get Vat List
-    public static Map<Integer,String> getVatList(connectCompanywebBe.BasicHttpBinding_AlacarteServiceV1_3 httpreq, connectCompanywebBe.RequestStep2 request){
+    public static Map<Integer,String> getVatList(connectCompanywebBe.BasicHttpBinding_AlacarteServiceV1_6_soap httpreq, connectCompanywebBe.RequestStep2 request){
         //http Reponse
         connectCompanywebBe.ResponseStep2 result = new connectCompanywebBe.ResponseStep2();
         if(Limits.getCallouts()<100){
@@ -1450,20 +1469,26 @@ public with sharing class CompanyWebController {
         String warningsString = '';
         //System.debug('getVatList statuscode = ' + result?.StatusCode);
 
-        if(result?.StatusCode == 0){
-            if(result?.ChangedVatList?.ChangedVat!=null){
-                for(connectCompanywebBe.ChangedVat changedVat : result.ChangedVatList.ChangedVat){
-                    mapOfStep3Token.put(changedVat.VatNumber,changedVat.Step3Token);
+        if(result!=null){
+            if(result?.StatusCode == 0){
+                if(result?.ChangedVatList?.ChangedVat!=null){
+                    for(connectCompanywebBe.ChangedVat changedVat : result.ChangedVatList.ChangedVat){
+                        mapOfStep3Token.put(changedVat.VatNumber,changedVat.Step3Token);
+                    }
                 }
+            }else{
+                sendEmail('getVatList', result.StatusCode, result.StatusMessage);
             }
+        }else{
+            sendEmail('getVatList', null, 'No response returned');
         }
         return mapOfStep3Token;
     }
 
     //Step 3: get Company Data
-    public static connectCompanywebBe.CompanyResponseV1_3 getCompanyData(connectCompanywebBe.BasicHttpBinding_AlacarteServiceV1_3 httpreq, connectCompanywebBe.RequestStep3_CompanyOnVat request){
+    public static connectCompanywebBe.CompanyResponseV1_5 getCompanyData(connectCompanywebBe.BasicHttpBinding_AlacarteServiceV1_6_soap httpreq, connectCompanywebBe.RequestStep3_CompanyOnVat request){
         //http Reponse
-        connectCompanywebBe.ResponseCompanyByVatV1_3 result = new connectCompanywebBe.ResponseCompanyByVatV1_3();
+        connectCompanywebBe.ResponseCompanyByVatV1_5 result = new connectCompanywebBe.ResponseCompanyByVatV1_5();
         if(Limits.getCallouts()<100){
             result = httpreq.Alerts_Step3_CompanyOnVat(request);
         } else {
@@ -1473,13 +1498,19 @@ public with sharing class CompanyWebController {
         String warningsString = '';
         //System.debug('getCompanyData statuscode = ' + result.StatusCode);
 
-        if(result?.StatusCode == 0){
-            return result.CompanyResponse; 
+        if(result!=null){
+            if(result?.StatusCode == 0){
+                return result.CompanyResponse;
+            }else{
+                sendEmail('getCompanyData', result.StatusCode, result.StatusMessage);
+            }
+        }else{
+            sendEmail('getCompanyData', null, 'No response returned');
         }
         return null;
     }
 
-    public static void updateCompanyByResponse(CW_Login_Setup__mdt oLoginSetup, connectCompanywebBe.CompanyResponseV1_3 companyData, List<Account> listOfAccountsToUpdate, List<Lead> listOfLeadsToUpdate){
+    public static void updateCompanyByResponse(CW_Login_Setup__mdt oLoginSetup, connectCompanywebBe.CompanyResponseV1_5 companyData, List<Account> listOfAccountsToUpdate, List<Lead> listOfLeadsToUpdate){
         String vatNumber = String.valueOf(companyData.VatNumber.Value);
         String qryString;
 
@@ -1501,7 +1532,7 @@ public with sharing class CompanyWebController {
 
         assignDynamicMappingFields(oLoginSetup);
 
-        connectCompanywebBe.ResponseCompanyByVatV1_3 result = new connectCompanywebBe.ResponseCompanyByVatV1_3();
+        connectCompanywebBe.ResponseCompanyByVatV1_5 result = new connectCompanywebBe.ResponseCompanyByVatV1_5();
         result.CompanyResponse = companyData;
 
         if(acc.size()>0){
@@ -1522,16 +1553,55 @@ public with sharing class CompanyWebController {
             System.debug(listOfAccountsToUpdate);
             Database.SaveResult[] srl = Database.update(listOfAccountsToUpdate, false);
             System.debug('srl accounts: ' + srl);
+            for(Database.SaveResult sr : srl){
+                if(!sr.isSuccess()){
+                    String errorMessage='';
+                    for(Database.Error err : sr.getErrors()){
+                        errorMessage += err.getMessage() + '. ';
+                    }
+                    sendEmail('updateCompanyOperation', null, errorMessage);
+                }
+            }
         }
         if(!listOfLeadsToUpdate.isEmpty()){
             //update leads
             System.debug(listOfLeadsToUpdate);
             Database.SaveResult[] srl = Database.update(listOfLeadsToUpdate, false);
             System.debug('srl leads: ' + srl);
+            for(Database.SaveResult sr : srl){
+                if(!sr.isSuccess()){
+                    String errorMessage='';
+                    for(Database.Error err : sr.getErrors()){
+                        errorMessage += err.getMessage() + '. ';
+                    }
+                    sendEmail('updateCompanyOperation', null, errorMessage);
+                }
+            }
         }
     }
 
-    public static void assignAccountFields(Account acc, connectCompanywebBe.ResponseCompanyByVatV1_3 result, Boolean fromPick){
+    public static void sendEmail(String methodName, Integer statusCode, String exceptionMessage){
+        CW_Login_Setup__mdt oLoginSetup = [SELECT CW_API_Email_Recipient__c FROM CW_Login_Setup__mdt WHERE DeveloperName = 'CW_Login'];
+        Messaging.reserveSingleEmailCapacity(1);
+        Messaging.SingleEmailMessage mail = new Messaging.SingleEmailMessage();
+        mail.setToAddresses(new List<String>{oLoginSetup.CW_API_Email_Recipient__c});
+        mail.setSenderDisplayName('Companyweb Support');
+        mail.setSubject('Unexpected outcome during companyweb alerts batch');
+        mail.setBccSender(false);
+        mail.setUseSignature(false);
+
+        String baseMessage = 'The following method has returned an unexpected outcome: ' + methodName + '. ';
+        if(statusCode!=null){
+            baseMessage += 'The Companyweb API has returned a response with the StatusCode ' + statusCode + '. ';
+        }
+        baseMessage += 'Summary of what went wrong during the process: ' + exceptionMessage;
+        mail.setPlainTextBody(baseMessage);
+        if(oLoginSetup.CW_API_Email_Recipient__c!=null && !Test.isRunningTest()){
+            Messaging.sendEmail(new Messaging.SingleEmailMessage[] { mail });
+        }
+    }
+
+    public static void assignAccountFields(Account acc, connectCompanywebBe.ResponseCompanyByVatV1_5 result, Boolean fromPick){
         Schema.DisplayType dt, dtAccountVAT, dtAccountScore, dtAccountActivities, dtAccountCreditLimit, dtAccountJointCommiteesBlue, dtAccountJointCommiteesWhite, dtAccountLegalForm, dtAccountMainActivity, dtAccountNumberEmployees, dtAccountSocialSecurity, dtAccountPhone, dtAccountAnnualRevenue;
         String warningsString = '';
 
@@ -1958,7 +2028,7 @@ public with sharing class CompanyWebController {
         acc.CW_Avoid_Callout__c = false;
     }
 
-    public static void assignLeadFields(Lead lead, connectCompanywebBe.ResponseCompanyByVatV1_3 result, Boolean fromPick){
+    public static void assignLeadFields(Lead lead, connectCompanywebBe.ResponseCompanyByVatV1_5 result, Boolean fromPick){
         Schema.DisplayType dt, dtLeadVAT, dtLeadScore, dtLeadActivities, dtLeadCreditLimit, dtLeadJointCommiteesBlue, dtLeadJointCommiteesWhite, dtLeadLegalForm, dtLeadMainActivity, dtLeadNumberEmployees, dtLeadSocialSecurity, dtLeadPhone, dtLeadAnnualRevenue;
         String warningsString = '';
         String vatFieldType = String.valueOf(dt);

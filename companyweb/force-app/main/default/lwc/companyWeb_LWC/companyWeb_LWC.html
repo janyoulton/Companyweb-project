@@ -67,6 +67,11 @@
                                     <lightning-output-field field-name="companyweb__CW_Full_Name__c"></lightning-output-field>
                                 </div>
                             </template>
+                            <template if:true={isInFollowUpAvailable}>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <lightning-output-field field-name="companyweb__CW_In_Follow_Up__c"></lightning-output-field>
+                                </div>
+                            </template>
                             <div class="slds-col slds-size_1-of-2">
                                 <lightning-output-field field-name="companyweb__CW_Last_Sync__c"></lightning-output-field>
                             </div>

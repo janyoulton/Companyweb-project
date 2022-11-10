@@ -84,6 +84,7 @@ export default class CompanyWeb_LWC extends NavigationMixin(LightningElement) {
     @track isFullAddressAvailable = false;
     @track isPrefLangAvailable = false;
     @track isCreditLimitAvailable = false;
+    @track isInFollowUpAvailable = false;
 
     label = {
         detailsBtn,
@@ -198,6 +199,7 @@ export default class CompanyWeb_LWC extends NavigationMixin(LightningElement) {
                 this.isFullAddressAvailable = vStatus['FullAddressAvailable'];
                 this.isPrefLangAvailable = vStatus['PrefLangAvailable'];
                 this.isCreditLimitAvailable = vStatus['CreditLimitAvailable'];
+                this.isInFollowUpAvailable = vStatus['InFollowUpAvailable'];
                 if (this.isScoreImage) {
                     this.scoreImageUrl = this.urlPath + '/' + result.companyweb__CW_Score_Image__c;
                 }
@@ -318,6 +320,7 @@ export default class CompanyWeb_LWC extends NavigationMixin(LightningElement) {
                             this.isFullAddressAvailable = vStatus['FullAddressAvailable'];
                             this.isPrefLangAvailable = vStatus['PrefLangAvailable'];
                             this.isCreditLimitAvailable = vStatus['CreditLimitAvailable'];
+                            this.isInFollowUpAvailable = vStatus['InFollowUpAvailable'];
                             if (this.isScoreImage) {
                                 this.scoreImageUrl = this.urlPath + '/' + result.companyweb__CW_Score_Image__c;
                             }
@@ -597,8 +600,9 @@ export default class CompanyWeb_LWC extends NavigationMixin(LightningElement) {
 
     checkVisibility(jsonResponse) {
         console.log('checkVisibility Method');
+        console.log(JSON.stringify(jsonResponse));
 
-        let sIsNameAvailable, sIsScoreImage, sIsKYCReport, sIsEquity, sIsRevenue, sIsEmployees, sIsGrossMargin, sIsResult, sIsCreditLimitAvailable, sIsCreditLimit, sIsCreditLimitReason, sIsCompanyActive, sIsCompanyAvailable, sIsWarning, sIsBalance, sIsAvoidCallOut, sIsEndDateAvailable, sIsLiableAvailable, sIsFullAddressAvailable, sIsStartDateAvailable, sIsPrefLangAvailable, sIsDetailsURL, sIsReportURL;
+        let sIsNameAvailable, sIsScoreImage, sIsKYCReport, sIsEquity, sIsRevenue, sIsEmployees, sIsGrossMargin, sIsResult, sIsCreditLimitAvailable, sIsCreditLimit, sIsCreditLimitReason, sIsCompanyActive, sIsCompanyAvailable, sIsWarning, sIsBalance, sIsAvoidCallOut, sIsEndDateAvailable, sIsLiableAvailable, sIsFullAddressAvailable, sIsStartDateAvailable, sIsPrefLangAvailable, sIsDetailsURL, sIsReportURL, sIsInFollowUpAvailable;
 
         if (!jsonResponse.companyweb__CW_Full_Name__c) {
             sIsNameAvailable = false;
@@ -738,6 +742,12 @@ export default class CompanyWeb_LWC extends NavigationMixin(LightningElement) {
             sIsReportURL = true;
         }
 
+        if(!jsonResponse.companyweb__CW_In_Follow_Up__c){
+            sIsInFollowUpAvailable = false;
+        } else {
+            sIsInFollowUpAvailable = true;
+        }
+
         // return objct
         let statusObj = {
             'Balance': sIsBalance,
@@ -761,6 +771,7 @@ export default class CompanyWeb_LWC extends NavigationMixin(LightningElement) {
             'FullAddressAvailable': sIsFullAddressAvailable,
             'PrefLangAvailable': sIsPrefLangAvailable,
             'CreditLimitAvailable': sIsCreditLimitAvailable,
+            'InFollowUpAvailable': sIsInFollowUpAvailable,
             'DetailsURL': sIsDetailsURL,
             'ReportURL': sIsReportURL
         };
