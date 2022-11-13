@@ -41,12 +41,6 @@ public class companyWebCompanyByVATQueueable implements Queueable, Database.Allo
                     System.debug('exceeded Callouts limit');
                     chainJob = true;
                     break;
-                    // DateTime nextRunTime = DateTime.now().addMinutes(2);
-                    // String cronString = '' + nextRunTime.second() + ' ' + nextRunTime.minute() + ' ' + 
-                    //     nextRunTime.hour() + ' ' + nextRunTime.day() + ' ' + 
-                    //     nextRunTime.month() + ' ? ' + nextRunTime.year(); 
-                    // System.schedule(companyWebScheduledAlerts.class.getName() + '-' + nextRunTime.format(), cronString, new companyWebScheduledAlerts(httpreq, request, oLoginSetup, mapOfStep3TokenExcess));
-                    // break;
                 }
 
                 if(companyData!=null && companyData?.VatNumber?.IsEnabled){
