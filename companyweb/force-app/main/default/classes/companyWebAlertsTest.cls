@@ -4,7 +4,7 @@ public class companyWebAlertsTest {
     @TestSetup
     public static void testSetup(){
         Account acc = new Account(Name='testacc', CW_VAT_Number__c='869703978');
-        Lead lead = new Lead(LastName='testlead', Company='testacc', Status='Open - Not Contacted', CW_VAT_Number__c='869703978');
+        Lead lead = new Lead(LastName='testlead', Company='testacc', CW_VAT_Number__c='869703978');
         insert acc;
         insert lead;
     }
