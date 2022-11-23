@@ -39,6 +39,7 @@ public with sharing class CompanyWebController {
     public static String leadPostalCodeAPI {get; set;}
     public static String leadCityAPI {get; set;}
     public static String leadCountryCodeAPI {get; set;}
+    public static String leadLegalFormAPI {get; set;}
 
     public static void assignDynamicMappingFields(CW_Login_Setup__mdt oLoginSetup){
         //System
@@ -80,6 +81,7 @@ public with sharing class CompanyWebController {
         leadPostalCodeAPI = oLoginSetup.Lead_PostalCode_Field__c;
         leadCityAPI = oLoginSetup.Lead_City_Field__c;
         leadCountryCodeAPI = oLoginSetup.Lead_CountryCode_Field__c;
+        leadLegalFormAPI = oLoginSetup.Lead_Legal_Form_Field__c;
     }
 
     @InvocableMethod(label='Call CW to Update Lead/Account' description='Callout to the CompanyWeb API to update information on the Lead/Account')
@@ -189,7 +191,7 @@ public with sharing class CompanyWebController {
              Account_Annual_Revenue_Field__c,CW_Duplicate_Check_Creation__c,
              CW_Duplicate_Check_Refresh__c,Lead_Score_Field__c,Lead_Activities_Field__c,Lead_Credit_Limit_Field__c,Lead_Joint_Commitees_Field__c,
              Lead_Joint_Commitees_White_Field__c,Lead_Legal_Form_Field__c,Lead_Main_Activity_Field__c,Lead_Number_Employees_Field__c,Lead_Social_Security_Field__c,
-             Lead_Phone_Field__c,Lead_Annual_Revenue_Field__c,Lead_Street_Field__c,Lead_PostalCode_Field__c,Lead_City_Field__c,Lead_CountryCode_Field__c
+             Lead_Phone_Field__c,Lead_Annual_Revenue_Field__c,Lead_Street_Field__c,Lead_PostalCode_Field__c,Lead_City_Field__c,Lead_CountryCode_Field__c,Lead_Legal_Form_Field__c
              FROM CW_Login_Setup__mdt WHERE DeveloperName = 'CW_Login'];
 
             system.debug('Result of loginSetup '+ oLoginSetup);
@@ -344,46 +346,7 @@ public with sharing class CompanyWebController {
             reqSearch.CompanyWebLogin = oLoginSetup.CW_CompanyWebLogin__c;
             reqSearch.CompanyWebPassword = oLoginSetup.CW_CompanyWebPassword__c;
             reqSearch.ServiceIntegrator = oLoginSetup.CW_ServiceIntegrator__c;
-             
-            //Date Handling
-            DateTime dtTodayDate = System.today();
-            String sMonth;
-            String sDay;
-            Integer Day =  dtTodayDate.day();
-            Integer Month = dtTodayDate.Month();
-
-            if(Day < 10){
-                sDay = String.valueOf('0'+ Day);
-            }else{
-                sDay = String.valueOf(Day);
-            }
-
-            if(Month < 10){
-                sMonth = String.valueOf('0'+ Month);
-            }else{
-                sMonth = String.valueOf(Month);
-            }
-            Integer Year = dtTodayDate.Year();
-
-            //String to be passed for SHA1 hash generation
-            String targetString = (
-                Year +
-                sMonth +
-                sDay +
-                oLoginSetup.CW_CompanyWebLogin__c +
-                oLoginSetup.CW_CompanyWebPassword__c +
-                oLoginSetup.CW_CompanyWebSecret__c
-            ).toLowercase();
-            system.debug('String to Hash: '+targetString);
-            // Convert to BLOB
-            Blob targetBlob = Blob.valueOf(targetString);
-            // Generate SHA1 digest
-            Blob hashSHA1 = Crypto.generateDigest('SHA1', targetBlob);
-            // For Rackspace Compatiblity encode the binary into BASE 64
-            // this will result in 28 chars long string 
-            String hashBase64SHA1 = EncodingUtil.base64encode (hashSHA1);
-            System.debug(EncodingUtil.convertToHex(hashSHA1));
-            reqSearch.LoginHash = EncodingUtil.convertToHex(hashSHA1);
+            reqSearch.LoginHash = createCWLoginHash(reqSearch.CompanyWebLogin, reqSearch.CompanyWebPassword, oLoginSetup.CW_CompanyWebSecret__c);
             connectCompanywebBe.BasicHttpBinding_AlacarteServiceV1_6_soap httpreq = new connectCompanywebBe.BasicHttpBinding_AlacarteServiceV1_6_soap();
             //http Reponse
             connectCompanywebBe.ResponseSearch result = httpreq.SearchCompanies(reqSearch);
@@ -403,7 +366,7 @@ public with sharing class CompanyWebController {
 
     public static CW_Login_Setup__mdt getCurrentVATNumberFields() {
         CW_Login_Setup__mdt oLoginSetup = new CW_Login_Setup__mdt();
-        oLoginSetup = [SELECT Id, CW_CompanyWebLogin__c, CW_CompanyWebPassword__c, CW_CompanyWebSecret__c, CW_ServiceIntegrator__c, Account_VAT_Number_Field__c, Lead_VAT_Number_Field__c,Account_Score_Field__c,Account_Activities_Field__c,Account_Credit_Limit_Field__c,Account_Joint_Commitees_Field__c,Account_Joint_Commitees_White_Field__c,Account_Legal_Form_Field__c,Account_Main_Activity_Field__c,Account_Number_Employees_Field__c,Account_Social_Security_Field__c,Account_Phone_Field__c,Account_Street_Field__c,Account_PostalCode_Field__c,Account_City_Field__c,Account_CountryCode_Field__c,Account_Annual_Revenue_Field__c,CW_Duplicate_Check_Creation__c,CW_Duplicate_Check_Refresh__c,Lead_Score_Field__c,Lead_Activities_Field__c,Lead_Credit_Limit_Field__c,Lead_Joint_Commitees_Field__c,Lead_Joint_Commitees_White_Field__c,Lead_Legal_Form_Field__c,Lead_Main_Activity_Field__c,Lead_Number_Employees_Field__c,Lead_Social_Security_Field__c,Lead_Phone_Field__c,Lead_Street_Field__c,Lead_PostalCode_Field__c,Lead_City_Field__c,Lead_CountryCode_Field__c,Lead_Annual_Revenue_Field__c FROM CW_Login_Setup__mdt WHERE DeveloperName = 'CW_Login'];
+        oLoginSetup = [SELECT Id, CW_CompanyWebLogin__c, CW_CompanyWebPassword__c, CW_CompanyWebSecret__c, CW_ServiceIntegrator__c, Account_VAT_Number_Field__c, Lead_VAT_Number_Field__c,Account_Score_Field__c,Account_Activities_Field__c,Account_Credit_Limit_Field__c,Account_Joint_Commitees_Field__c,Account_Joint_Commitees_White_Field__c,Account_Legal_Form_Field__c,Account_Main_Activity_Field__c,Account_Number_Employees_Field__c,Account_Social_Security_Field__c,Account_Phone_Field__c,Account_Street_Field__c,Account_PostalCode_Field__c,Account_City_Field__c,Account_CountryCode_Field__c,Account_Annual_Revenue_Field__c,CW_Duplicate_Check_Creation__c,CW_Duplicate_Check_Refresh__c,Lead_Score_Field__c,Lead_Activities_Field__c,Lead_Credit_Limit_Field__c,Lead_Joint_Commitees_Field__c,Lead_Joint_Commitees_White_Field__c,Lead_Legal_Form_Field__c,Lead_Main_Activity_Field__c,Lead_Number_Employees_Field__c,Lead_Social_Security_Field__c,Lead_Phone_Field__c,Lead_Street_Field__c,Lead_PostalCode_Field__c,Lead_City_Field__c,Lead_CountryCode_Field__c,Lead_Annual_Revenue_Field__c,Lead_Legal_Form_Field__c FROM CW_Login_Setup__mdt WHERE DeveloperName = 'CW_Login'];
         System.debug('Account_VAT_Number_Field__c = '+ oLoginSetup.Account_VAT_Number_Field__c);
         System.debug('Lead_VAT_Number_Field__c = '+ oLoginSetup.Lead_VAT_Number_Field__c);
         return oLoginSetup;
@@ -865,42 +828,8 @@ public with sharing class CompanyWebController {
 
             CW_Login_Setup__mdt oLoginSetup = getCurrentVATNumberFields();
             
-            //Account
-            String accountVATAPI = oLoginSetup.Account_VAT_Number_Field__c;
-            String accountScoreAPI = oLoginSetup.Account_Score_Field__c;
-            String accountActivitiesAPI = oLoginSetup.Account_Activities_Field__c;
-            String accountCreditLimitAPI = oLoginSetup.Account_Credit_Limit_Field__c;
-            String accountJointCommitieesBlueAPI = oLoginSetup.Account_Joint_Commitees_Field__c;
-            String accountJointCommitieesWhiteAPI = oLoginSetup.Account_Joint_Commitees_White_Field__c;
-            String accountMainActivityAPI = oLoginSetup.Account_Main_Activity_Field__c;
-            String accountNumberEmployeesAPI = oLoginSetup.Account_Number_Employees_Field__c;
-            String accountSocialSecurityAPI = oLoginSetup.Account_Social_Security_Field__c;
-            String accountLegalFormAPI = oLoginSetup.Account_Legal_Form_Field__c;
-            String accountPhoneAPI = oLoginSetup.Account_Phone_Field__c;
-            String accountAnnualRevenueAPI = oLoginSetup.Account_Annual_Revenue_Field__c;
-            String accountStreetAPI = oLoginSetup.Account_Street_Field__c;
-            String accountPostalCodeAPI = oLoginSetup.Account_PostalCode_Field__c;
-            String accountCityAPI = oLoginSetup.Account_City_Field__c;
-            String accountCountryCodeAPI = oLoginSetup.Account_CountryCode_Field__c;
+            assignDynamicMappingFields(oLoginSetup);
 
-            //Lead
-            String leadVATAPI = oLoginSetup.Lead_VAT_Number_Field__c;
-            String leadScoreAPI = oLoginSetup.Lead_Score_Field__c;
-            String leadActivitiesAPI = oLoginSetup.Lead_Activities_Field__c;
-            String leadCreditLimitAPI = oLoginSetup.Lead_Credit_Limit_Field__c;
-            String leadJointCommitieesBlueAPI = oLoginSetup.Lead_Joint_Commitees_Field__c;
-            String leadJointCommitieesWhiteAPI = oLoginSetup.Lead_Joint_Commitees_White_Field__c;
-            String leadMainActivityAPI = oLoginSetup.Lead_Main_Activity_Field__c;
-            String leadNumberEmployeesAPI = oLoginSetup.Lead_Number_Employees_Field__c;
-            String leadSocialSecurityAPI = oLoginSetup.Lead_Social_Security_Field__c;
-            String leadLegalFormAPI = oLoginSetup.Lead_Legal_Form_Field__c;
-            String leadPhoneAPI = oLoginSetup.Lead_Phone_Field__c;
-            String leadAnnualRevenueAPI = oLoginSetup.Lead_Annual_Revenue_Field__c;
-            String leadStreetAPI = oLoginSetup.Lead_Street_Field__c;
-            String leadPostalCodeAPI = oLoginSetup.Lead_PostalCode_Field__c;
-            String leadCityAPI = oLoginSetup.Lead_City_Field__c;
-            String leadCountryCodeAPI = oLoginSetup.Lead_CountryCode_Field__c;
-            
             System.debug('accountVATAPI = '+ oLoginSetup.Account_VAT_Number_Field__c);
             System.debug('leadVATAPI = '+ oLoginSetup.Lead_VAT_Number_Field__c);
 
@@ -909,17 +838,17 @@ public with sharing class CompanyWebController {
             switch on objectName {
                 when 'Account' {
                     if (accountVATAPI != null) {
-                        queryString = 'SELECT Id, Name, Phone, ShippingStreet, ShippingCity, ShippingPostalCode, ShippingCountry, AnnualRevenue, NumberOfEmployees, CW_Phone__c, CW_Address_Line_1__c, CW_Address_Line_2__c, CW_Name__c, ' + accountVATAPI + ', CW_VAT_Liable__c, CW_Abbreviation__c, CW_Company_Status__c, CW_Score_Image__c, CW_Score__c, CW_Credit_Limit__c, CW_Detail_URL__c, CW_Report_URL__c, CW_Balance__c, CW_Equity__c, CW_Last_Sync__c, CW_Revenue__c, CW_Employees__c, CW_Gross_Margin__c, CW_Result__c, CW_Warnings__c,CW_Kyc_URL__c,CW_Credit_Limit_Reason__c,CW_Start_Date__c,CW_End_Date__c,CW_Preferred_Languages__c FROM Account WHERE Id = :Id';
+                        queryString = 'SELECT Id, Name, Phone, ShippingStreet, ShippingCity, ShippingPostalCode, ShippingCountry, AnnualRevenue, NumberOfEmployees, CW_Phone__c, CW_Address_Line_1__c, CW_Address_Line_2__c, CW_Name__c, ' + accountVATAPI + ', CW_VAT_Liable__c, CW_Abbreviation__c, CW_Company_Status__c, CW_Score_Image__c, CW_Score__c, CW_Credit_Limit__c, CW_Detail_URL__c, CW_Report_URL__c, CW_Balance__c, CW_Equity__c, CW_Last_Sync__c, CW_Revenue__c, CW_Employees__c, CW_Gross_Margin__c, CW_Result__c, CW_Warnings__c,CW_Kyc_URL__c,CW_Credit_Limit_Reason__c,CW_Start_Date__c,CW_End_Date__c,CW_Preferred_Languages_PL__c,CW_Legal_Form__c FROM Account WHERE Id = :Id';
                     } else {
-                        queryString = 'SELECT Id, Name, Phone, ShippingStreet, ShippingCity, ShippingPostalCode, ShippingCountry, AnnualRevenue, NumberOfEmployees, CW_Phone__c, CW_Address_Line_1__c, CW_Address_Line_2__c, CW_Name__c, CW_VAT_Number__c, CW_VAT_Liable__c, CW_Abbreviation__c, CW_Company_Status__c, CW_Score_Image__c, CW_Score__c, CW_Credit_Limit__c, CW_Detail_URL__c, CW_Report_URL__c, CW_Balance__c, CW_Equity__c, CW_Last_Sync__c, CW_Revenue__c, CW_Employees__c, CW_Gross_Margin__c, CW_Result__c, CW_Warnings__c,CW_Kyc_URL__c,CW_Credit_Limit_Reason__c,CW_Start_Date__c,CW_End_Date__c,CW_Preferred_Languages__c FROM Account WHERE Id = :Id';
+                        queryString = 'SELECT Id, Name, Phone, ShippingStreet, ShippingCity, ShippingPostalCode, ShippingCountry, AnnualRevenue, NumberOfEmployees, CW_Phone__c, CW_Address_Line_1__c, CW_Address_Line_2__c, CW_Name__c, CW_VAT_Number__c, CW_VAT_Liable__c, CW_Abbreviation__c, CW_Company_Status__c, CW_Score_Image__c, CW_Score__c, CW_Credit_Limit__c, CW_Detail_URL__c, CW_Report_URL__c, CW_Balance__c, CW_Equity__c, CW_Last_Sync__c, CW_Revenue__c, CW_Employees__c, CW_Gross_Margin__c, CW_Result__c, CW_Warnings__c,CW_Kyc_URL__c,CW_Credit_Limit_Reason__c,CW_Start_Date__c,CW_End_Date__c,CW_Preferred_Languages_PL__c,CW_Legal_Form__c FROM Account WHERE Id = :Id';
                     }
                     
                 }
                 when 'Lead' {
                     if (leadVATAPI != null) {
-                        queryString = 'SELECT Id, Company, Phone, Street, City, PostalCode, Country, AnnualRevenue, NumberOfEmployees, CW_Phone__c, CW_Address_Line_1__c, CW_Address_Line_2__c, CW_Name__c, ' + leadVATAPI + ', CW_VAT_Liable__c, CW_Abbreviation__c, CW_Company_Status__c, CW_Score_Image__c, CW_Score__c, CW_Credit_Limit__c, CW_Detail_URL__c, CW_Report_URL__c, CW_Balance__c, CW_Equity__c, CW_Last_Sync__c, CW_Revenue__c, CW_Employees__c, CW_Gross_Margin__c, CW_Result__c, CW_Warnings__c,CW_Kyc_URL__c,CW_Credit_Limit_Reason__c,CW_Start_Date__c,CW_End_Date__c,CW_Preferred_Languages__c FROM Lead WHERE Id = :Id';
+                        queryString = 'SELECT Id, Company, Phone, Street, City, PostalCode, Country, AnnualRevenue, NumberOfEmployees, CW_Phone__c, CW_Address_Line_1__c, CW_Address_Line_2__c, CW_Name__c, ' + leadVATAPI + ', CW_VAT_Liable__c, CW_Abbreviation__c, CW_Company_Status__c, CW_Score_Image__c, CW_Score__c, CW_Credit_Limit__c, CW_Detail_URL__c, CW_Report_URL__c, CW_Balance__c, CW_Equity__c, CW_Last_Sync__c, CW_Revenue__c, CW_Employees__c, CW_Gross_Margin__c, CW_Result__c, CW_Warnings__c,CW_Kyc_URL__c,CW_Credit_Limit_Reason__c,CW_Start_Date__c,CW_End_Date__c,CW_Preferred_Languages_PL__c,CW_Legal_Form__c FROM Lead WHERE Id = :Id';
                     } else {
-                        queryString = 'SELECT Id, Company, Phone, Street, City, PostalCode, Country, AnnualRevenue, NumberOfEmployees, CW_Phone__c, CW_Address_Line_1__c, CW_Address_Line_2__c, CW_Name__c, CW_VAT_Number__c, CW_VAT_Liable__c, CW_Abbreviation__c, CW_Company_Status__c, CW_Score_Image__c, CW_Score__c, CW_Credit_Limit__c, CW_Detail_URL__c, CW_Report_URL__c, CW_Balance__c, CW_Equity__c, CW_Last_Sync__c, CW_Revenue__c, CW_Employees__c, CW_Gross_Margin__c, CW_Result__c, CW_Warnings__c,CW_Kyc_URL__c,CW_Credit_Limit_Reason__c,CW_Start_Date__c,CW_End_Date__c,CW_Preferred_Languages__c FROM Lead WHERE Id = :Id';
+                        queryString = 'SELECT Id, Company, Phone, Street, City, PostalCode, Country, AnnualRevenue, NumberOfEmployees, CW_Phone__c, CW_Address_Line_1__c, CW_Address_Line_2__c, CW_Name__c, CW_VAT_Number__c, CW_VAT_Liable__c, CW_Abbreviation__c, CW_Company_Status__c, CW_Score_Image__c, CW_Score__c, CW_Credit_Limit__c, CW_Detail_URL__c, CW_Report_URL__c, CW_Balance__c, CW_Equity__c, CW_Last_Sync__c, CW_Revenue__c, CW_Employees__c, CW_Gross_Margin__c, CW_Result__c, CW_Warnings__c,CW_Kyc_URL__c,CW_Credit_Limit_Reason__c,CW_Start_Date__c,CW_End_Date__c,CW_Preferred_Languages_PL__c,CW_Legal_Form__c FROM Lead WHERE Id = :Id';
                     }
                     
                 }
@@ -997,7 +926,7 @@ public with sharing class CompanyWebController {
                 acc.CW_Credit_Limit_Reason__c = null;
                 acc.CW_Start_Date__c = null;
                 acc.CW_End_Date__c = null;
-                acc.CW_Preferred_Languages__c = null;
+                acc.CW_Preferred_Languages_PL__c = null;
                 if (accountJointCommitieesBlueAPI != null) {
                     acc.put(accountJointCommitieesBlueAPI, null);
                     acc.CW_Joint_Commitees__c = null;
@@ -1098,7 +1027,7 @@ public with sharing class CompanyWebController {
                 lead.CW_Credit_Limit_Reason__c = null;
                 lead.CW_Start_Date__c = null;
                 lead.CW_End_Date__c = null;
-                lead.CW_Preferred_Languages__c = null;
+                lead.CW_Preferred_Languages_PL__c = null;
                 if (leadJointCommitieesBlueAPI != null) {
                     lead.put(leadJointCommitieesBlueAPI, null);
                     lead.CW_Joint_Commitees__c = null;
@@ -1208,16 +1137,16 @@ public with sharing class CompanyWebController {
         switch on objectName {
             when 'Account' {
                 if (accountVATAPI != null) {
-                    queryString = 'SELECT Id, companyweb__CW_Full_Name__c, companyweb__CW_Phone__c,companyweb__CW_Address_Line_1__c, companyweb__CW_Address_Line_2__c, companyweb__CW_Name__c, ' + accountVATAPI + ', companyweb__CW_VAT_Liable__c, companyweb__CW_Abbreviation__c, companyweb__CW_Company_Status__c, companyweb__CW_Score_Image__c, companyweb__CW_Score__c, companyweb__CW_Credit_Limit__c, companyweb__CW_Detail_URL__c, companyweb__CW_Report_URL__c, companyweb__CW_Balance__c, companyweb__CW_Equity__c, companyweb__CW_Last_Sync__c, companyweb__CW_Revenue__c, companyweb__CW_Employees__c, companyweb__CW_Gross_Margin__c, companyweb__CW_Result__c, companyweb__CW_Warnings__c,companyweb__CW_Kyc_URL__c,companyweb__CW_Credit_Limit_Reason__c,companyweb__CW_Start_Date__c,companyweb__CW_End_Date__c,companyweb__CW_Preferred_Languages__c,companyweb__CW_Preferred_Languages_PL__c,companyweb__CW_Avoid_Callout__c,companyweb__CW_Main_Activity__c, companyweb__CW_Activities__c, companyweb__CW_Joint_Commitees__c, companyweb__CW_Social_Security_Information__c, companyweb__CW_In_Follow_Up__c FROM Account WHERE Id = :recordId';
+                    queryString = 'SELECT Id, companyweb__CW_Full_Name__c, companyweb__CW_Phone__c,companyweb__CW_Address_Line_1__c, companyweb__CW_Address_Line_2__c, companyweb__CW_Name__c, ' + accountVATAPI + ', companyweb__CW_VAT_Liable__c, companyweb__CW_Abbreviation__c, companyweb__CW_Company_Status__c, companyweb__CW_Score_Image__c, companyweb__CW_Score__c, companyweb__CW_Credit_Limit__c, companyweb__CW_Detail_URL__c, companyweb__CW_Report_URL__c, companyweb__CW_Balance__c, companyweb__CW_Equity__c, companyweb__CW_Last_Sync__c, companyweb__CW_Revenue__c, companyweb__CW_Employees__c, companyweb__CW_Gross_Margin__c, companyweb__CW_Result__c, companyweb__CW_Warnings__c,companyweb__CW_Kyc_URL__c,companyweb__CW_Credit_Limit_Reason__c,companyweb__CW_Start_Date__c,companyweb__CW_End_Date__c,companyweb__CW_Preferred_Languages_PL__c,companyweb__CW_Avoid_Callout__c,companyweb__CW_Main_Activity__c, companyweb__CW_Activities__c, companyweb__CW_Joint_Commitees__c, companyweb__CW_Social_Security_Information__c, companyweb__CW_In_Follow_Up__c, companyweb__CW_Legal_Form__c FROM Account WHERE Id = :recordId';
                 } else {
-                    queryString = 'SELECT Id, companyweb__CW_Full_Name__c, companyweb__CW_Phone__c,companyweb__CW_Address_Line_1__c, companyweb__CW_Address_Line_2__c, companyweb__CW_Name__c, companyweb__CW_VAT_Number__c, companyweb__CW_VAT_Liable__c, companyweb__CW_Abbreviation__c, companyweb__CW_Company_Status__c, companyweb__CW_Score_Image__c, companyweb__CW_Score__c, companyweb__CW_Credit_Limit__c, companyweb__CW_Detail_URL__c, companyweb__CW_Report_URL__c, companyweb__CW_Balance__c, companyweb__CW_Equity__c, companyweb__CW_Last_Sync__c, companyweb__CW_Revenue__c, companyweb__CW_Employees__c, companyweb__CW_Gross_Margin__c, companyweb__CW_Result__c, companyweb__CW_Warnings__c,companyweb__CW_Kyc_URL__c,companyweb__CW_Credit_Limit_Reason__c,companyweb__CW_Start_Date__c,companyweb__CW_End_Date__c,companyweb__CW_Preferred_Languages__c,companyweb__CW_Preferred_Languages_PL__c,companyweb__CW_Avoid_Callout__c,companyweb__CW_Main_Activity__c, companyweb__CW_Activities__c, companyweb__CW_Joint_Commitees__c, companyweb__CW_Social_Security_Information__c, companyweb__CW_In_Follow_Up__c FROM Account WHERE Id = :recordId';
+                    queryString = 'SELECT Id, companyweb__CW_Full_Name__c, companyweb__CW_Phone__c,companyweb__CW_Address_Line_1__c, companyweb__CW_Address_Line_2__c, companyweb__CW_Name__c, companyweb__CW_VAT_Number__c, companyweb__CW_VAT_Liable__c, companyweb__CW_Abbreviation__c, companyweb__CW_Company_Status__c, companyweb__CW_Score_Image__c, companyweb__CW_Score__c, companyweb__CW_Credit_Limit__c, companyweb__CW_Detail_URL__c, companyweb__CW_Report_URL__c, companyweb__CW_Balance__c, companyweb__CW_Equity__c, companyweb__CW_Last_Sync__c, companyweb__CW_Revenue__c, companyweb__CW_Employees__c, companyweb__CW_Gross_Margin__c, companyweb__CW_Result__c, companyweb__CW_Warnings__c,companyweb__CW_Kyc_URL__c,companyweb__CW_Credit_Limit_Reason__c,companyweb__CW_Start_Date__c,companyweb__CW_End_Date__c,companyweb__CW_Preferred_Languages_PL__c,companyweb__CW_Avoid_Callout__c,companyweb__CW_Main_Activity__c, companyweb__CW_Activities__c, companyweb__CW_Joint_Commitees__c, companyweb__CW_Social_Security_Information__c, companyweb__CW_In_Follow_Up__c, companyweb__CW_Legal_Form__c FROM Account WHERE Id = :recordId';
                 }
             }
             when 'Lead' {
                 if (leadVATAPI != null) {
-                    queryString = 'SELECT Id, companyweb__CW_Full_Name__c, companyweb__CW_Phone__c,companyweb__CW_Address_Line_1__c, companyweb__CW_Address_Line_2__c, companyweb__CW_Name__c, ' + leadVATAPI + ', companyweb__CW_VAT_Liable__c, companyweb__CW_Abbreviation__c, companyweb__CW_Company_Status__c, companyweb__CW_Score_Image__c, companyweb__CW_Score__c, companyweb__CW_Credit_Limit__c, companyweb__CW_Detail_URL__c, companyweb__CW_Report_URL__c, companyweb__CW_Balance__c, companyweb__CW_Equity__c, companyweb__CW_Last_Sync__c, companyweb__CW_Revenue__c, companyweb__CW_Employees__c, companyweb__CW_Gross_Margin__c, companyweb__CW_Result__c, companyweb__CW_Warnings__c,companyweb__CW_Kyc_URL__c,companyweb__CW_Credit_Limit_Reason__c,companyweb__CW_Start_Date__c,companyweb__CW_End_Date__c,companyweb__CW_Preferred_Languages__c,companyweb__CW_Preferred_Languages_PL__c,companyweb__CW_Avoid_Callout__c,companyweb__CW_Main_Activity__c, companyweb__CW_Activities__c, companyweb__CW_Joint_Commitees__c, companyweb__CW_Social_Security_Information__c, companyweb__CW_In_Follow_Up__c FROM Lead WHERE Id = :recordId';
+                    queryString = 'SELECT Id, companyweb__CW_Full_Name__c, companyweb__CW_Phone__c,companyweb__CW_Address_Line_1__c, companyweb__CW_Address_Line_2__c, companyweb__CW_Name__c, ' + leadVATAPI + ', companyweb__CW_VAT_Liable__c, companyweb__CW_Abbreviation__c, companyweb__CW_Company_Status__c, companyweb__CW_Score_Image__c, companyweb__CW_Score__c, companyweb__CW_Credit_Limit__c, companyweb__CW_Detail_URL__c, companyweb__CW_Report_URL__c, companyweb__CW_Balance__c, companyweb__CW_Equity__c, companyweb__CW_Last_Sync__c, companyweb__CW_Revenue__c, companyweb__CW_Employees__c, companyweb__CW_Gross_Margin__c, companyweb__CW_Result__c, companyweb__CW_Warnings__c,companyweb__CW_Kyc_URL__c,companyweb__CW_Credit_Limit_Reason__c,companyweb__CW_Start_Date__c,companyweb__CW_End_Date__c,companyweb__CW_Preferred_Languages_PL__c,companyweb__CW_Avoid_Callout__c,companyweb__CW_Main_Activity__c, companyweb__CW_Activities__c, companyweb__CW_Joint_Commitees__c, companyweb__CW_Social_Security_Information__c, companyweb__CW_In_Follow_Up__c, companyweb__CW_Legal_Form__c FROM Lead WHERE Id = :recordId';
                 } else {
-                    queryString = 'SELECT Id, companyweb__CW_Full_Name__c, companyweb__CW_Phone__c,companyweb__CW_Address_Line_1__c, companyweb__CW_Address_Line_2__c, companyweb__CW_Name__c, companyweb__CW_VAT_Number__c, companyweb__CW_VAT_Liable__c, companyweb__CW_Abbreviation__c, companyweb__CW_Company_Status__c, companyweb__CW_Score_Image__c, companyweb__CW_Score__c, companyweb__CW_Credit_Limit__c, companyweb__CW_Detail_URL__c, companyweb__CW_Report_URL__c, companyweb__CW_Balance__c, companyweb__CW_Equity__c, companyweb__CW_Last_Sync__c, companyweb__CW_Revenue__c, companyweb__CW_Employees__c, companyweb__CW_Gross_Margin__c, companyweb__CW_Result__c, companyweb__CW_Warnings__c,companyweb__CW_Kyc_URL__c,companyweb__CW_Credit_Limit_Reason__c,companyweb__CW_Start_Date__c,companyweb__CW_End_Date__c,companyweb__CW_Preferred_Languages__c,companyweb__CW_Preferred_Languages_PL__c,companyweb__CW_Avoid_Callout__c,companyweb__CW_Main_Activity__c, companyweb__CW_Activities__c, companyweb__CW_Joint_Commitees__c, companyweb__CW_Social_Security_Information__c, companyweb__CW_In_Follow_Up__c FROM Lead WHERE Id = :recordId';                
+                    queryString = 'SELECT Id, companyweb__CW_Full_Name__c, companyweb__CW_Phone__c,companyweb__CW_Address_Line_1__c, companyweb__CW_Address_Line_2__c, companyweb__CW_Name__c, companyweb__CW_VAT_Number__c, companyweb__CW_VAT_Liable__c, companyweb__CW_Abbreviation__c, companyweb__CW_Company_Status__c, companyweb__CW_Score_Image__c, companyweb__CW_Score__c, companyweb__CW_Credit_Limit__c, companyweb__CW_Detail_URL__c, companyweb__CW_Report_URL__c, companyweb__CW_Balance__c, companyweb__CW_Equity__c, companyweb__CW_Last_Sync__c, companyweb__CW_Revenue__c, companyweb__CW_Employees__c, companyweb__CW_Gross_Margin__c, companyweb__CW_Result__c, companyweb__CW_Warnings__c,companyweb__CW_Kyc_URL__c,companyweb__CW_Credit_Limit_Reason__c,companyweb__CW_Start_Date__c,companyweb__CW_End_Date__c,companyweb__CW_Preferred_Languages_PL__c,companyweb__CW_Avoid_Callout__c,companyweb__CW_Main_Activity__c, companyweb__CW_Activities__c, companyweb__CW_Joint_Commitees__c, companyweb__CW_Social_Security_Information__c, companyweb__CW_In_Follow_Up__c, companyweb__CW_Legal_Form__c FROM Lead WHERE Id = :recordId';                
                 }
             }
         }
@@ -1519,7 +1448,7 @@ public with sharing class CompanyWebController {
         } else {
             qryString = 'SELECT Id FROM Account WHERE CW_Vat_Number__c =: vatNumber';
         }
-        List<Account> acc = Database.query(qryString);
+        List<Account> accounts = Database.query(qryString);
 
         //find Lead with given VAT Number
         if(oLoginSetup.Lead_VAT_Number_Field__c != null){
@@ -1527,22 +1456,26 @@ public with sharing class CompanyWebController {
         } else {
             qryString = 'SELECT Id FROM Lead WHERE CW_Vat_Number__c =: vatNumber';
         }
-        List<Lead> lead = Database.query(qryString);
+        List<Lead> leads = Database.query(qryString);
 
         assignDynamicMappingFields(oLoginSetup);
 
         connectCompanywebBe.ResponseCompanyByVatV1_5 result = new connectCompanywebBe.ResponseCompanyByVatV1_5();
         result.CompanyResponse = companyData;
 
-        if(acc.size()>0){
-            System.debug('Found account to update: ' + acc[0].Id);
-            assignAccountFields(acc[0], result, false);
-            listOfAccountsToUpdate.add(acc[0]);
+        if(accounts.size()>0){
+            for(Account acc: accounts){
+                System.debug('Found account to update: ' + acc.Id);
+                assignAccountFields(acc, result, false);
+                listOfAccountsToUpdate.add(acc);
+            }
         }
-        if(lead.size()>0){
-            System.debug('Found lead to update: ' + lead[0].Id);
-            assignLeadFields(lead[0], result, false);
-            listOfLeadsToUpdate.add(lead[0]);
+        if(leads.size()>0){
+            for(Lead lead: leads){
+                System.debug('Found lead to update: ' + lead.Id);
+                assignLeadFields(lead, result, false);
+                listOfLeadsToUpdate.add(lead);
+            }
         }
     }
 
@@ -1749,12 +1682,17 @@ public with sharing class CompanyWebController {
         }
         //Legal form
         if(result.CompanyResponse.LegalForm.IsEnabled == True){
-                acc.CW_Abbreviation__c = String.valueOf(result.CompanyResponse.LegalForm.Value.Abbreviation);
-                if (legalFormFieldType != null) {
-                    acc.put(accountLegalFormAPI, String.valueOf(result.CompanyResponse.LegalForm.Value.Code));
-                }
+            acc.CW_Legal_Form__c = String.valueOf(result.CompanyResponse.LegalForm.Value.Abbreviation);
+            acc.CW_Abbreviation__c = String.valueOf(result.CompanyResponse.LegalForm.Value.Abbreviation);
+            if (legalFormFieldType != null) {
+                acc.put(accountLegalFormAPI, String.valueOf(result.CompanyResponse.LegalForm.Value.Abbreviation));
+            }
         } else{
+            if (legalFormFieldType != null) {
+                acc.put(accountLegalFormAPI, null);
+            }
             acc.CW_Abbreviation__c = null;
+            acc.CW_Legal_Form__c = null;
         }
         //Company Status 
         if(result.CompanyResponse.CompanyStatus.IsEnabled == True){
@@ -1859,67 +1797,91 @@ public with sharing class CompanyWebController {
                 //Balance Year
                 acc.CW_Balance__c = String.valueOf(result.CompanyResponse.Balances.Value.Balans[0].BookYear);
 
-                if (String.isNotBlank(result.CompanyResponse.Balances.Value.Balans[0].BalansData.BalansData[1].Value)){
-                    //Equity Year
-                    acc.CW_Equity__c = Decimal.valueOf(result.CompanyResponse.Balances.Value.Balans[0].BalansData.BalansData[1].Value);
-                }
-                else{
-                    acc.CW_Equity__c = null;
-                }
-                if (String.isNotBlank(result.CompanyResponse.Balances.Value.Balans[0].BalansData.BalansData[2].Value)){
-                    //Revenue
-                    if(accountAnnualRevenueAPI != null){
-                        if (annualRevenueFieldType != 'String') {
-                            acc.put(accountAnnualRevenueAPI, Decimal.valueOf(result.CompanyResponse.Balances.Value.Balans[0].BalansData.BalansData[2].Value));
-                        } else {
-                            acc.put(accountAnnualRevenueAPI, String.valueOf(Decimal.valueOf(result.CompanyResponse.Balances.Value.Balans[0].BalansData.BalansData[2].Value).round(RoundingMode.HALF_UP)));
+                for(connectCompanywebBe.BalansData balansData : result.CompanyResponse.Balances.Value.Balans[0].BalansData){
+                    switch on balansData.Key {
+                        when 'CloseDate' { //Closing date of the Financial year
+                            
                         }
-                    } else {
-                        acc.CW_Revenue__c = Decimal.valueOf(result.CompanyResponse.Balances.Value.Balans[0].BalansData.BalansData[2].Value);
-                    }
-                }
-                else{
-                    acc.CW_Revenue__c = null;
-                    if(accountAnnualRevenueAPI != null){
-                        acc.put(accountAnnualRevenueAPI, null);  
-                    }
-                }
-                if (String.isNotBlank(result.CompanyResponse.Balances.Value.Balans[0].BalansData.BalansData[3].Value)){
-                    //# Employees
-                    //acc.NumberOfEmployees = Integer.valueOf(Decimal.valueOf(result.CompanyResponse.Balances.Value.Balans[0].BalansData.BalansData[3].Value).round(RoundingMode.HALF_UP)); 
-
-                    if (accountNumberEmployeesAPI != null) {
-                        if (numberEmployeesFieldType != 'String') {
-                            acc.put(accountNumberEmployeesAPI, Integer.valueOf(Decimal.valueOf(result.CompanyResponse.Balances.Value.Balans[0].BalansData.BalansData[3].Value).round(RoundingMode.HALF_UP)));
-                        } else {
-                            acc.put(accountNumberEmployeesAPI, result.CompanyResponse.Balances.Value.Balans[0].BalansData.BalansData[3].Value);
+                        when 'Rub10_15' { //Equity
+                            if (String.isNotBlank(balansData.Value)){
+                                //Equity Year
+                                acc.CW_Equity__c = Decimal.valueOf(balansData.Value);
+                            }
+                            else{
+                                acc.CW_Equity__c = null;
+                            }
                         }
-                    } else{
-                        acc.CW_Employees__c = Decimal.valueOf(result.CompanyResponse.Balances.Value.Balans[0].BalansData.BalansData[3].Value);
-                    }
-                }
-                else{
-                    acc.CW_Employees__c = null;
-                    //acc.NumberOfEmployees = null;
-                    if(accountNumberEmployeesAPI != null){
-                        acc.put(accountNumberEmployeesAPI, null);  
-                    }
-                }
+                        when 'Rub1323' { //Workers (Blue collar workers)
 
-                if (String.isNotBlank(result.CompanyResponse.Balances.Value.Balans[0].BalansData.BalansData[4].Value)){
-                    //Gross margin
-                    acc.CW_Gross_Margin__c = Decimal.valueOf(result.CompanyResponse.Balances.Value.Balans[0].BalansData.BalansData[4].Value);
-                }
-                else{
-                    acc.CW_Gross_Margin__c = null;
-                }
-                system.debug('Result: '+ result.CompanyResponse.Balances.Value.Balans[0].BalansData.BalansData[5].Value);
-                if (String.isNotBlank(result.CompanyResponse.Balances.Value.Balans[0].BalansData.BalansData[5].Value)){
-                    //Result
-                    acc.CW_Result__c = Decimal.valueOf(result.CompanyResponse.Balances.Value.Balans[0].BalansData.BalansData[5].Value);
-                }
-                else{
-                    acc.CW_Result__c = null;
+                        }
+                        when 'Rub1343' { //Employees (White collar workers)
+
+                        }
+                        when 'Rub70' { //Turnover
+                            if (String.isNotBlank(balansData.Value)){
+                                //Revenue
+                                if(accountAnnualRevenueAPI != null){
+                                    if (annualRevenueFieldType != 'String') {
+                                        acc.put(accountAnnualRevenueAPI, Decimal.valueOf(balansData.Value));
+                                    } else {
+                                        acc.put(accountAnnualRevenueAPI, String.valueOf(Decimal.valueOf(balansData.Value).round(RoundingMode.HALF_UP)));
+                                    }
+                                } else {
+                                    acc.CW_Revenue__c = Decimal.valueOf(balansData.Value);
+                                }
+                            }
+                            else{
+                                acc.CW_Revenue__c = null;
+                                if(accountAnnualRevenueAPI != null){
+                                    acc.put(accountAnnualRevenueAPI, null);  
+                                }
+                            }
+                        }
+                        when 'Rub9087' { //Average number of staff in FTE
+                            if (String.isNotBlank(balansData.Value)){
+                                //# Employees
+                                //acc.NumberOfEmployees = Integer.valueOf(Decimal.valueOf(balansData.Value).round(RoundingMode.HALF_UP)); 
+            
+                                if (accountNumberEmployeesAPI != null) {
+                                    if (numberEmployeesFieldType != 'String') {
+                                        acc.put(accountNumberEmployeesAPI, Integer.valueOf(Decimal.valueOf(balansData.Value).round(RoundingMode.HALF_UP)));
+                                    } else {
+                                        acc.put(accountNumberEmployeesAPI, balansData.Value);
+                                    }
+                                } else{
+                                    acc.CW_Employees__c = Decimal.valueOf(balansData.Value);
+                                }
+                            }
+                            else{
+                                acc.CW_Employees__c = null;
+                                //acc.NumberOfEmployees = null;
+                                if(accountNumberEmployeesAPI != null){
+                                    acc.put(accountNumberEmployeesAPI, null);  
+                                }
+                            }
+                        }
+                        when 'Rub9800' { //Gross Margin
+                            if (String.isNotBlank(balansData.Value)){
+                                //Gross margin
+                                acc.CW_Gross_Margin__c = Decimal.valueOf(balansData.Value);
+                            }
+                            else{
+                                acc.CW_Gross_Margin__c = null;
+                            }
+                        }
+                        when 'Rub9904' { //Profit/Loss of the book year
+                            if (String.isNotBlank(balansData.Value)){
+                                //Result
+                                acc.CW_Result__c = Decimal.valueOf(balansData.Value);
+                            }
+                            else{
+                                acc.CW_Result__c = null;
+                            }
+                        }
+                        when else {
+                            System.debug('unfamiliar balansdata, companyweb service added new values...');
+                        }
+                    }
                 }
             } else{
                 acc.CW_Balance__c = null;
@@ -2031,7 +1993,7 @@ public with sharing class CompanyWebController {
     }
 
     public static void assignLeadFields(Lead lead, connectCompanywebBe.ResponseCompanyByVatV1_5 result, Boolean fromPick){
-        Schema.DisplayType dt, dtLeadVAT, dtLeadScore, dtLeadActivities, dtLeadCreditLimit, dtLeadJointCommiteesBlue, dtLeadJointCommiteesWhite, dtLeadLegalForm, dtLeadMainActivity, dtLeadNumberEmployees, dtLeadSocialSecurity, dtLeadPhone, dtLeadAnnualRevenue;
+        Schema.DisplayType dt, dtLeadVAT, dtLeadScore, dtLeadActivities, dtLeadCreditLimit, dtLeadJointCommiteesBlue, dtLeadJointCommiteesWhite, dtLeadLegalForm, dtLeadMainActivity, dtLeadNumberEmployees, dtLeadSocialSecurity, dtLeadPhone, dtLeadAnnualRevenue, dtLeadLegalForm;
         String warningsString = '';
         String vatFieldType = String.valueOf(dt);
                         
@@ -2083,8 +2045,12 @@ public with sharing class CompanyWebController {
         if(leadAnnualRevenueAPI != null){
             dtLeadAnnualRevenue = Schema.getGlobalDescribe().get('Lead').getDescribe().fields.getMap().get(leadAnnualRevenueAPI).getDescribe().getType();
         }
+
+        if(leadLegalFormAPI != null){
+            dtLeadLegalForm = Schema.getGlobalDescribe().get('Lead').getDescribe().fields.getMap().get(leadLegalFormAPI).getDescribe().getType();
+        }
         
-        String vatLeadFieldType, scoreFieldType, activitiesFieldType,creditLimitFieldType,joinCommiteesBlueFieldType,joinCommiteesWhiteFieldType,legalFormFieldType,mainActivityFieldType,numberEmployeesFieldType,socialSecurityFieldType,phoneFieldType,annualRevenueFieldType;
+        String vatLeadFieldType, scoreFieldType, activitiesFieldType,creditLimitFieldType,joinCommiteesBlueFieldType,joinCommiteesWhiteFieldType,legalFormFieldType,mainActivityFieldType,numberEmployeesFieldType,socialSecurityFieldType,phoneFieldType,annualRevenueFieldType, legalFormFieldType;
 
         vatLeadFieldType = String.valueOf(dtLeadVAT);
         scoreFieldType = String.valueOf(dtLeadScore);
@@ -2098,6 +2064,7 @@ public with sharing class CompanyWebController {
         socialSecurityFieldType= String.valueOf(dtLeadSocialSecurity);
         phoneFieldType = String.valueOf(dtLeadPhone);
         annualRevenueFieldType = String.valueOf(dtLeadAnnualRevenue);
+        legalFormFieldType = String.valueOf(dtLeadLegalForm);
 
         System.debug('vatFieldType = ' + vatLeadFieldType);
         System.debug('vatFieldType = ' + vatFieldType);
@@ -2170,8 +2137,16 @@ public with sharing class CompanyWebController {
         }
         //Legal form
         if(result.CompanyResponse.LegalForm.IsEnabled == True){
+            if(leadLegalFormAPI != null){
+                lead.put(leadLegalFormAPI, result.CompanyResponse.LegalForm.Value.Abbreviation);
+            }
+            lead.CW_Legal_Form__c = result.CompanyResponse.LegalForm.Value.Abbreviation;
             lead.CW_Abbreviation__c = result.CompanyResponse.LegalForm.Value.Abbreviation;
         } else {
+            if(leadLegalFormAPI != null){
+                lead.put(leadLegalFormAPI, null);
+            }
+            lead.CW_Legal_Form__c = null;
             lead.CW_Abbreviation__c = null;
         }
         // Company status
@@ -2317,59 +2292,100 @@ public with sharing class CompanyWebController {
                 //Balance Year
                 lead.CW_Balance__c = String.valueOf(result.CompanyResponse.Balances.Value.Balans[0].BookYear);
 
-                if (String.isNotBlank(result.CompanyResponse.Balances.Value.Balans[0].BalansData.BalansData[1].Value)){
-                    //Equity
-                    lead.CW_Equity__c = Decimal.valueOf(result.CompanyResponse.Balances.Value.Balans[0].BalansData.BalansData[1].Value);
-                }
-                else{
-                    lead.CW_Equity__c = null;
-                }
-                if (String.isNotBlank(result.CompanyResponse.Balances.Value.Balans[0].BalansData.BalansData[2].Value)){
-                    //Revenue
-                    if(leadAnnualRevenueAPI != null){
-                        if (annualRevenueFieldType != 'String') {
-                            lead.put(leadAnnualRevenueAPI, Decimal.valueOf(result.CompanyResponse.Balances.Value.Balans[0].BalansData.BalansData[2].Value));
-                        } else {
-                            lead.put(leadAnnualRevenueAPI, Integer.valueOf(Decimal.valueOf(result.CompanyResponse.Balances.Value.Balans[0].BalansData.BalansData[2].Value).round(RoundingMode.HALF_UP)));
+                for(connectCompanywebBe.BalansData balansData : result.CompanyResponse.Balances.Value.Balans[0].BalansData){
+                    switch on balansData.Key {
+                        when 'CloseDate' { //Closing date of the Financial year
+                            
                         }
-                    } else {
-                        lead.CW_Revenue__c = Decimal.valueOf(result.CompanyResponse.Balances.Value.Balans[0].BalansData.BalansData[2].Value);
-                    }
-                }
-                else{
-                    lead.CW_Revenue__c = null;
-                }
-                if (String.isNotBlank(result.CompanyResponse.Balances.Value.Balans[0].BalansData.BalansData[3].Value)){
-                    //# Employees
-                    //lead.NumberOfEmployees = Integer.valueOf(Decimal.valueOf(result.CompanyResponse.Balances.Value.Balans[0].BalansData.BalansData[3].Value).round(RoundingMode.HALF_UP)); 
-                    
-                    if (leadNumberEmployeesAPI != null) {
-                        if (numberEmployeesFieldType != 'String') {
-                            lead.put(leadNumberEmployeesAPI, Integer.valueOf(Decimal.valueOf(result.CompanyResponse.Balances.Value.Balans[0].BalansData.BalansData[3].Value).round(RoundingMode.HALF_UP)));
-                        } else {
-                            lead.put(leadNumberEmployeesAPI, result.CompanyResponse.Balances.Value.Balans[0].BalansData.BalansData[3].Value);
+                        when 'Rub10_15' { //Equity
+                            if (String.isNotBlank(balansData.Value)){
+                                //Equity
+                                lead.CW_Equity__c = Decimal.valueOf(balansData.Value);
+                            }else{
+                                lead.CW_Equity__c = null;
+                            }
                         }
-                    } else {
-                        lead.CW_Employees__c = Decimal.valueOf(result.CompanyResponse.Balances.Value.Balans[0].BalansData.BalansData[3].Value);
+                        when 'Rub1323' { //Workers (Blue collar workers)
+                            if (String.isNotBlank(balansData.Value)){
+                                //Workers
+                                if(leadWorkersAPI != null){
+                                    if (leadWorkersAPI != 'String') {
+                                        lead.put(leadWorkersAPI, Decimal.valueOf(balansData.Value));
+                                    }
+                                } else {
+                                    lead.CW_Workers__c = Decimal.valueOf(balansData.Value);
+                                }
+                            }else{
+                                lead.CW_Workers__c = null;
+                            }
+                        }
+                        when 'Rub1343' { //Employees (White collar workers)
+                            if (String.isNotBlank(balansData.Value)){
+                                //Employees
+                                if(leadEmployeesAPI != null){
+                                    if (leadEmployeesAPI != 'String') {
+                                        lead.put(leadEmployeesAPI, Decimal.valueOf(balansData.Value));
+                                    }
+                                } else {
+                                    lead.CW_Employees__c = Decimal.valueOf(balansData.Value);
+                                }
+                            }else{
+                                lead.CW_Employees__c = null;
+                            }
+                        }
+                        when 'Rub70' { //Turnover
+                            if (String.isNotBlank(balansData.Value)){
+                                //Revenue
+                                if(leadAnnualRevenueAPI != null){
+                                    if (annualRevenueFieldType != 'String') {
+                                        lead.put(leadAnnualRevenueAPI, Decimal.valueOf(balansData.Value));
+                                    } else {
+                                        lead.put(leadAnnualRevenueAPI, Integer.valueOf(Decimal.valueOf(balansData.Value).round(RoundingMode.HALF_UP)));
+                                    }
+                                } else {
+                                    lead.CW_Revenue__c = Decimal.valueOf(balansData.Value);
+                                }
+                            }else{
+                                lead.CW_Revenue__c = null;
+                            }
+                        }
+                        when 'Rub9087' { //Average number of staff in FTE
+                            if (String.isNotBlank(balansData.Value)){
+                                //# Employees
+                                //lead.NumberOfEmployees = Integer.valueOf(Decimal.valueOf(balansData.Value).round(RoundingMode.HALF_UP)); 
+                                if (leadNumberEmployeesAPI != null) {
+                                    if (numberEmployeesFieldType != 'String') {
+                                        lead.put(leadNumberEmployeesAPI, Integer.valueOf(Decimal.valueOf(balansData.Value).round(RoundingMode.HALF_UP)));
+                                    } else {
+                                        lead.put(leadNumberEmployeesAPI, balansData.Value);
+                                    }
+                                } else {
+                                    lead.CW_Employees__c = Decimal.valueOf(balansData.Value);
+                                }
+                            }else{
+                                lead.CW_Employees__c = null;
+                            }
+                        }
+                        when 'Rub9800' { //Gross Margin
+                            if (String.isNotBlank(balansData.Value)){
+                                //Gross margin
+                                lead.CW_Gross_Margin__c = Decimal.valueOf(balansData.Value);
+                            }else{
+                                lead.CW_Gross_Margin__c = null;
+                            }
+                        }
+                        when 'Rub9904' { //Profit/Loss of the book year
+                            if (String.isNotBlank(balansData.Value)){
+                                //Result
+                                lead.CW_Result__c = Decimal.valueOf(balansData.Value);
+                            }else{
+                                lead.CW_Result__c = null;
+                            }
+                        }
+                        when else {
+                            System.debug('unfamiliar balansdata, companyweb service added new values...');
+                        }
                     }
-                }
-                else{
-                    lead.CW_Employees__c = null;
-                }
-                if (String.isNotBlank(result.CompanyResponse.Balances.Value.Balans[0].BalansData.BalansData[4].Value)){
-                    //Gross margin
-                    lead.CW_Gross_Margin__c = Decimal.valueOf(result.CompanyResponse.Balances.Value.Balans[0].BalansData.BalansData[4].Value);
-                }
-                else{
-                    lead.CW_Gross_Margin__c = null;
-                }
-                system.debug('Result: '+ result.CompanyResponse.Balances.Value.Balans[0].BalansData.BalansData[5].Value);
-                if (String.isNotBlank(result.CompanyResponse.Balances.Value.Balans[0].BalansData.BalansData[5].Value)){
-                    //Result
-                    lead.CW_Result__c = Decimal.valueOf(result.CompanyResponse.Balances.Value.Balans[0].BalansData.BalansData[5].Value);
-                }
-                else{
-                    lead.CW_Result__c = null;
                 }
             } else {
                 lead.CW_Balance__c = null;

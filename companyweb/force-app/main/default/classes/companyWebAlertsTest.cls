@@ -29,16 +29,7 @@ public class companyWebAlertsTest {
 	
     @isTest
     public static void companyWebAlertsGetChangeDatesTest(){
-        CW_Login_Setup__mdt oLoginSetup = new CW_Login_Setup__mdt();
-        oLoginSetup = [SELECT Id, CW_CompanyWebLogin__c, CW_CompanyWebPassword__c, CW_CompanyWebSecret__c, CW_ServiceIntegrator__c, Account_VAT_Number_Field__c,
-            Lead_VAT_Number_Field__c,Account_Score_Field__c,Account_Activities_Field__c,Account_Credit_Limit_Field__c,Account_Joint_Commitees_Field__c,
-            Account_Joint_Commitees_White_Field__c,Account_Legal_Form_Field__c,Account_Main_Activity_Field__c,Account_Number_Employees_Field__c,
-            Account_Social_Security_Field__c,Account_Phone_Field__c,Account_Street_Field__c,Account_PostalCode_Field__c,Account_City_Field__c,Account_CountryCode_Field__c,
-            Account_Annual_Revenue_Field__c,CW_Duplicate_Check_Creation__c,
-            CW_Duplicate_Check_Refresh__c,Lead_Score_Field__c,Lead_Activities_Field__c,Lead_Credit_Limit_Field__c,Lead_Joint_Commitees_Field__c,
-            Lead_Joint_Commitees_White_Field__c,Lead_Legal_Form_Field__c,Lead_Main_Activity_Field__c,Lead_Number_Employees_Field__c,Lead_Social_Security_Field__c,
-            Lead_Phone_Field__c,Lead_Annual_Revenue_Field__c,Lead_Street_Field__c,Lead_PostalCode_Field__c,Lead_City_Field__c,Lead_CountryCode_Field__c
-            FROM CW_Login_Setup__mdt WHERE DeveloperName = 'CW_Login'];
+        CW_Login_Setup__mdt oLoginSetup = CompanyWebController.getCurrentVATNumberFields();
         connectCompanywebBe.RequestStep1 request = new connectCompanywebBe.RequestStep1();
         request.CompanyWebLogin = oLoginSetup.CW_CompanyWebLogin__c;
         request.CompanyWebPassword = oLoginSetup.CW_CompanyWebPassword__c;
@@ -52,16 +43,7 @@ public class companyWebAlertsTest {
     
     @isTest
     public static void companyWebAlertsGetVatListTest(){
-        CW_Login_Setup__mdt oLoginSetup = new CW_Login_Setup__mdt();
-        oLoginSetup = [SELECT Id, CW_CompanyWebLogin__c, CW_CompanyWebPassword__c, CW_CompanyWebSecret__c, CW_ServiceIntegrator__c, Account_VAT_Number_Field__c,
-            Lead_VAT_Number_Field__c,Account_Score_Field__c,Account_Activities_Field__c,Account_Credit_Limit_Field__c,Account_Joint_Commitees_Field__c,
-            Account_Joint_Commitees_White_Field__c,Account_Legal_Form_Field__c,Account_Main_Activity_Field__c,Account_Number_Employees_Field__c,
-            Account_Social_Security_Field__c,Account_Phone_Field__c,Account_Street_Field__c,Account_PostalCode_Field__c,Account_City_Field__c,Account_CountryCode_Field__c,
-            Account_Annual_Revenue_Field__c,CW_Duplicate_Check_Creation__c,
-            CW_Duplicate_Check_Refresh__c,Lead_Score_Field__c,Lead_Activities_Field__c,Lead_Credit_Limit_Field__c,Lead_Joint_Commitees_Field__c,
-            Lead_Joint_Commitees_White_Field__c,Lead_Legal_Form_Field__c,Lead_Main_Activity_Field__c,Lead_Number_Employees_Field__c,Lead_Social_Security_Field__c,
-            Lead_Phone_Field__c,Lead_Annual_Revenue_Field__c,Lead_Street_Field__c,Lead_PostalCode_Field__c,Lead_City_Field__c,Lead_CountryCode_Field__c
-            FROM CW_Login_Setup__mdt WHERE DeveloperName = 'CW_Login'];
+        CW_Login_Setup__mdt oLoginSetup = CompanyWebController.getCurrentVATNumberFields();
         connectCompanywebBe.RequestStep2 request = new connectCompanywebBe.RequestStep2();
         request.CompanyWebLogin = oLoginSetup.CW_CompanyWebLogin__c;
         request.CompanyWebPassword = oLoginSetup.CW_CompanyWebPassword__c;
@@ -77,16 +59,7 @@ public class companyWebAlertsTest {
     
     @isTest
     public static void companyWebAlertsGetCompanyDataTest(){
-        CW_Login_Setup__mdt oLoginSetup = new CW_Login_Setup__mdt();
-        oLoginSetup = [SELECT Id, CW_CompanyWebLogin__c, CW_CompanyWebPassword__c, CW_CompanyWebSecret__c, CW_ServiceIntegrator__c, Account_VAT_Number_Field__c,
-            Lead_VAT_Number_Field__c,Account_Score_Field__c,Account_Activities_Field__c,Account_Credit_Limit_Field__c,Account_Joint_Commitees_Field__c,
-            Account_Joint_Commitees_White_Field__c,Account_Legal_Form_Field__c,Account_Main_Activity_Field__c,Account_Number_Employees_Field__c,
-            Account_Social_Security_Field__c,Account_Phone_Field__c,Account_Street_Field__c,Account_PostalCode_Field__c,Account_City_Field__c,Account_CountryCode_Field__c,
-            Account_Annual_Revenue_Field__c,CW_Duplicate_Check_Creation__c,
-            CW_Duplicate_Check_Refresh__c,Lead_Score_Field__c,Lead_Activities_Field__c,Lead_Credit_Limit_Field__c,Lead_Joint_Commitees_Field__c,
-            Lead_Joint_Commitees_White_Field__c,Lead_Legal_Form_Field__c,Lead_Main_Activity_Field__c,Lead_Number_Employees_Field__c,Lead_Social_Security_Field__c,
-            Lead_Phone_Field__c,Lead_Annual_Revenue_Field__c,Lead_Street_Field__c,Lead_PostalCode_Field__c,Lead_City_Field__c,Lead_CountryCode_Field__c
-            FROM CW_Login_Setup__mdt WHERE DeveloperName = 'CW_Login'];
+        CW_Login_Setup__mdt oLoginSetup = CompanyWebController.getCurrentVATNumberFields();
         connectCompanywebBe.RequestStep3_CompanyOnVat request = new connectCompanywebBe.RequestStep3_CompanyOnVat();
         request.CompanyWebLogin = oLoginSetup.CW_CompanyWebLogin__c;
         request.CompanyWebPassword = oLoginSetup.CW_CompanyWebPassword__c;
