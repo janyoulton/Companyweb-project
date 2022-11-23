@@ -21,6 +21,8 @@ public with sharing class CompanyWebController {
     public static String accountPostalCodeAPI {get; set;}
     public static String accountCityAPI {get; set;}
     public static String accountCountryCodeAPI {get; set;}
+    public static String accountWorkersAPI {get; set;}
+    public static String accountEmployeesAPI {get; set;}
 
     //Lead
     public static String leadVATAPI {get; set;}
@@ -39,7 +41,8 @@ public with sharing class CompanyWebController {
     public static String leadPostalCodeAPI {get; set;}
     public static String leadCityAPI {get; set;}
     public static String leadCountryCodeAPI {get; set;}
-    public static String leadLegalFormAPI {get; set;}
+    public static String leadWorkersAPI {get; set;}
+    public static String leadEmployeesAPI {get; set;}
 
     public static void assignDynamicMappingFields(CW_Login_Setup__mdt oLoginSetup){
         //System
@@ -63,6 +66,8 @@ public with sharing class CompanyWebController {
         accountPostalCodeAPI = oLoginSetup.Account_PostalCode_Field__c;
         accountCityAPI = oLoginSetup.Account_City_Field__c;
         accountCountryCodeAPI = oLoginSetup.Account_CountryCode_Field__c;
+        accountEmployeesAPI = oLoginSetup.Account_Employees_Field__c;
+        accountWorkersAPI = oLoginSetup.Account_Workers_Field__c;
 
         //Lead
         leadVATAPI = oLoginSetup.Lead_VAT_Number_Field__c;
@@ -82,6 +87,8 @@ public with sharing class CompanyWebController {
         leadCityAPI = oLoginSetup.Lead_City_Field__c;
         leadCountryCodeAPI = oLoginSetup.Lead_CountryCode_Field__c;
         leadLegalFormAPI = oLoginSetup.Lead_Legal_Form_Field__c;
+        leadEmployeesAPI = oLoginSetup.Lead_Employees_Field__c;
+        leadWorkersAPI = oLoginSetup.Lead_Workers_Field__c;
     }
 
     @InvocableMethod(label='Call CW to Update Lead/Account' description='Callout to the CompanyWeb API to update information on the Lead/Account')
@@ -191,7 +198,7 @@ public with sharing class CompanyWebController {
              Account_Annual_Revenue_Field__c,CW_Duplicate_Check_Creation__c,
              CW_Duplicate_Check_Refresh__c,Lead_Score_Field__c,Lead_Activities_Field__c,Lead_Credit_Limit_Field__c,Lead_Joint_Commitees_Field__c,
              Lead_Joint_Commitees_White_Field__c,Lead_Legal_Form_Field__c,Lead_Main_Activity_Field__c,Lead_Number_Employees_Field__c,Lead_Social_Security_Field__c,
-             Lead_Phone_Field__c,Lead_Annual_Revenue_Field__c,Lead_Street_Field__c,Lead_PostalCode_Field__c,Lead_City_Field__c,Lead_CountryCode_Field__c,Lead_Legal_Form_Field__c
+             Lead_Phone_Field__c,Lead_Annual_Revenue_Field__c,Lead_Street_Field__c,Lead_PostalCode_Field__c,Lead_City_Field__c,Lead_CountryCode_Field__c
              FROM CW_Login_Setup__mdt WHERE DeveloperName = 'CW_Login'];
 
             system.debug('Result of loginSetup '+ oLoginSetup);
@@ -366,7 +373,7 @@ public with sharing class CompanyWebController {
 
     public static CW_Login_Setup__mdt getCurrentVATNumberFields() {
         CW_Login_Setup__mdt oLoginSetup = new CW_Login_Setup__mdt();
-        oLoginSetup = [SELECT Id, CW_CompanyWebLogin__c, CW_CompanyWebPassword__c, CW_CompanyWebSecret__c, CW_ServiceIntegrator__c, Account_VAT_Number_Field__c, Lead_VAT_Number_Field__c,Account_Score_Field__c,Account_Activities_Field__c,Account_Credit_Limit_Field__c,Account_Joint_Commitees_Field__c,Account_Joint_Commitees_White_Field__c,Account_Legal_Form_Field__c,Account_Main_Activity_Field__c,Account_Number_Employees_Field__c,Account_Social_Security_Field__c,Account_Phone_Field__c,Account_Street_Field__c,Account_PostalCode_Field__c,Account_City_Field__c,Account_CountryCode_Field__c,Account_Annual_Revenue_Field__c,CW_Duplicate_Check_Creation__c,CW_Duplicate_Check_Refresh__c,Lead_Score_Field__c,Lead_Activities_Field__c,Lead_Credit_Limit_Field__c,Lead_Joint_Commitees_Field__c,Lead_Joint_Commitees_White_Field__c,Lead_Legal_Form_Field__c,Lead_Main_Activity_Field__c,Lead_Number_Employees_Field__c,Lead_Social_Security_Field__c,Lead_Phone_Field__c,Lead_Street_Field__c,Lead_PostalCode_Field__c,Lead_City_Field__c,Lead_CountryCode_Field__c,Lead_Annual_Revenue_Field__c,Lead_Legal_Form_Field__c FROM CW_Login_Setup__mdt WHERE DeveloperName = 'CW_Login'];
+        oLoginSetup = [SELECT Id, CW_CompanyWebLogin__c, CW_CompanyWebPassword__c, CW_CompanyWebSecret__c, CW_ServiceIntegrator__c, Account_VAT_Number_Field__c, Lead_VAT_Number_Field__c,Account_Score_Field__c,Account_Activities_Field__c,Account_Credit_Limit_Field__c,Account_Joint_Commitees_Field__c,Account_Joint_Commitees_White_Field__c,Account_Legal_Form_Field__c,Account_Main_Activity_Field__c,Account_Number_Employees_Field__c,Account_Social_Security_Field__c,Account_Phone_Field__c,Account_Street_Field__c,Account_PostalCode_Field__c,Account_City_Field__c,Account_CountryCode_Field__c,Account_Annual_Revenue_Field__c,CW_Duplicate_Check_Creation__c,CW_Duplicate_Check_Refresh__c,Lead_Score_Field__c,Lead_Activities_Field__c,Lead_Credit_Limit_Field__c,Lead_Joint_Commitees_Field__c,Lead_Joint_Commitees_White_Field__c,Lead_Legal_Form_Field__c,Lead_Main_Activity_Field__c,Lead_Number_Employees_Field__c,Lead_Social_Security_Field__c,Lead_Phone_Field__c,Lead_Street_Field__c,Lead_PostalCode_Field__c,Lead_City_Field__c,Lead_CountryCode_Field__c,Lead_Annual_Revenue_Field__c FROM CW_Login_Setup__mdt WHERE DeveloperName = 'CW_Login'];
         System.debug('Account_VAT_Number_Field__c = '+ oLoginSetup.Account_VAT_Number_Field__c);
         System.debug('Lead_VAT_Number_Field__c = '+ oLoginSetup.Lead_VAT_Number_Field__c);
         return oLoginSetup;
@@ -1797,7 +1804,7 @@ public with sharing class CompanyWebController {
                 //Balance Year
                 acc.CW_Balance__c = String.valueOf(result.CompanyResponse.Balances.Value.Balans[0].BookYear);
 
-                for(connectCompanywebBe.BalansData balansData : result.CompanyResponse.Balances.Value.Balans[0].BalansData){
+                for(connectCompanywebBe.BalansData balansData : result.CompanyResponse.Balances.Value.Balans[0].BalansData.BalansData){
                     switch on balansData.Key {
                         when 'CloseDate' { //Closing date of the Financial year
                             
@@ -1993,7 +2000,7 @@ public with sharing class CompanyWebController {
     }
 
     public static void assignLeadFields(Lead lead, connectCompanywebBe.ResponseCompanyByVatV1_5 result, Boolean fromPick){
-        Schema.DisplayType dt, dtLeadVAT, dtLeadScore, dtLeadActivities, dtLeadCreditLimit, dtLeadJointCommiteesBlue, dtLeadJointCommiteesWhite, dtLeadLegalForm, dtLeadMainActivity, dtLeadNumberEmployees, dtLeadSocialSecurity, dtLeadPhone, dtLeadAnnualRevenue, dtLeadLegalForm;
+        Schema.DisplayType dt, dtLeadVAT, dtLeadScore, dtLeadActivities, dtLeadCreditLimit, dtLeadJointCommiteesBlue, dtLeadJointCommiteesWhite, dtLeadLegalForm, dtLeadMainActivity, dtLeadNumberEmployees, dtLeadSocialSecurity, dtLeadPhone, dtLeadAnnualRevenue, dtLeadWorkers, dtLeadEmployees;
         String warningsString = '';
         String vatFieldType = String.valueOf(dt);
                         
@@ -2046,11 +2053,15 @@ public with sharing class CompanyWebController {
             dtLeadAnnualRevenue = Schema.getGlobalDescribe().get('Lead').getDescribe().fields.getMap().get(leadAnnualRevenueAPI).getDescribe().getType();
         }
 
-        if(leadLegalFormAPI != null){
-            dtLeadLegalForm = Schema.getGlobalDescribe().get('Lead').getDescribe().fields.getMap().get(leadLegalFormAPI).getDescribe().getType();
+        if(leadWorkersAPI != null){
+            dtLeadWorkers = Schema.getGlobalDescribe().get('Lead').getDescribe().fields.getMap().get(leadWorkersAPI).getDescribe().getType();
         }
         
-        String vatLeadFieldType, scoreFieldType, activitiesFieldType,creditLimitFieldType,joinCommiteesBlueFieldType,joinCommiteesWhiteFieldType,legalFormFieldType,mainActivityFieldType,numberEmployeesFieldType,socialSecurityFieldType,phoneFieldType,annualRevenueFieldType, legalFormFieldType;
+        if(leadEmployeesAPI != null){
+            dtLeadEmployees = Schema.getGlobalDescribe().get('Lead').getDescribe().fields.getMap().get(leadEmployeesAPI).getDescribe().getType();
+        }
+
+        String vatLeadFieldType, scoreFieldType, activitiesFieldType,creditLimitFieldType,joinCommiteesBlueFieldType,joinCommiteesWhiteFieldType,legalFormFieldType,mainActivityFieldType,numberEmployeesFieldType,socialSecurityFieldType,phoneFieldType,annualRevenueFieldType, workersFieldType, employeesFieldType;
 
         vatLeadFieldType = String.valueOf(dtLeadVAT);
         scoreFieldType = String.valueOf(dtLeadScore);
@@ -2064,7 +2075,8 @@ public with sharing class CompanyWebController {
         socialSecurityFieldType= String.valueOf(dtLeadSocialSecurity);
         phoneFieldType = String.valueOf(dtLeadPhone);
         annualRevenueFieldType = String.valueOf(dtLeadAnnualRevenue);
-        legalFormFieldType = String.valueOf(dtLeadLegalForm);
+        workersFieldType = String.valueOf(dtLeadWorkers);
+        employeesFieldType = String.valueOf(dtLeadEmployees);
 
         System.debug('vatFieldType = ' + vatLeadFieldType);
         System.debug('vatFieldType = ' + vatFieldType);
@@ -2292,7 +2304,7 @@ public with sharing class CompanyWebController {
                 //Balance Year
                 lead.CW_Balance__c = String.valueOf(result.CompanyResponse.Balances.Value.Balans[0].BookYear);
 
-                for(connectCompanywebBe.BalansData balansData : result.CompanyResponse.Balances.Value.Balans[0].BalansData){
+                for(connectCompanywebBe.BalansData balansData : result.CompanyResponse.Balances.Value.Balans[0].BalansData.BalansData){
                     switch on balansData.Key {
                         when 'CloseDate' { //Closing date of the Financial year
                             
@@ -2309,28 +2321,32 @@ public with sharing class CompanyWebController {
                             if (String.isNotBlank(balansData.Value)){
                                 //Workers
                                 if(leadWorkersAPI != null){
-                                    if (leadWorkersAPI != 'String') {
+                                    if (workersFieldType != 'String') {
+                                        lead.put(leadWorkersAPI, Decimal.valueOf(String.valueOf(balansData.Value)));
+                                    } else {
                                         lead.put(leadWorkersAPI, Decimal.valueOf(balansData.Value));
                                     }
                                 } else {
-                                    lead.CW_Workers__c = Decimal.valueOf(balansData.Value);
+                                    lead.CW_Joint_Commitees_Blue_Collar__c = String.valueOf(balansData.Value);
                                 }
                             }else{
-                                lead.CW_Workers__c = null;
+                                lead.CW_Joint_Commitees_Blue_Collar__c = null;
                             }
                         }
                         when 'Rub1343' { //Employees (White collar workers)
                             if (String.isNotBlank(balansData.Value)){
                                 //Employees
                                 if(leadEmployeesAPI != null){
-                                    if (leadEmployeesAPI != 'String') {
+                                    if (employeesFieldType != 'String') {
+                                        lead.put(leadEmployeesAPI, Decimal.valueOf(String.valueOf(balansData.Value)));
+                                    } else {
                                         lead.put(leadEmployeesAPI, Decimal.valueOf(balansData.Value));
                                     }
                                 } else {
-                                    lead.CW_Employees__c = Decimal.valueOf(balansData.Value);
+                                    lead.CW_Joint_Commitees_White_Collar__c = String.valueOf(balansData.Value);
                                 }
                             }else{
-                                lead.CW_Employees__c = null;
+                                lead.CW_Joint_Commitees_White_Collar__c = null;
                             }
                         }
                         when 'Rub70' { //Turnover
