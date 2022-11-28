@@ -86,7 +86,6 @@ public with sharing class CompanyWebController {
         leadPostalCodeAPI = oLoginSetup.Lead_PostalCode_Field__c;
         leadCityAPI = oLoginSetup.Lead_City_Field__c;
         leadCountryCodeAPI = oLoginSetup.Lead_CountryCode_Field__c;
-        leadLegalFormAPI = oLoginSetup.Lead_Legal_Form_Field__c;
         leadEmployeesAPI = oLoginSetup.Lead_Employees_Field__c;
         leadWorkersAPI = oLoginSetup.Lead_Workers_Field__c;
     }
@@ -373,7 +372,7 @@ public with sharing class CompanyWebController {
 
     public static CW_Login_Setup__mdt getCurrentVATNumberFields() {
         CW_Login_Setup__mdt oLoginSetup = new CW_Login_Setup__mdt();
-        oLoginSetup = [SELECT Id, CW_CompanyWebLogin__c, CW_CompanyWebPassword__c, CW_CompanyWebSecret__c, CW_ServiceIntegrator__c, Account_VAT_Number_Field__c, Lead_VAT_Number_Field__c,Account_Score_Field__c,Account_Activities_Field__c,Account_Credit_Limit_Field__c,Account_Joint_Commitees_Field__c,Account_Joint_Commitees_White_Field__c,Account_Legal_Form_Field__c,Account_Main_Activity_Field__c,Account_Number_Employees_Field__c,Account_Social_Security_Field__c,Account_Phone_Field__c,Account_Street_Field__c,Account_PostalCode_Field__c,Account_City_Field__c,Account_CountryCode_Field__c,Account_Annual_Revenue_Field__c,CW_Duplicate_Check_Creation__c,CW_Duplicate_Check_Refresh__c,Lead_Score_Field__c,Lead_Activities_Field__c,Lead_Credit_Limit_Field__c,Lead_Joint_Commitees_Field__c,Lead_Joint_Commitees_White_Field__c,Lead_Legal_Form_Field__c,Lead_Main_Activity_Field__c,Lead_Number_Employees_Field__c,Lead_Social_Security_Field__c,Lead_Phone_Field__c,Lead_Street_Field__c,Lead_PostalCode_Field__c,Lead_City_Field__c,Lead_CountryCode_Field__c,Lead_Annual_Revenue_Field__c FROM CW_Login_Setup__mdt WHERE DeveloperName = 'CW_Login'];
+        oLoginSetup = [SELECT Id, CW_CompanyWebLogin__c, CW_CompanyWebPassword__c, CW_CompanyWebSecret__c, CW_ServiceIntegrator__c, Account_VAT_Number_Field__c, Lead_VAT_Number_Field__c,Account_Score_Field__c,Account_Activities_Field__c,Account_Credit_Limit_Field__c,Account_Joint_Commitees_Field__c,Account_Joint_Commitees_White_Field__c,Account_Legal_Form_Field__c,Account_Main_Activity_Field__c,Account_Number_Employees_Field__c,Account_Social_Security_Field__c,Account_Phone_Field__c,Account_Street_Field__c,Account_PostalCode_Field__c,Account_City_Field__c,Account_CountryCode_Field__c,Account_Annual_Revenue_Field__c,Account_Employees_Field__c,Account_Workers_Field__c,CW_Duplicate_Check_Creation__c,CW_Duplicate_Check_Refresh__c,Lead_Score_Field__c,Lead_Activities_Field__c,Lead_Credit_Limit_Field__c,Lead_Joint_Commitees_Field__c,Lead_Joint_Commitees_White_Field__c,Lead_Legal_Form_Field__c,Lead_Main_Activity_Field__c,Lead_Number_Employees_Field__c,Lead_Social_Security_Field__c,Lead_Phone_Field__c,Lead_Street_Field__c,Lead_PostalCode_Field__c,Lead_City_Field__c,Lead_CountryCode_Field__c,Lead_Annual_Revenue_Field__c,Lead_Employees_Field__c,Lead_Workers_Field__c FROM CW_Login_Setup__mdt WHERE DeveloperName = 'CW_Login'];
         System.debug('Account_VAT_Number_Field__c = '+ oLoginSetup.Account_VAT_Number_Field__c);
         System.debug('Lead_VAT_Number_Field__c = '+ oLoginSetup.Lead_VAT_Number_Field__c);
         return oLoginSetup;
