@@ -23,6 +23,7 @@ public with sharing class CompanyWebController {
     public static String accountCountryCodeAPI {get; set;}
     public static String accountWorkersAPI {get; set;}
     public static String accountEmployeesAPI {get; set;}
+    public static String accountCloseDateAPI {get; set;}
 
     //Lead
     public static String leadVATAPI {get; set;}
@@ -43,6 +44,7 @@ public with sharing class CompanyWebController {
     public static String leadCountryCodeAPI {get; set;}
     public static String leadWorkersAPI {get; set;}
     public static String leadEmployeesAPI {get; set;}
+    public static String leadCloseDateAPI {get; set;}
 
     public static void assignDynamicMappingFields(CW_Login_Setup__mdt oLoginSetup){
         //System
@@ -54,7 +56,7 @@ public with sharing class CompanyWebController {
         accountScoreAPI = oLoginSetup.Account_Score_Field__c;
         accountActivitiesAPI = oLoginSetup.Account_Activities_Field__c;
         accountCreditLimitAPI = oLoginSetup.Account_Credit_Limit_Field__c;
-        accountJointCommitieesBlueAPI = oLoginSetup.Account_Joint_Commitees_Field__c;
+        accountJointCommitieesBlueAPI = oLoginSetup.Account_Joint_Commitees_Blue_Field__c;
         accountJointCommitieesWhiteAPI = oLoginSetup.Account_Joint_Commitees_White_Field__c;
         accountMainActivityAPI = oLoginSetup.Account_Main_Activity_Field__c;
         accountNumberEmployeesAPI = oLoginSetup.Account_Number_Employees_Field__c;
@@ -68,6 +70,7 @@ public with sharing class CompanyWebController {
         accountCountryCodeAPI = oLoginSetup.Account_CountryCode_Field__c;
         accountEmployeesAPI = oLoginSetup.Account_Employees_Field__c;
         accountWorkersAPI = oLoginSetup.Account_Workers_Field__c;
+        accountCloseDateAPI = oLoginSetup.Account_Close_Date_Field__c;
 
         //Lead
         leadVATAPI = oLoginSetup.Lead_VAT_Number_Field__c;
@@ -88,6 +91,7 @@ public with sharing class CompanyWebController {
         leadCountryCodeAPI = oLoginSetup.Lead_CountryCode_Field__c;
         leadEmployeesAPI = oLoginSetup.Lead_Employees_Field__c;
         leadWorkersAPI = oLoginSetup.Lead_Workers_Field__c;
+        leadCloseDateAPI = oLoginSetup.Lead_Close_Date_Field__c;
     }
 
     @InvocableMethod(label='Call CW to Update Lead/Account' description='Callout to the CompanyWeb API to update information on the Lead/Account')
@@ -192,12 +196,12 @@ public with sharing class CompanyWebController {
 
             oLoginSetup = [SELECT Id, CW_CompanyWebLogin__c, CW_CompanyWebPassword__c, CW_CompanyWebSecret__c, CW_ServiceIntegrator__c, Account_VAT_Number_Field__c,
              Lead_VAT_Number_Field__c,Account_Score_Field__c,Account_Activities_Field__c,Account_Credit_Limit_Field__c,Account_Joint_Commitees_Field__c,
-             Account_Joint_Commitees_White_Field__c,Account_Legal_Form_Field__c,Account_Main_Activity_Field__c,Account_Number_Employees_Field__c,
+             Account_Joint_Commitees_White_Field__c,Account_Joint_Commitees_Blue_Field__c,Account_Legal_Form_Field__c,Account_Main_Activity_Field__c,Account_Number_Employees_Field__c,
              Account_Social_Security_Field__c,Account_Phone_Field__c,Account_Street_Field__c,Account_PostalCode_Field__c,Account_City_Field__c,Account_CountryCode_Field__c,
-             Account_Annual_Revenue_Field__c,CW_Duplicate_Check_Creation__c,
+             Account_Annual_Revenue_Field__c,Account_Employees_Field__c,Account_Workers_Field__c,Account_Close_Date_Field__c,CW_Duplicate_Check_Creation__c,
              CW_Duplicate_Check_Refresh__c,Lead_Score_Field__c,Lead_Activities_Field__c,Lead_Credit_Limit_Field__c,Lead_Joint_Commitees_Field__c,
-             Lead_Joint_Commitees_White_Field__c,Lead_Legal_Form_Field__c,Lead_Main_Activity_Field__c,Lead_Number_Employees_Field__c,Lead_Social_Security_Field__c,
-             Lead_Phone_Field__c,Lead_Annual_Revenue_Field__c,Lead_Street_Field__c,Lead_PostalCode_Field__c,Lead_City_Field__c,Lead_CountryCode_Field__c
+             Lead_Joint_Commitees_White_Field__c,Lead_Joint_Commitees_Blue_Field__c,Lead_Legal_Form_Field__c,Lead_Main_Activity_Field__c,Lead_Number_Employees_Field__c,Lead_Social_Security_Field__c,
+             Lead_Phone_Field__c,Lead_Annual_Revenue_Field__c,Lead_Street_Field__c,Lead_PostalCode_Field__c,Lead_City_Field__c,Lead_CountryCode_Field__c,Lead_Employees_Field__c,Lead_Workers_Field__c,Lead_Close_Date_Field__c
              FROM CW_Login_Setup__mdt WHERE DeveloperName = 'CW_Login'];
 
             system.debug('Result of loginSetup '+ oLoginSetup);
@@ -898,10 +902,10 @@ public with sharing class CompanyWebController {
                 acc.CW_Name__c = null;
                 if (accountLegalFormAPI != null) {
                     acc.put(accountLegalFormAPI, null);
-                    acc.CW_Abbreviation__c = null;
+                    //acc.CW_Abbreviation__c = null;
                     acc.CW_Legal_Form__c = null;
                 } else {
-                    acc.CW_Abbreviation__c = null;
+                    //acc.CW_Abbreviation__c = null;
                     acc.CW_Legal_Form__c = null;
                 }
                 acc.CW_Company_Status__c = null;
@@ -963,6 +967,11 @@ public with sharing class CompanyWebController {
                 } else {
                     acc.CW_Social_Security_Information__c = null;
                 }
+                if(accountCloseDateAPI!=null){
+                    acc.put(accountCloseDateAPI,null);
+                } else {
+                    acc.CW_Close_Date__c = null;
+                }
 
                 update acc;
             } else if (objectName == 'Lead'){
@@ -1001,9 +1010,9 @@ public with sharing class CompanyWebController {
                 }
                 if (leadLegalFormAPI != null) {
                     lead.put(leadLegalFormAPI, null);
-                    lead.CW_Abbreviation__c = null;
+                    lead.CW_Legal_Form__c = null;
                 } else {
-                    lead.CW_Abbreviation__c = null;
+                    lead.CW_Legal_Form__c = null;
                 }
                 lead.CW_Company_Status__c = null;
                 lead.CW_Score_Image__c = null; 
@@ -1063,6 +1072,11 @@ public with sharing class CompanyWebController {
                     lead.CW_Social_Security_Information__c = null;
                 } else {
                     lead.CW_Social_Security_Information__c = null;
+                }
+                if(leadCloseDateAPI!=null){
+                    lead.put(leadCloseDateAPI,null);
+                } else {
+                    lead.CW_Close_Date__c = null;
                 }
 
                 update lead;
@@ -1143,16 +1157,16 @@ public with sharing class CompanyWebController {
         switch on objectName {
             when 'Account' {
                 if (accountVATAPI != null) {
-                    queryString = 'SELECT Id, companyweb__CW_Full_Name__c, companyweb__CW_Phone__c,companyweb__CW_Address_Line_1__c, companyweb__CW_Address_Line_2__c, companyweb__CW_Name__c, ' + accountVATAPI + ', companyweb__CW_VAT_Liable__c, companyweb__CW_Abbreviation__c, companyweb__CW_Company_Status__c, companyweb__CW_Score_Image__c, companyweb__CW_Score__c, companyweb__CW_Credit_Limit__c, companyweb__CW_Detail_URL__c, companyweb__CW_Report_URL__c, companyweb__CW_Balance__c, companyweb__CW_Equity__c, companyweb__CW_Last_Sync__c, companyweb__CW_Revenue__c, companyweb__CW_Employees__c, companyweb__CW_Gross_Margin__c, companyweb__CW_Result__c, companyweb__CW_Warnings__c,companyweb__CW_Kyc_URL__c,companyweb__CW_Credit_Limit_Reason__c,companyweb__CW_Start_Date__c,companyweb__CW_End_Date__c,companyweb__CW_Preferred_Languages_PL__c,companyweb__CW_Avoid_Callout__c,companyweb__CW_Main_Activity__c, companyweb__CW_Activities__c, companyweb__CW_Joint_Commitees__c, companyweb__CW_Social_Security_Information__c, companyweb__CW_In_Follow_Up__c, companyweb__CW_Legal_Form__c FROM Account WHERE Id = :recordId';
+                    queryString = 'SELECT Id, companyweb__CW_Full_Name__c, companyweb__CW_Phone__c,companyweb__CW_Address_Line_1__c, companyweb__CW_Address_Line_2__c, companyweb__CW_Name__c, ' + accountVATAPI + ', companyweb__CW_VAT_Liable__c, companyweb__CW_Abbreviation__c, companyweb__CW_Company_Status__c, companyweb__CW_Score_Image__c, companyweb__CW_Score__c, companyweb__CW_Credit_Limit__c, companyweb__CW_Detail_URL__c, companyweb__CW_Report_URL__c, companyweb__CW_Balance__c, companyweb__CW_Equity__c, companyweb__CW_Last_Sync__c, companyweb__CW_Revenue__c, companyweb__CW_Employees__c, companyweb__CW_Gross_Margin__c, companyweb__CW_Result__c, companyweb__CW_Warnings__c,companyweb__CW_Kyc_URL__c,companyweb__CW_Credit_Limit_Reason__c,companyweb__CW_Start_Date__c,companyweb__CW_End_Date__c,companyweb__CW_Preferred_Languages_PL__c,companyweb__CW_Avoid_Callout__c,companyweb__CW_Main_Activity__c, companyweb__CW_Activities__c, companyweb__CW_Joint_Commitees__c, companyweb__CW_Joint_Commitees_White_Collar__c, companyweb__CW_Joint_Commitees_Blue_Collar__c, companyweb__CW_Social_Security_Information__c, companyweb__CW_In_Follow_Up__c, companyweb__CW_Legal_Form__c, CW_Workers__c FROM Account WHERE Id = :recordId';
                 } else {
-                    queryString = 'SELECT Id, companyweb__CW_Full_Name__c, companyweb__CW_Phone__c,companyweb__CW_Address_Line_1__c, companyweb__CW_Address_Line_2__c, companyweb__CW_Name__c, companyweb__CW_VAT_Number__c, companyweb__CW_VAT_Liable__c, companyweb__CW_Abbreviation__c, companyweb__CW_Company_Status__c, companyweb__CW_Score_Image__c, companyweb__CW_Score__c, companyweb__CW_Credit_Limit__c, companyweb__CW_Detail_URL__c, companyweb__CW_Report_URL__c, companyweb__CW_Balance__c, companyweb__CW_Equity__c, companyweb__CW_Last_Sync__c, companyweb__CW_Revenue__c, companyweb__CW_Employees__c, companyweb__CW_Gross_Margin__c, companyweb__CW_Result__c, companyweb__CW_Warnings__c,companyweb__CW_Kyc_URL__c,companyweb__CW_Credit_Limit_Reason__c,companyweb__CW_Start_Date__c,companyweb__CW_End_Date__c,companyweb__CW_Preferred_Languages_PL__c,companyweb__CW_Avoid_Callout__c,companyweb__CW_Main_Activity__c, companyweb__CW_Activities__c, companyweb__CW_Joint_Commitees__c, companyweb__CW_Social_Security_Information__c, companyweb__CW_In_Follow_Up__c, companyweb__CW_Legal_Form__c FROM Account WHERE Id = :recordId';
+                    queryString = 'SELECT Id, companyweb__CW_Full_Name__c, companyweb__CW_Phone__c,companyweb__CW_Address_Line_1__c, companyweb__CW_Address_Line_2__c, companyweb__CW_Name__c, companyweb__CW_VAT_Number__c, companyweb__CW_VAT_Liable__c, companyweb__CW_Abbreviation__c, companyweb__CW_Company_Status__c, companyweb__CW_Score_Image__c, companyweb__CW_Score__c, companyweb__CW_Credit_Limit__c, companyweb__CW_Detail_URL__c, companyweb__CW_Report_URL__c, companyweb__CW_Balance__c, companyweb__CW_Equity__c, companyweb__CW_Last_Sync__c, companyweb__CW_Revenue__c, companyweb__CW_Employees__c, companyweb__CW_Gross_Margin__c, companyweb__CW_Result__c, companyweb__CW_Warnings__c,companyweb__CW_Kyc_URL__c,companyweb__CW_Credit_Limit_Reason__c,companyweb__CW_Start_Date__c,companyweb__CW_End_Date__c,companyweb__CW_Preferred_Languages_PL__c,companyweb__CW_Avoid_Callout__c,companyweb__CW_Main_Activity__c, companyweb__CW_Activities__c, companyweb__CW_Joint_Commitees__c, companyweb__CW_Joint_Commitees_White_Collar__c, companyweb__CW_Joint_Commitees_Blue_Collar__c, companyweb__CW_Social_Security_Information__c, companyweb__CW_In_Follow_Up__c, companyweb__CW_Legal_Form__c, CW_Workers__c FROM Account WHERE Id = :recordId';
                 }
             }
             when 'Lead' {
                 if (leadVATAPI != null) {
-                    queryString = 'SELECT Id, companyweb__CW_Full_Name__c, companyweb__CW_Phone__c,companyweb__CW_Address_Line_1__c, companyweb__CW_Address_Line_2__c, companyweb__CW_Name__c, ' + leadVATAPI + ', companyweb__CW_VAT_Liable__c, companyweb__CW_Abbreviation__c, companyweb__CW_Company_Status__c, companyweb__CW_Score_Image__c, companyweb__CW_Score__c, companyweb__CW_Credit_Limit__c, companyweb__CW_Detail_URL__c, companyweb__CW_Report_URL__c, companyweb__CW_Balance__c, companyweb__CW_Equity__c, companyweb__CW_Last_Sync__c, companyweb__CW_Revenue__c, companyweb__CW_Employees__c, companyweb__CW_Gross_Margin__c, companyweb__CW_Result__c, companyweb__CW_Warnings__c,companyweb__CW_Kyc_URL__c,companyweb__CW_Credit_Limit_Reason__c,companyweb__CW_Start_Date__c,companyweb__CW_End_Date__c,companyweb__CW_Preferred_Languages_PL__c,companyweb__CW_Avoid_Callout__c,companyweb__CW_Main_Activity__c, companyweb__CW_Activities__c, companyweb__CW_Joint_Commitees__c, companyweb__CW_Social_Security_Information__c, companyweb__CW_In_Follow_Up__c, companyweb__CW_Legal_Form__c FROM Lead WHERE Id = :recordId';
+                    queryString = 'SELECT Id, companyweb__CW_Full_Name__c, companyweb__CW_Phone__c,companyweb__CW_Address_Line_1__c, companyweb__CW_Address_Line_2__c, companyweb__CW_Name__c, ' + leadVATAPI + ', companyweb__CW_VAT_Liable__c, companyweb__CW_Abbreviation__c, companyweb__CW_Company_Status__c, companyweb__CW_Score_Image__c, companyweb__CW_Score__c, companyweb__CW_Credit_Limit__c, companyweb__CW_Detail_URL__c, companyweb__CW_Report_URL__c, companyweb__CW_Balance__c, companyweb__CW_Equity__c, companyweb__CW_Last_Sync__c, companyweb__CW_Revenue__c, companyweb__CW_Employees__c, companyweb__CW_Gross_Margin__c, companyweb__CW_Result__c, companyweb__CW_Warnings__c,companyweb__CW_Kyc_URL__c,companyweb__CW_Credit_Limit_Reason__c,companyweb__CW_Start_Date__c,companyweb__CW_End_Date__c,companyweb__CW_Preferred_Languages_PL__c,companyweb__CW_Avoid_Callout__c,companyweb__CW_Main_Activity__c, companyweb__CW_Activities__c, companyweb__CW_Joint_Commitees__c, companyweb__CW_Joint_Commitees_White_Collar__c, companyweb__CW_Joint_Commitees_Blue_Collar__c, companyweb__CW_Social_Security_Information__c, companyweb__CW_In_Follow_Up__c, companyweb__CW_Legal_Form__c, CW_Workers__c FROM Lead WHERE Id = :recordId';
                 } else {
-                    queryString = 'SELECT Id, companyweb__CW_Full_Name__c, companyweb__CW_Phone__c,companyweb__CW_Address_Line_1__c, companyweb__CW_Address_Line_2__c, companyweb__CW_Name__c, companyweb__CW_VAT_Number__c, companyweb__CW_VAT_Liable__c, companyweb__CW_Abbreviation__c, companyweb__CW_Company_Status__c, companyweb__CW_Score_Image__c, companyweb__CW_Score__c, companyweb__CW_Credit_Limit__c, companyweb__CW_Detail_URL__c, companyweb__CW_Report_URL__c, companyweb__CW_Balance__c, companyweb__CW_Equity__c, companyweb__CW_Last_Sync__c, companyweb__CW_Revenue__c, companyweb__CW_Employees__c, companyweb__CW_Gross_Margin__c, companyweb__CW_Result__c, companyweb__CW_Warnings__c,companyweb__CW_Kyc_URL__c,companyweb__CW_Credit_Limit_Reason__c,companyweb__CW_Start_Date__c,companyweb__CW_End_Date__c,companyweb__CW_Preferred_Languages_PL__c,companyweb__CW_Avoid_Callout__c,companyweb__CW_Main_Activity__c, companyweb__CW_Activities__c, companyweb__CW_Joint_Commitees__c, companyweb__CW_Social_Security_Information__c, companyweb__CW_In_Follow_Up__c, companyweb__CW_Legal_Form__c FROM Lead WHERE Id = :recordId';                
+                    queryString = 'SELECT Id, companyweb__CW_Full_Name__c, companyweb__CW_Phone__c,companyweb__CW_Address_Line_1__c, companyweb__CW_Address_Line_2__c, companyweb__CW_Name__c, companyweb__CW_VAT_Number__c, companyweb__CW_VAT_Liable__c, companyweb__CW_Abbreviation__c, companyweb__CW_Company_Status__c, companyweb__CW_Score_Image__c, companyweb__CW_Score__c, companyweb__CW_Credit_Limit__c, companyweb__CW_Detail_URL__c, companyweb__CW_Report_URL__c, companyweb__CW_Balance__c, companyweb__CW_Equity__c, companyweb__CW_Last_Sync__c, companyweb__CW_Revenue__c, companyweb__CW_Employees__c, companyweb__CW_Gross_Margin__c, companyweb__CW_Result__c, companyweb__CW_Warnings__c,companyweb__CW_Kyc_URL__c,companyweb__CW_Credit_Limit_Reason__c,companyweb__CW_Start_Date__c,companyweb__CW_End_Date__c,companyweb__CW_Preferred_Languages_PL__c,companyweb__CW_Avoid_Callout__c,companyweb__CW_Main_Activity__c, companyweb__CW_Activities__c, companyweb__CW_Joint_Commitees__c, companyweb__CW_Joint_Commitees_White_Collar__c, companyweb__CW_Joint_Commitees_Blue_Collar__c, companyweb__CW_Social_Security_Information__c, companyweb__CW_In_Follow_Up__c, companyweb__CW_Legal_Form__c, CW_Workers__c FROM Lead WHERE Id = :recordId';                
                 }
             }
         }
@@ -1543,7 +1557,7 @@ public with sharing class CompanyWebController {
     }
 
     public static void assignAccountFields(Account acc, connectCompanywebBe.ResponseCompanyByVatV1_5 result, Boolean fromPick){
-        Schema.DisplayType dt, dtAccountVAT, dtAccountScore, dtAccountActivities, dtAccountCreditLimit, dtAccountJointCommiteesBlue, dtAccountJointCommiteesWhite, dtAccountLegalForm, dtAccountMainActivity, dtAccountNumberEmployees, dtAccountSocialSecurity, dtAccountPhone, dtAccountAnnualRevenue;
+        Schema.DisplayType dt, dtAccountVAT, dtAccountScore, dtAccountActivities, dtAccountCreditLimit, dtAccountJointCommiteesBlue, dtAccountJointCommiteesWhite, dtAccountLegalForm, dtAccountMainActivity, dtAccountNumberEmployees, dtAccountSocialSecurity, dtAccountPhone, dtAccountAnnualRevenue, dtAccountWorkers, dtAccountEmployees;
         String warningsString = '';
 
         /* Schema.DisplayType dt; */
@@ -1594,8 +1608,16 @@ public with sharing class CompanyWebController {
         if(accountAnnualRevenueAPI != null){
             dtAccountAnnualRevenue = Schema.getGlobalDescribe().get('Account').getDescribe().fields.getMap().get(accountAnnualRevenueAPI).getDescribe().getType();
         }
+
+        if(accountEmployeesAPI != null){
+            dtAccountEmployees = Schema.getGlobalDescribe().get('Account').getDescribe().fields.getMap().get(accountEmployeesAPI).getDescribe().getType();
+        }
+
+        if(accountWorkersAPI != null){
+            dtAccountWorkers = Schema.getGlobalDescribe().get('Account').getDescribe().fields.getMap().get(accountWorkersAPI).getDescribe().getType();
+        }
         
-        String vatAccountFieldType,scoreFieldType,activitiesFieldType,creditLimitFieldType,joinCommiteesBlueFieldType,joinCommiteesWhiteFieldType,legalFormFieldType,mainActivityFieldType,numberEmployeesFieldType,socialSecurityFieldType,phoneFieldType,annualRevenueFieldType;
+        String vatAccountFieldType,scoreFieldType,activitiesFieldType,creditLimitFieldType,joinCommiteesBlueFieldType,joinCommiteesWhiteFieldType,legalFormFieldType,mainActivityFieldType,numberEmployeesFieldType,socialSecurityFieldType,phoneFieldType,annualRevenueFieldType,workersFieldType,employeesFieldType;
 
         vatAccountFieldType = String.valueOf(dtAccountVAT);
         scoreFieldType = String.valueOf(dtAccountScore);
@@ -1609,15 +1631,35 @@ public with sharing class CompanyWebController {
         socialSecurityFieldType= String.valueOf(dtAccountSocialSecurity);
         phoneFieldType = String.valueOf(dtAccountPhone);
         annualRevenueFieldType = String.valueOf(dtAccountAnnualRevenue);
+        workersFieldType = String.valueOf(dtAccountWorkers);
+        employeesFieldType = String.valueOf(dtAccountEmployees);
 
         System.debug('vatFieldType = ' + vatAccountFieldType);
+        System.debug('SSI:' + result.CompanyResponse.SocialSecurityInformation.Value.RegistrationId);
         
         //Address
         if(result.CompanyResponse.Address.IsEnabled == True){
-            if(accountStreetAPI!=null) acc.put(accountStreetAPI, result.CompanyResponse.Address.Value.Street + ' ' + result.CompanyResponse.Address.Value.HouseNumber);
-            if(accountCityAPI!=null) acc.put(accountCityAPI, result.CompanyResponse.Address.Value.City);
-            if(accountPostalCodeAPI!=null) acc.put(accountPostalCodeAPI, result.CompanyResponse.Address.Value.PostalCode);
-            if(accountCountryCodeAPI!=null) acc.put(accountCountryCodeAPI, result.CompanyResponse.Address.Value.CountryCode);
+            if(accountStreetAPI!=null){
+                acc.put(accountStreetAPI, result.CompanyResponse.Address.Value.Street + ' ' + result.CompanyResponse.Address.Value.HouseNumber);
+            }else{
+                acc.CW_Street__c = result.CompanyResponse.Address.Value.Street + ' ' + result.CompanyResponse.Address.Value.HouseNumber;
+            }
+            if(accountCityAPI!=null){
+                acc.put(accountCityAPI, result.CompanyResponse.Address.Value.City);
+            }else{
+                acc.CW_City__c = result.CompanyResponse.Address.Value.City;
+            }
+            if(accountPostalCodeAPI!=null){
+                acc.put(accountPostalCodeAPI, result.CompanyResponse.Address.Value.PostalCode);
+            }else{
+                acc.CW_PostalCode__c = result.CompanyResponse.Address.Value.PostalCode;
+            }
+            if(accountCountryCodeAPI!=null){
+                acc.put(accountCountryCodeAPI, result.CompanyResponse.Address.Value.CountryCode);
+            }else{
+                acc.CW_Country__c = result.CompanyResponse.Address.Value.CountryCode;
+            }
+
         }else{
             acc.CW_Street__c = null;
             acc.CW_City__c = null;
@@ -1689,7 +1731,7 @@ public with sharing class CompanyWebController {
         //Legal form
         if(result.CompanyResponse.LegalForm.IsEnabled == True){
             acc.CW_Legal_Form__c = String.valueOf(result.CompanyResponse.LegalForm.Value.Abbreviation);
-            acc.CW_Abbreviation__c = String.valueOf(result.CompanyResponse.LegalForm.Value.Abbreviation);
+            //acc.CW_Abbreviation__c = String.valueOf(result.CompanyResponse.LegalForm.Value.Abbreviation);
             if (legalFormFieldType != null) {
                 acc.put(accountLegalFormAPI, String.valueOf(result.CompanyResponse.LegalForm.Value.Abbreviation));
             }
@@ -1697,7 +1739,7 @@ public with sharing class CompanyWebController {
             if (legalFormFieldType != null) {
                 acc.put(accountLegalFormAPI, null);
             }
-            acc.CW_Abbreviation__c = null;
+            //acc.CW_Abbreviation__c = null;
             acc.CW_Legal_Form__c = null;
         }
         //Company Status 
@@ -1806,7 +1848,11 @@ public with sharing class CompanyWebController {
                 for(connectCompanywebBe.BalansData balansData : result.CompanyResponse.Balances.Value.Balans[0].BalansData.BalansData){
                     switch on balansData.Key {
                         when 'CloseDate' { //Closing date of the Financial year
-                            
+                            System.debug('CloseDate unformatted: ' + balansData.Value);
+                            if(accountCloseDateAPI!=null){
+                                acc.put(accountCloseDateAPI, Date.newInstance(Integer.valueOf(balansData.Value.left(4)), Integer.valueOf(balansData.Value.mid(5,2)), Integer.valueOf(balansData.Value.right(2))));
+                            }
+                            acc.CW_Close_Date__c = Date.newInstance(Integer.valueOf(balansData.Value.left(4)), Integer.valueOf(balansData.Value.mid(5,2)), Integer.valueOf(balansData.Value.right(2))); //2021-12-31
                         }
                         when 'Rub10_15' { //Equity
                             if (String.isNotBlank(balansData.Value)){
@@ -1818,10 +1864,36 @@ public with sharing class CompanyWebController {
                             }
                         }
                         when 'Rub1323' { //Workers (Blue collar workers)
-
+                            if (String.isNotBlank(balansData.Value)){
+                                //Workers
+                                if(accountWorkersAPI != null){
+                                    if (workersFieldType != 'String') {
+                                        acc.put(accountWorkersAPI, Decimal.valueOf(String.valueOf(balansData.Value)));
+                                    } else {
+                                        acc.put(accountWorkersAPI, Decimal.valueOf(balansData.Value));
+                                    }
+                                } else {
+                                    acc.CW_Workers__c = Decimal.valueOf(balansData.Value);
+                                }
+                            }else{
+                                acc.CW_Workers__c = null;
+                            }
                         }
                         when 'Rub1343' { //Employees (White collar workers)
-
+                            if (String.isNotBlank(balansData.Value)){
+                                //Employees
+                                if(accountEmployeesAPI != null){
+                                    if (employeesFieldType != 'String') {
+                                        acc.put(accountEmployeesAPI, Decimal.valueOf(String.valueOf(balansData.Value)));
+                                    } else {
+                                        acc.put(accountEmployeesAPI, Decimal.valueOf(balansData.Value));
+                                    }
+                                } else {
+                                    acc.CW_Employees__c = Decimal.valueOf(balansData.Value);
+                                }
+                            }else{
+                                acc.CW_Employees__c = null;
+                            }
                         }
                         when 'Rub70' { //Turnover
                             if (String.isNotBlank(balansData.Value)){
@@ -1928,6 +2000,7 @@ public with sharing class CompanyWebController {
         
         //Social Security
         if(result.CompanyResponse.SocialSecurityInformation.IsEnabled == True){
+
             String delimiter = '-';
             String socialSecurityNumberPart1 = String.ValueOf(result.CompanyResponse.SocialSecurityInformation.Value.RegistrationId).substringBefore(delimiter);
             String socialSecurityNumberPart2 = String.ValueOf(result.CompanyResponse.SocialSecurityInformation.Value.RegistrationId).substringAfter(delimiter);
@@ -1940,17 +2013,70 @@ public with sharing class CompanyWebController {
                 } else {
                     acc.put(accountSocialSecurityAPI, fullSocialSecurityNumber);
                 }
-            } 
+            } else{
+                if (socialSecurityFieldType != 'String') {
+                    acc.CW_Social_Security_Information__c = fullSocialSecurityNumber;
+                } else {
+                    acc.CW_Social_Security_Information__c = fullSocialSecurityNumber;
+                }
+            }
         } else {
-            //acc.CW_Social_Security_Information__c = null;
+            acc.CW_Social_Security_Information__c = null;
             if(accountSocialSecurityAPI != null){
                 acc.put(accountSocialSecurityAPI, null);
             }
         }
 
+        //Activities
+        if(result.CompanyResponse.Activities.IsEnabled == True){
+            Integer activitiesArraySize;
+            String activitiesField = '';
 
-        //Join Commitees
-        if(result.CompanyResponse.JointCommitees.IsEnabled == True){
+            if(result.CompanyResponse.Activities.Value.ActivityV1_1 != null){
+
+                activitiesArraySize = result.CompanyResponse.Activities.Value.ActivityV1_1.size();
+
+                for (Integer i = 0; i < activitiesArraySize; i++) {
+                    activitiesField = activitiesField + result.CompanyResponse.Activities.Value.ActivityV1_1[i].Description+'\n' ;
+                }
+                system.debug('a activitiesField Inserir ->'+ activitiesField );
+
+                acc.CW_Activities__c = activitiesField;
+
+                if (accountActivitiesAPI != null) {
+                    if (activitiesFieldType != 'String') {
+                        acc.put(accountActivitiesAPI, String.ValueOf(activitiesField));
+                    } else {
+                        acc.put(accountActivitiesAPI, activitiesField);                        
+                    }
+                }
+            }
+        } else {
+            acc.CW_Activities__c = null;
+            if(accountActivitiesAPI != null){
+                acc.put(accountActivitiesAPI, null);
+            }
+        }
+
+        //Main Activity
+        if(result.CompanyResponse.MainActivity.IsEnabled == True){
+            acc.CW_Main_Activity__c = String.ValueOf(result.CompanyResponse.MainActivity.Value.Description);
+            if (accountMainActivityAPI != null) {
+                if (mainActivityFieldType != 'String') {
+                    acc.put(accountMainActivityAPI, String.ValueOf(result.CompanyResponse.MainActivity.Value.Description));
+                } else {
+                    acc.put(accountMainActivityAPI, String.ValueOf(result.CompanyResponse.MainActivity.Value.Description));
+                }
+            } 
+        } else {
+            acc.CW_Main_Activity__c = null;
+            if(accountMainActivityAPI != null){
+                acc.put(accountMainActivityAPI, null);
+            }
+        }
+
+        //Joint Commitees
+        if(result.CompanyResponse.JointCommitees.IsEnabled){
             Integer JointCommiteeArraySize;
             String JointCommiteeFieldConcatBlue = ''; 
             String JointCommiteeFieldConcatWhite = '';
@@ -1973,6 +2099,8 @@ public with sharing class CompanyWebController {
                         } else {
                             acc.put(accountJointCommitieesBlueAPI, JointCommiteeFieldConcatBlue);
                         }
+                }else{
+                    acc.CW_Joint_Commitees_Blue_Collar__c = JointCommiteeFieldConcatBlue;
                 }
 
                 if(accountJointCommitieesWhiteAPI != null){
@@ -1981,17 +2109,22 @@ public with sharing class CompanyWebController {
                         } else {
                             acc.put(accountJointCommitieesWhiteAPI, JointCommiteeFieldConcatWhite);
                         }
+                }else{
+                    acc.CW_Joint_Commitees_White_Collar__c = JointCommiteeFieldConcatWhite;
                 }
             }
         } else {
-
             if(accountJointCommitieesBlueAPI != null){
                 acc.put(accountJointCommitieesBlueAPI, null);
-            } 
+            } else{
+                acc.CW_Joint_Commitees_Blue_Collar__c = null;
+            }
 
             if(accountJointCommitieesWhiteAPI != null){
                 acc.put(accountJointCommitieesWhiteAPI, null);
-            } 
+            } else {
+                acc.CW_Joint_Commitees_White_Collar__c = null;
+            }
         }
 
         //Avoid call out
@@ -2082,19 +2215,34 @@ public with sharing class CompanyWebController {
         
         //Address
         if(result.CompanyResponse.Address.IsEnabled == True){
-            if(leadStreetAPI!=null) lead.put(leadStreetAPI, result.CompanyResponse.Address.Value.Street + ' ' + result.CompanyResponse.Address.Value.HouseNumber);
-            if(leadCityAPI!=null) lead.put(leadCityAPI, result.CompanyResponse.Address.Value.City);
-            if(leadPostalCodeAPI!=null) lead.put(leadPostalCodeAPI, result.CompanyResponse.Address.Value.PostalCode);
-            if(leadCountryCodeAPI!=null) lead.put(leadCountryCodeAPI, result.CompanyResponse.Address.Value.CountryCode);
-        } 
-        //else {
-        //     lead.CW_Street__c = null;
-        //     lead.CW_City__c = null;
-        //     lead.CW_PostalCode__c = null; 
-        //     lead.CW_Country__c = null;
-        //     lead.CW_Address_Line_1__c = null; 
-        //     lead.CW_Address_Line_2__c = null;
-        // }
+            if(leadStreetAPI!=null){
+                lead.put(leadStreetAPI, result.CompanyResponse.Address.Value.Street + ' ' + result.CompanyResponse.Address.Value.HouseNumber);
+            }else{
+                lead.CW_Street__c = result.CompanyResponse.Address.Value.Street + ' ' + result.CompanyResponse.Address.Value.HouseNumber;
+            }
+            if(leadCityAPI!=null){
+                lead.put(leadCityAPI, result.CompanyResponse.Address.Value.City);
+            }else{
+                lead.CW_City__c = result.CompanyResponse.Address.Value.City;
+            }
+            if(leadPostalCodeAPI!=null){
+                lead.put(leadPostalCodeAPI, result.CompanyResponse.Address.Value.PostalCode);
+            }else{
+                lead.CW_PostalCode__c = result.CompanyResponse.Address.Value.PostalCode;
+            }
+            if(leadCountryCodeAPI!=null){
+                lead.put(leadCountryCodeAPI, result.CompanyResponse.Address.Value.CountryCode);
+            }else{
+                lead.CW_Country__c = result.CompanyResponse.Address.Value.CountryCode;
+            }
+        }else {
+            lead.CW_Street__c = null;
+            lead.CW_City__c = null;
+            lead.CW_PostalCode__c = null; 
+            lead.CW_Country__c = null;
+            lead.CW_Address_Line_1__c = null; 
+            lead.CW_Address_Line_2__c = null;
+        }
 
         //Lead Name
         if(result.CompanyResponse.CompanyName.IsEnabled == True){
@@ -2152,13 +2300,13 @@ public with sharing class CompanyWebController {
                 lead.put(leadLegalFormAPI, result.CompanyResponse.LegalForm.Value.Abbreviation);
             }
             lead.CW_Legal_Form__c = result.CompanyResponse.LegalForm.Value.Abbreviation;
-            lead.CW_Abbreviation__c = result.CompanyResponse.LegalForm.Value.Abbreviation;
+            //lead.CW_Abbreviation__c = result.CompanyResponse.LegalForm.Value.Abbreviation;
         } else {
             if(leadLegalFormAPI != null){
                 lead.put(leadLegalFormAPI, null);
             }
             lead.CW_Legal_Form__c = null;
-            lead.CW_Abbreviation__c = null;
+            //lead.CW_Abbreviation__c = null;
         }
         // Company status
         if(result.CompanyResponse.CompanyStatus.IsEnabled == True){ 
@@ -2216,7 +2364,7 @@ public with sharing class CompanyWebController {
         
         //CreditLimit
         if(result.CompanyResponse.CreditLimit.IsEnabled == True){
-            lead.CW_Credit_Limit__c= result.CompanyResponse.CreditLimit.Value.Limit_x;
+            lead.CW_Credit_Limit__c = result.CompanyResponse.CreditLimit.Value.Limit_x;
             if (leadCreditLimitAPI != null) {
                 if (creditLimitFieldType != 'String') {
                     lead.put(leadCreditLimitAPI, result.CompanyResponse.CreditLimit.Value.Limit_x);
@@ -2306,7 +2454,11 @@ public with sharing class CompanyWebController {
                 for(connectCompanywebBe.BalansData balansData : result.CompanyResponse.Balances.Value.Balans[0].BalansData.BalansData){
                     switch on balansData.Key {
                         when 'CloseDate' { //Closing date of the Financial year
-                            
+                            System.debug('CloseDate unformatted: ' + balansData.Value);
+                            if(leadCloseDateAPI!=null){
+                                lead.put(leadCloseDateAPI, Date.newInstance(Integer.valueOf(balansData.Value.left(4)), Integer.valueOf(balansData.Value.mid(5,2)), Integer.valueOf(balansData.Value.right(2))));
+                            }
+                            lead.CW_Close_Date__c = Date.newInstance(Integer.valueOf(balansData.Value.left(4)), Integer.valueOf(balansData.Value.mid(5,2)), Integer.valueOf(balansData.Value.right(2))); //2021-12-31
                         }
                         when 'Rub10_15' { //Equity
                             if (String.isNotBlank(balansData.Value)){
@@ -2326,10 +2478,10 @@ public with sharing class CompanyWebController {
                                         lead.put(leadWorkersAPI, Decimal.valueOf(balansData.Value));
                                     }
                                 } else {
-                                    lead.CW_Joint_Commitees_Blue_Collar__c = String.valueOf(balansData.Value);
+                                    lead.CW_Workers__c = Decimal.valueOf(balansData.Value);
                                 }
                             }else{
-                                lead.CW_Joint_Commitees_Blue_Collar__c = null;
+                                lead.CW_Workers__c = null;
                             }
                         }
                         when 'Rub1343' { //Employees (White collar workers)
@@ -2342,10 +2494,10 @@ public with sharing class CompanyWebController {
                                         lead.put(leadEmployeesAPI, Decimal.valueOf(balansData.Value));
                                     }
                                 } else {
-                                    lead.CW_Joint_Commitees_White_Collar__c = String.valueOf(balansData.Value);
+                                    lead.CW_Employees__c = Decimal.valueOf(balansData.Value);
                                 }
                             }else{
-                                lead.CW_Joint_Commitees_White_Collar__c = null;
+                                lead.CW_Employees__c = null;
                             }
                         }
                         when 'Rub70' { //Turnover
@@ -2379,6 +2531,9 @@ public with sharing class CompanyWebController {
                                 }
                             }else{
                                 lead.CW_Employees__c = null;
+                                if(leadNumberEmployeesAPI != null){
+                                    lead.put(leadNumberEmployeesAPI, null);  
+                                }
                             }
                         }
                         when 'Rub9800' { //Gross Margin
@@ -2440,6 +2595,7 @@ public with sharing class CompanyWebController {
 
         //Social Security
         if(result.CompanyResponse.SocialSecurityInformation.IsEnabled == True){
+
             String delimiter = '-';
             String socialSecurityNumberPart1 = String.ValueOf(result.CompanyResponse.SocialSecurityInformation.Value.RegistrationId).substringBefore(delimiter);
             String socialSecurityNumberPart2 = String.ValueOf(result.CompanyResponse.SocialSecurityInformation.Value.RegistrationId).substringAfter(delimiter);
@@ -2453,6 +2609,13 @@ public with sharing class CompanyWebController {
                     lead.put(leadSocialSecurityAPI, fullSocialSecurityNumber);
                 } else {
                     lead.put(leadSocialSecurityAPI, fullSocialSecurityNumber);
+                }
+            }
+            else{
+                if (socialSecurityFieldType != 'String') {
+                    lead.CW_Social_Security_Information__c = fullSocialSecurityNumber;
+                } else {
+                    lead.CW_Social_Security_Information__c = fullSocialSecurityNumber;
                 }
             } 
         } else {
@@ -2504,14 +2667,14 @@ public with sharing class CompanyWebController {
                 }
             }
         } else {
-            // lead.CW_Activities__c = null;
+            lead.CW_Activities__c = null;
             if(leadActivitiesAPI != null){
                 lead.put(leadActivitiesAPI, null);
             }
         }
 
-            //Joint Commitees
-            if(result.CompanyResponse.JointCommitees.IsEnabled == True){
+        //Joint Commitees
+        if(result.CompanyResponse.JointCommitees.IsEnabled == True){
             Integer JointCommiteeArraySize;
             String JointCommiteeFieldConcatBlue = ''; 
             String JointCommiteeFieldConcatWhite = '';
@@ -2523,13 +2686,15 @@ public with sharing class CompanyWebController {
                 for (Integer i = 0; i < JointCommiteeArraySize; i++) {
                     if(result.CompanyResponse.JointCommitees.Value.JointCommitee[i].Code >= 100 && result.CompanyResponse.JointCommitees.Value.JointCommitee[i].Code < 200){
                         JointCommiteeFieldConcatBlue  = JointCommiteeFieldConcatBlue + result.CompanyResponse.JointCommitees.Value.JointCommitee[i].Code +' - '+result.CompanyResponse.JointCommitees.Value.JointCommitee[i].Description+'\n';
+                        System.debug('Blue ' + JointCommiteeFieldConcatBlue);
                     } else{
                         JointCommiteeFieldConcatWhite  = JointCommiteeFieldConcatWhite + result.CompanyResponse.JointCommitees.Value.JointCommitee[i].Code +' - '+result.CompanyResponse.JointCommitees.Value.JointCommitee[i].Description+'\n';
+                        System.debug('White ' +JointCommiteeFieldConcatWhite);
                     }        
                 }
                 
-                lead.CW_Joint_Commitees__c = JointCommiteeFieldConcatBlue;
-                lead.CW_Joint_Commitees_White_Collar__c = JointCommiteeFieldConcatWhite;
+                //lead.CW_Joint_Commitees__c = JointCommiteeFieldConcatBlue;
+                //lead.CW_Joint_Commitees_White_Collar__c = JointCommiteeFieldConcatWhite;
 
                 if (leadJointCommitieesBlueAPI != null) {
                     if (joinCommiteesBlueFieldType != 'String') {
@@ -2537,6 +2702,8 @@ public with sharing class CompanyWebController {
                         } else {
                             lead.put(leadJointCommitieesBlueAPI, JointCommiteeFieldConcatBlue);
                         }
+                }else{
+                    lead.CW_Joint_Commitees_Blue_Collar__c = JointCommiteeFieldConcatBlue;
                 }
 
                 if(leadJointCommitieesWhiteAPI != null){
@@ -2545,6 +2712,8 @@ public with sharing class CompanyWebController {
                         } else {
                             lead.put(leadJointCommitieesWhiteAPI, JointCommiteeFieldConcatWhite);
                         }
+                }else{
+                    lead.CW_Joint_Commitees_White_Collar__c = JointCommiteeFieldConcatWhite;
                 }
             }
         } else {

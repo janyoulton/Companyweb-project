@@ -40,6 +40,25 @@ public class companyWebAlertsQueueable implements Queueable, Database.AllowsCall
             collectionOfStep3TokensByChangedDate.put(changeDate, mapOfStep3Token);
         }
 
+        //Create map to store all Dates and all VAT numbers
+        Map<Integer, Integer> tempVatAndDateCollection = new Map<Integer,Integer>();
+        //Get the VAT numbers that got updated twice and put them in the Map
+        for(Integer changeDate: collectionOfStep3TokensByChangedDate.keySet()){
+            for(Integer vatNumber: collectionOfStep3TokensByChangedDate.get(changeDate).keySet()){
+                tempVatAndDateCollection.put(vatNumber, changeDate);
+            }
+        }
+
+        //remove older duplicate VAT Number date values from collectionOfStep3TokensByChangedDate
+        for(Integer changeDate: collectionOfStep3TokensByChangedDate.keySet()){
+            for(Integer vatNumber: collectionOfStep3TokensByChangedDate.get(changeDate).keySet()){
+                if(tempVatAndDateCollection.get(vatNumber) > changeDate){
+                    collectionOfStep3TokensByChangedDate.get(changeDate).remove(vatNumber);
+                }
+            }
+        }
+
+
         System.debug(collectionOfStep3TokensByChangedDate);
         connectCompanywebBe.RequestStep3_CompanyOnVat request3 = new connectCompanywebBe.RequestStep3_CompanyOnVat();
         request3.CompanyWebLogin = oLoginSetup.CW_CompanyWebLogin__c;
