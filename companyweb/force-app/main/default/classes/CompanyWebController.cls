@@ -77,7 +77,7 @@ public with sharing class CompanyWebController {
         leadScoreAPI = oLoginSetup.Lead_Score_Field__c;
         leadActivitiesAPI = oLoginSetup.Lead_Activities_Field__c;
         leadCreditLimitAPI = oLoginSetup.Lead_Credit_Limit_Field__c;
-        leadJointCommitieesBlueAPI = oLoginSetup.Lead_Joint_Commitees_Field__c;
+        leadJointCommitieesBlueAPI = oLoginSetup.Lead_Joint_Commitees_Blue_Field__c;
         leadJointCommitieesWhiteAPI = oLoginSetup.Lead_Joint_Commitees_White_Field__c;
         leadMainActivityAPI = oLoginSetup.Lead_Main_Activity_Field__c;
         leadNumberEmployeesAPI = oLoginSetup.Lead_Number_Employees_Field__c;
@@ -376,7 +376,15 @@ public with sharing class CompanyWebController {
 
     public static CW_Login_Setup__mdt getCurrentVATNumberFields() {
         CW_Login_Setup__mdt oLoginSetup = new CW_Login_Setup__mdt();
-        oLoginSetup = [SELECT Id, CW_CompanyWebLogin__c, CW_CompanyWebPassword__c, CW_CompanyWebSecret__c, CW_ServiceIntegrator__c, Account_VAT_Number_Field__c, Lead_VAT_Number_Field__c,Account_Score_Field__c,Account_Activities_Field__c,Account_Credit_Limit_Field__c,Account_Joint_Commitees_Field__c,Account_Joint_Commitees_White_Field__c,Account_Legal_Form_Field__c,Account_Main_Activity_Field__c,Account_Number_Employees_Field__c,Account_Social_Security_Field__c,Account_Phone_Field__c,Account_Street_Field__c,Account_PostalCode_Field__c,Account_City_Field__c,Account_CountryCode_Field__c,Account_Annual_Revenue_Field__c,Account_Employees_Field__c,Account_Workers_Field__c,CW_Duplicate_Check_Creation__c,CW_Duplicate_Check_Refresh__c,Lead_Score_Field__c,Lead_Activities_Field__c,Lead_Credit_Limit_Field__c,Lead_Joint_Commitees_Field__c,Lead_Joint_Commitees_White_Field__c,Lead_Legal_Form_Field__c,Lead_Main_Activity_Field__c,Lead_Number_Employees_Field__c,Lead_Social_Security_Field__c,Lead_Phone_Field__c,Lead_Street_Field__c,Lead_PostalCode_Field__c,Lead_City_Field__c,Lead_CountryCode_Field__c,Lead_Annual_Revenue_Field__c,Lead_Employees_Field__c,Lead_Workers_Field__c FROM CW_Login_Setup__mdt WHERE DeveloperName = 'CW_Login'];
+        oLoginSetup = [SELECT Id, CW_CompanyWebLogin__c, CW_CompanyWebPassword__c, CW_CompanyWebSecret__c, CW_ServiceIntegrator__c, Account_VAT_Number_Field__c,
+             Lead_VAT_Number_Field__c,Account_Score_Field__c,Account_Activities_Field__c,Account_Credit_Limit_Field__c,Account_Joint_Commitees_Field__c,
+             Account_Joint_Commitees_White_Field__c,Account_Joint_Commitees_Blue_Field__c,Account_Legal_Form_Field__c,Account_Main_Activity_Field__c,Account_Number_Employees_Field__c,
+             Account_Social_Security_Field__c,Account_Phone_Field__c,Account_Street_Field__c,Account_PostalCode_Field__c,Account_City_Field__c,Account_CountryCode_Field__c,
+             Account_Annual_Revenue_Field__c,Account_Employees_Field__c,Account_Workers_Field__c,Account_Close_Date_Field__c,CW_Duplicate_Check_Creation__c,
+             CW_Duplicate_Check_Refresh__c,Lead_Score_Field__c,Lead_Activities_Field__c,Lead_Credit_Limit_Field__c,Lead_Joint_Commitees_Field__c,
+             Lead_Joint_Commitees_White_Field__c,Lead_Joint_Commitees_Blue_Field__c,Lead_Legal_Form_Field__c,Lead_Main_Activity_Field__c,Lead_Number_Employees_Field__c,Lead_Social_Security_Field__c,
+             Lead_Phone_Field__c,Lead_Annual_Revenue_Field__c,Lead_Street_Field__c,Lead_PostalCode_Field__c,Lead_City_Field__c,Lead_CountryCode_Field__c,Lead_Employees_Field__c,Lead_Workers_Field__c,Lead_Close_Date_Field__c
+             FROM CW_Login_Setup__mdt WHERE DeveloperName = 'CW_Login'];
         System.debug('Account_VAT_Number_Field__c = '+ oLoginSetup.Account_VAT_Number_Field__c);
         System.debug('Lead_VAT_Number_Field__c = '+ oLoginSetup.Lead_VAT_Number_Field__c);
         return oLoginSetup;
@@ -824,7 +832,7 @@ public with sharing class CompanyWebController {
     //            }
 
     //             update lead;
-    //         }
+    //         }End
     //     /* } catch (Exception e) {
     //         throw new AuraHandledException(e.getMessage());
     //     } */
@@ -848,17 +856,17 @@ public with sharing class CompanyWebController {
             switch on objectName {
                 when 'Account' {
                     if (accountVATAPI != null) {
-                        queryString = 'SELECT Id, Name, Phone, ShippingStreet, ShippingCity, ShippingPostalCode, ShippingCountry, AnnualRevenue, NumberOfEmployees, CW_Phone__c, CW_Address_Line_1__c, CW_Address_Line_2__c, CW_Name__c, ' + accountVATAPI + ', CW_VAT_Liable__c, CW_Abbreviation__c, CW_Company_Status__c, CW_Score_Image__c, CW_Score__c, CW_Credit_Limit__c, CW_Detail_URL__c, CW_Report_URL__c, CW_Balance__c, CW_Equity__c, CW_Last_Sync__c, CW_Revenue__c, CW_Employees__c, CW_Gross_Margin__c, CW_Result__c, CW_Warnings__c,CW_Kyc_URL__c,CW_Credit_Limit_Reason__c,CW_Start_Date__c,CW_End_Date__c,CW_Preferred_Languages_PL__c,CW_Legal_Form__c FROM Account WHERE Id = :Id';
+                        queryString = 'SELECT Id, Name, Phone, ShippingStreet, ShippingCity, ShippingPostalCode, ShippingCountry, AnnualRevenue, NumberOfEmployees, CW_Phone__c, CW_Address_Line_1__c, CW_Address_Line_2__c, CW_Name__c, ' + accountVATAPI + ', CW_VAT_Liable__c, CW_Abbreviation__c, CW_Company_Status__c, CW_Score_Image__c, CW_Score__c, CW_Credit_Limit__c, CW_Detail_URL__c, CW_Report_URL__c, CW_Balance__c, CW_Equity__c, CW_Last_Sync__c, CW_Revenue__c, CW_Employees__c, CW_Gross_Margin__c, CW_Result__c, CW_Warnings__c,CW_Kyc_URL__c,CW_Credit_Limit_Reason__c,CW_Start_Date__c,CW_End_Date__c,CW_Preferred_Languages_PL__c,CW_Legal_Form__c,CW_Joint_Commitees__c,CW_Joint_Commitees_Blue_Collar__c,CW_Joint_Commitees_White_Collar__c, CW_Workers__c FROM Account WHERE Id = :Id';
                     } else {
-                        queryString = 'SELECT Id, Name, Phone, ShippingStreet, ShippingCity, ShippingPostalCode, ShippingCountry, AnnualRevenue, NumberOfEmployees, CW_Phone__c, CW_Address_Line_1__c, CW_Address_Line_2__c, CW_Name__c, CW_VAT_Number__c, CW_VAT_Liable__c, CW_Abbreviation__c, CW_Company_Status__c, CW_Score_Image__c, CW_Score__c, CW_Credit_Limit__c, CW_Detail_URL__c, CW_Report_URL__c, CW_Balance__c, CW_Equity__c, CW_Last_Sync__c, CW_Revenue__c, CW_Employees__c, CW_Gross_Margin__c, CW_Result__c, CW_Warnings__c,CW_Kyc_URL__c,CW_Credit_Limit_Reason__c,CW_Start_Date__c,CW_End_Date__c,CW_Preferred_Languages_PL__c,CW_Legal_Form__c FROM Account WHERE Id = :Id';
+                        queryString = 'SELECT Id, Name, Phone, ShippingStreet, ShippingCity, ShippingPostalCode, ShippingCountry, AnnualRevenue, NumberOfEmployees, CW_Phone__c, CW_Address_Line_1__c, CW_Address_Line_2__c, CW_Name__c, CW_VAT_Number__c, CW_VAT_Liable__c, CW_Abbreviation__c, CW_Company_Status__c, CW_Score_Image__c, CW_Score__c, CW_Credit_Limit__c, CW_Detail_URL__c, CW_Report_URL__c, CW_Balance__c, CW_Equity__c, CW_Last_Sync__c, CW_Revenue__c, CW_Employees__c, CW_Gross_Margin__c, CW_Result__c, CW_Warnings__c,CW_Kyc_URL__c,CW_Credit_Limit_Reason__c,CW_Start_Date__c,CW_End_Date__c,CW_Preferred_Languages_PL__c,CW_Legal_Form__c,CW_Joint_Commitees__c,CW_Joint_Commitees_Blue_Collar__c,CW_Joint_Commitees_White_Collar__c, CW_Workers__c FROM Account WHERE Id = :Id';
                     }
                     
                 }
                 when 'Lead' {
                     if (leadVATAPI != null) {
-                        queryString = 'SELECT Id, Company, Phone, Street, City, PostalCode, Country, AnnualRevenue, NumberOfEmployees, CW_Phone__c, CW_Address_Line_1__c, CW_Address_Line_2__c, CW_Name__c, ' + leadVATAPI + ', CW_VAT_Liable__c, CW_Abbreviation__c, CW_Company_Status__c, CW_Score_Image__c, CW_Score__c, CW_Credit_Limit__c, CW_Detail_URL__c, CW_Report_URL__c, CW_Balance__c, CW_Equity__c, CW_Last_Sync__c, CW_Revenue__c, CW_Employees__c, CW_Gross_Margin__c, CW_Result__c, CW_Warnings__c,CW_Kyc_URL__c,CW_Credit_Limit_Reason__c,CW_Start_Date__c,CW_End_Date__c,CW_Preferred_Languages_PL__c,CW_Legal_Form__c FROM Lead WHERE Id = :Id';
+                        queryString = 'SELECT Id, Company, Phone, Street, City, PostalCode, Country, AnnualRevenue, NumberOfEmployees, CW_Phone__c, CW_Address_Line_1__c, CW_Address_Line_2__c, CW_Name__c, ' + leadVATAPI + ', CW_VAT_Liable__c, CW_Abbreviation__c, CW_Company_Status__c, CW_Score_Image__c, CW_Score__c, CW_Credit_Limit__c, CW_Detail_URL__c, CW_Report_URL__c, CW_Balance__c, CW_Equity__c, CW_Last_Sync__c, CW_Revenue__c, CW_Employees__c, CW_Gross_Margin__c, CW_Result__c, CW_Warnings__c,CW_Kyc_URL__c,CW_Credit_Limit_Reason__c,CW_Start_Date__c,CW_End_Date__c,CW_Preferred_Languages_PL__c,CW_Legal_Form__c,CW_Joint_Commitees__c,CW_Joint_Commitees_Blue_Collar__c,CW_Joint_Commitees_White_Collar__c, CW_Workers__c FROM Lead WHERE Id = :Id';
                     } else {
-                        queryString = 'SELECT Id, Company, Phone, Street, City, PostalCode, Country, AnnualRevenue, NumberOfEmployees, CW_Phone__c, CW_Address_Line_1__c, CW_Address_Line_2__c, CW_Name__c, CW_VAT_Number__c, CW_VAT_Liable__c, CW_Abbreviation__c, CW_Company_Status__c, CW_Score_Image__c, CW_Score__c, CW_Credit_Limit__c, CW_Detail_URL__c, CW_Report_URL__c, CW_Balance__c, CW_Equity__c, CW_Last_Sync__c, CW_Revenue__c, CW_Employees__c, CW_Gross_Margin__c, CW_Result__c, CW_Warnings__c,CW_Kyc_URL__c,CW_Credit_Limit_Reason__c,CW_Start_Date__c,CW_End_Date__c,CW_Preferred_Languages_PL__c,CW_Legal_Form__c FROM Lead WHERE Id = :Id';
+                        queryString = 'SELECT Id, Company, Phone, Street, City, PostalCode, Country, AnnualRevenue, NumberOfEmployees, CW_Phone__c, CW_Address_Line_1__c, CW_Address_Line_2__c, CW_Name__c, CW_VAT_Number__c, CW_VAT_Liable__c, CW_Abbreviation__c, CW_Company_Status__c, CW_Score_Image__c, CW_Score__c, CW_Credit_Limit__c, CW_Detail_URL__c, CW_Report_URL__c, CW_Balance__c, CW_Equity__c, CW_Last_Sync__c, CW_Revenue__c, CW_Employees__c, CW_Gross_Margin__c, CW_Result__c, CW_Warnings__c,CW_Kyc_URL__c,CW_Credit_Limit_Reason__c,CW_Start_Date__c,CW_End_Date__c,CW_Preferred_Languages_PL__c,CW_Legal_Form__c,CW_Joint_Commitees__c,CW_Joint_Commitees_Blue_Collar__c,CW_Joint_Commitees_White_Collar__c, CW_Workers__c FROM Lead WHERE Id = :Id';
                     }
                     
                 }
@@ -883,15 +891,17 @@ public with sharing class CompanyWebController {
                 acc.AnnualRevenue = null; 
                 if (accountNumberEmployeesAPI != null) {
                     acc.put(accountNumberEmployeesAPI, null);
-                    //acc.NumberOfEmployees = null;
+                    acc.NumberOfEmployees = null;
                 } else {
-                    //acc.NumberOfEmployees = null;
+                    acc.NumberOfEmployees = null;
                 }
                 acc.CW_Street__c = null;
                 acc.CW_City__c = null;
                 acc.CW_PostalCode__c = null; 
                 acc.CW_Country__c = null;
+                acc.CW_VAT_Liable__c = null;
                 if (accountVATAPI != null) {
+                    acc.CW_VAT_Number__c = null;
                     acc.put(accountVATAPI, null);
                 } else {
                     acc.CW_VAT_Number__c = null;
@@ -900,12 +910,11 @@ public with sharing class CompanyWebController {
                 acc.CW_Address_Line_1__c = null;
                 acc.CW_Address_Line_2__c = null;
                 acc.CW_Name__c = null;
+                acc.CW_Abbreviation__c = null;
                 if (accountLegalFormAPI != null) {
                     acc.put(accountLegalFormAPI, null);
-                    //acc.CW_Abbreviation__c = null;
                     acc.CW_Legal_Form__c = null;
                 } else {
-                    //acc.CW_Abbreviation__c = null;
                     acc.CW_Legal_Form__c = null;
                 }
                 acc.CW_Company_Status__c = null;
@@ -929,6 +938,7 @@ public with sharing class CompanyWebController {
                 acc.CW_Last_Sync__c = null;
                 acc.CW_Revenue__c = null;
                 acc.CW_Employees__c = null;
+                acc.CW_Workers__c = null;
                 acc.CW_Gross_Margin__c = null;
                 acc.CW_Result__c = null;
                 acc.CW_Warnings__c = null;
@@ -937,11 +947,12 @@ public with sharing class CompanyWebController {
                 acc.CW_Start_Date__c = null;
                 acc.CW_End_Date__c = null;
                 acc.CW_Preferred_Languages_PL__c = null;
+                acc.CW_Joint_Commitees__c = null;
                 if (accountJointCommitieesBlueAPI != null) {
                     acc.put(accountJointCommitieesBlueAPI, null);
-                    acc.CW_Joint_Commitees__c = null;
+                    acc.CW_Joint_Commitees_Blue_Collar__c = null;
                 } else {
-                   acc.CW_Joint_Commitees__c = null;
+                   acc.CW_Joint_Commitees_Blue_Collar__c = null;
                 }
                 if (accountJointCommitieesWhiteAPI != null) {
                     acc.put(accountJointCommitieesWhiteAPI, null);
@@ -991,9 +1002,9 @@ public with sharing class CompanyWebController {
                 lead.AnnualRevenue = null; 
                 if (leadNumberEmployeesAPI != null) {
                     lead.put(leadNumberEmployeesAPI, null);
-                    //lead.NumberOfEmployees = null;
+                    lead.NumberOfEmployees = null;
                 } else {
-                    //lead.NumberOfEmployees = null;
+                    lead.NumberOfEmployees = null;
                 }
                 lead.CW_Street__c = null;
                 lead.CW_City__c = null;
@@ -1003,11 +1014,14 @@ public with sharing class CompanyWebController {
                 lead.CW_Address_Line_1__c = null; 
                 lead.CW_Address_Line_2__c = null;
                 lead.CW_Name__c = null; 
+                lead.CW_VAT_Liable__c = null;
                 if (leadVATAPI != null) {
+                    lead.CW_VAT_Number__c = null;
                     lead.put(leadVATAPI, null);
                 } else {
                     lead.CW_VAT_Number__c = null;
                 }
+                lead.CW_Abbreviation__c = null;
                 if (leadLegalFormAPI != null) {
                     lead.put(leadLegalFormAPI, null);
                     lead.CW_Legal_Form__c = null;
@@ -1035,6 +1049,7 @@ public with sharing class CompanyWebController {
                 lead.CW_Last_Sync__c = null;
                 lead.CW_Revenue__c = null;
                 lead.CW_Employees__c = null;
+                lead.CW_Workers__c = null;
                 lead.CW_Gross_Margin__c = null;
                 lead.CW_Result__c = null;
                 lead.CW_Warnings__c = null;
@@ -1043,11 +1058,12 @@ public with sharing class CompanyWebController {
                 lead.CW_Start_Date__c = null;
                 lead.CW_End_Date__c = null;
                 lead.CW_Preferred_Languages_PL__c = null;
+                lead.CW_Joint_Commitees__c = null;
                 if (leadJointCommitieesBlueAPI != null) {
                     lead.put(leadJointCommitieesBlueAPI, null);
-                    lead.CW_Joint_Commitees__c = null;
+                    lead.CW_Joint_Commitees_Blue_Collar__c = null;
                 } else {
-                    lead.CW_Joint_Commitees__c = null;
+                    lead.CW_Joint_Commitees_Blue_Collar__c = null;
                 }
                 if (leadJointCommitieesWhiteAPI != null) {
                     lead.put(leadJointCommitieesWhiteAPI, null);
@@ -1659,7 +1675,9 @@ public with sharing class CompanyWebController {
             }else{
                 acc.CW_Country__c = result.CompanyResponse.Address.Value.CountryCode;
             }
-
+            acc.CW_Address_Line_1__c = result.CompanyResponse.Address.Value.Line1;
+            acc.CW_Address_Line_2__c = result.CompanyResponse.Address.Value.Line2;
+            
         }else{
             acc.CW_Street__c = null;
             acc.CW_City__c = null;
@@ -1918,8 +1936,6 @@ public with sharing class CompanyWebController {
                         when 'Rub9087' { //Average number of staff in FTE
                             if (String.isNotBlank(balansData.Value)){
                                 //# Employees
-                                //acc.NumberOfEmployees = Integer.valueOf(Decimal.valueOf(balansData.Value).round(RoundingMode.HALF_UP)); 
-            
                                 if (accountNumberEmployeesAPI != null) {
                                     if (numberEmployeesFieldType != 'String') {
                                         acc.put(accountNumberEmployeesAPI, Integer.valueOf(Decimal.valueOf(balansData.Value).round(RoundingMode.HALF_UP)));
@@ -1927,12 +1943,11 @@ public with sharing class CompanyWebController {
                                         acc.put(accountNumberEmployeesAPI, balansData.Value);
                                     }
                                 } else{
-                                    acc.CW_Employees__c = Decimal.valueOf(balansData.Value);
+                                    acc.NumberOfEmployees = Integer.valueOf(Decimal.valueOf(balansData.Value).round(RoundingMode.HALF_UP));
                                 }
                             }
                             else{
-                                acc.CW_Employees__c = null;
-                                //acc.NumberOfEmployees = null;
+                                acc.NumberOfEmployees = null;
                                 if(accountNumberEmployeesAPI != null){
                                     acc.put(accountNumberEmployeesAPI, null);  
                                 }
@@ -2112,6 +2127,8 @@ public with sharing class CompanyWebController {
                 }else{
                     acc.CW_Joint_Commitees_White_Collar__c = JointCommiteeFieldConcatWhite;
                 }
+
+                acc.CW_Joint_Commitees__c = JointCommiteeFieldConcatBlue + JointCommiteeFieldConcatWhite;
             }
         } else {
             if(accountJointCommitieesBlueAPI != null){
@@ -2235,6 +2252,8 @@ public with sharing class CompanyWebController {
             }else{
                 lead.CW_Country__c = result.CompanyResponse.Address.Value.CountryCode;
             }
+            lead.CW_Address_Line_1__c = result.CompanyResponse.Address.Value.Line1;
+            lead.CW_Address_Line_2__c = result.CompanyResponse.Address.Value.Line2;
         }else {
             lead.CW_Street__c = null;
             lead.CW_City__c = null;
@@ -2692,9 +2711,6 @@ public with sharing class CompanyWebController {
                         System.debug('White ' +JointCommiteeFieldConcatWhite);
                     }        
                 }
-                
-                //lead.CW_Joint_Commitees__c = JointCommiteeFieldConcatBlue;
-                //lead.CW_Joint_Commitees_White_Collar__c = JointCommiteeFieldConcatWhite;
 
                 if (leadJointCommitieesBlueAPI != null) {
                     if (joinCommiteesBlueFieldType != 'String') {
@@ -2715,6 +2731,8 @@ public with sharing class CompanyWebController {
                 }else{
                     lead.CW_Joint_Commitees_White_Collar__c = JointCommiteeFieldConcatWhite;
                 }
+
+                lead.CW_Joint_Commitees__c = JointCommiteeFieldConcatBlue + JointCommiteeFieldConcatWhite;
             }
         } else {
             lead.CW_Joint_Commitees__c = null;
