@@ -237,6 +237,8 @@ global class companyWebCallOutMock implements WebServiceMock {
         connectCompanywebBe.BalansData sBalansData4 = new  connectCompanywebBe.BalansData();
         connectCompanywebBe.BalansData sBalansData5 = new  connectCompanywebBe.BalansData();
         connectCompanywebBe.BalansData sBalansData6 = new  connectCompanywebBe.BalansData();
+        connectCompanywebBe.BalansData sBalansData7 = new  connectCompanywebBe.BalansData();
+        connectCompanywebBe.BalansData sBalansData8 = new  connectCompanywebBe.BalansData();
         List<connectCompanywebBe.BalansData> lBalansData = new List<connectCompanywebBe.BalansData>();
         sBalansData1.Key ='CloseDate';
         sBalansData1.Value = '2019-12-31';
@@ -256,6 +258,12 @@ global class companyWebCallOutMock implements WebServiceMock {
         sBalansData6.Key ='Rub9904';
         sBalansData6.Value = '641532';
         lBalansData.add(sBalansData6);
+        sBalansData7.Key = 'Rub1323';
+        sBalansData7.Value = '123';
+        lBalansData.add(sBalansData7);
+        sBalansData8.Key = 'Rub1343';
+        sBalansData8.Value = '124';
+        lBalansData.add(sBalansData8);
       
 
         connectCompanywebBe.ArrayOfBalansData cArrayOfBalansData = new connectCompanywebBe.ArrayOfBalansData();

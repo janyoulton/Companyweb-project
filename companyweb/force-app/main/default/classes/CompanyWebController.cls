@@ -256,17 +256,7 @@ public with sharing class CompanyWebController {
             if((accts.size() <= 1 && objectName == 'Account' && fromPick == false) || (accts.size() < 1 && objectName == 'Account' && fromPick == true) || duplicatedCheckOnRefresh == false ){
                 
             // User user Language
-            String userLanguage = UserInfo.getLanguage();
-            
-            if (userLanguage == 'en_US'){
-                userLanguage = 'EN';
-            } else if(userLanguage == 'nl_NL'){
-                userLanguage = 'NL';
-            } else if(userLanguage == 'fr'){
-                userLanguage = 'FR';
-            } else {
-                userLanguage = 'EN';
-            }
+            String userLanguage = getUserLanguage();
 
             connectCompanywebBe.RequestCompanyByVat reqByVAT = new connectCompanywebBe.RequestCompanyByVat();
             reqByVAT.VatNumber = VatNumber;
@@ -338,17 +328,7 @@ public with sharing class CompanyWebController {
             system.debug('Result of loginSetup '+ oLoginSetup);
 
             // User user Language
-            String userLanguage = UserInfo.getLanguage();
-            
-            if (userLanguage == 'en_US'){
-                userLanguage = 'EN';
-            } else if(userLanguage == 'nl_NL'){
-                userLanguage = 'NL';
-            } else if(userLanguage == 'fr'){
-                userLanguage = 'FR';
-            } else {
-                userLanguage = 'EN';
-            }
+            String userLanguage = getUserLanguage();
 
             connectCompanywebBe.RequestSearch reqSearch = new connectCompanywebBe.RequestSearch();
             reqSearch.SearchTerm  = sTerm;
@@ -854,21 +834,34 @@ public with sharing class CompanyWebController {
             String queryString;
 
             switch on objectName {
+                // when 'Account' {
+                //     if (accountVATAPI != null) {
+                //         queryString = 'SELECT Id, Name, Phone, ShippingStreet, ShippingCity, ShippingPostalCode, ShippingCountry, AnnualRevenue, NumberOfEmployees, CW_Phone__c, CW_Address_Line_1__c, CW_Address_Line_2__c, CW_Name__c, ' + accountVATAPI + ', CW_VAT_Liable__c, CW_Abbreviation__c, CW_Company_Status__c, CW_Score_Image__c, CW_Score__c, CW_Credit_Limit__c, CW_Detail_URL__c, CW_Report_URL__c, CW_Balance__c, CW_Equity__c, CW_Last_Sync__c, CW_Revenue__c, CW_Employees__c, CW_Gross_Margin__c, CW_Result__c, CW_Warnings__c,CW_Kyc_URL__c,CW_Credit_Limit_Reason__c,CW_Start_Date__c,CW_End_Date__c,CW_Preferred_Languages_PL__c,CW_Legal_Form__c,CW_Joint_Commitees__c,CW_Joint_Commitees_Blue_Collar__c,CW_Joint_Commitees_White_Collar__c, CW_Workers__c FROM Account WHERE Id = :Id';
+                //     } else {
+                //         queryString = 'SELECT Id, Name, Phone, ShippingStreet, ShippingCity, ShippingPostalCode, ShippingCountry, AnnualRevenue, NumberOfEmployees, CW_Phone__c, CW_Address_Line_1__c, CW_Address_Line_2__c, CW_Name__c, CW_VAT_Number__c, CW_VAT_Liable__c, CW_Abbreviation__c, CW_Company_Status__c, CW_Score_Image__c, CW_Score__c, CW_Credit_Limit__c, CW_Detail_URL__c, CW_Report_URL__c, CW_Balance__c, CW_Equity__c, CW_Last_Sync__c, CW_Revenue__c, CW_Employees__c, CW_Gross_Margin__c, CW_Result__c, CW_Warnings__c,CW_Kyc_URL__c,CW_Credit_Limit_Reason__c,CW_Start_Date__c,CW_End_Date__c,CW_Preferred_Languages_PL__c,CW_Legal_Form__c,CW_Joint_Commitees__c,CW_Joint_Commitees_Blue_Collar__c,CW_Joint_Commitees_White_Collar__c, CW_Workers__c FROM Account WHERE Id = :Id';
+                //     }
+                    
+                // }
+                // when 'Lead' {
+                //     if (leadVATAPI != null) {
+                //         queryString = 'SELECT Id, Company, Phone, Street, City, PostalCode, Country, AnnualRevenue, NumberOfEmployees, CW_Phone__c, CW_Address_Line_1__c, CW_Address_Line_2__c, CW_Name__c, ' + leadVATAPI + ', CW_VAT_Liable__c, CW_Abbreviation__c, CW_Company_Status__c, CW_Score_Image__c, CW_Score__c, CW_Credit_Limit__c, CW_Detail_URL__c, CW_Report_URL__c, CW_Balance__c, CW_Equity__c, CW_Last_Sync__c, CW_Revenue__c, CW_Employees__c, CW_Gross_Margin__c, CW_Result__c, CW_Warnings__c,CW_Kyc_URL__c,CW_Credit_Limit_Reason__c,CW_Start_Date__c,CW_End_Date__c,CW_Preferred_Languages_PL__c,CW_Legal_Form__c,CW_Joint_Commitees__c,CW_Joint_Commitees_Blue_Collar__c,CW_Joint_Commitees_White_Collar__c, CW_Workers__c FROM Lead WHERE Id = :Id';
+                //     } else {
+                //         queryString = 'SELECT Id, Company, Phone, Street, City, PostalCode, Country, AnnualRevenue, NumberOfEmployees, CW_Phone__c, CW_Address_Line_1__c, CW_Address_Line_2__c, CW_Name__c, CW_VAT_Number__c, CW_VAT_Liable__c, CW_Abbreviation__c, CW_Company_Status__c, CW_Score_Image__c, CW_Score__c, CW_Credit_Limit__c, CW_Detail_URL__c, CW_Report_URL__c, CW_Balance__c, CW_Equity__c, CW_Last_Sync__c, CW_Revenue__c, CW_Employees__c, CW_Gross_Margin__c, CW_Result__c, CW_Warnings__c,CW_Kyc_URL__c,CW_Credit_Limit_Reason__c,CW_Start_Date__c,CW_End_Date__c,CW_Preferred_Languages_PL__c,CW_Legal_Form__c,CW_Joint_Commitees__c,CW_Joint_Commitees_Blue_Collar__c,CW_Joint_Commitees_White_Collar__c, CW_Workers__c FROM Lead WHERE Id = :Id';
+                //     }
+                // }
                 when 'Account' {
                     if (accountVATAPI != null) {
-                        queryString = 'SELECT Id, Name, Phone, ShippingStreet, ShippingCity, ShippingPostalCode, ShippingCountry, AnnualRevenue, NumberOfEmployees, CW_Phone__c, CW_Address_Line_1__c, CW_Address_Line_2__c, CW_Name__c, ' + accountVATAPI + ', CW_VAT_Liable__c, CW_Abbreviation__c, CW_Company_Status__c, CW_Score_Image__c, CW_Score__c, CW_Credit_Limit__c, CW_Detail_URL__c, CW_Report_URL__c, CW_Balance__c, CW_Equity__c, CW_Last_Sync__c, CW_Revenue__c, CW_Employees__c, CW_Gross_Margin__c, CW_Result__c, CW_Warnings__c,CW_Kyc_URL__c,CW_Credit_Limit_Reason__c,CW_Start_Date__c,CW_End_Date__c,CW_Preferred_Languages_PL__c,CW_Legal_Form__c,CW_Joint_Commitees__c,CW_Joint_Commitees_Blue_Collar__c,CW_Joint_Commitees_White_Collar__c, CW_Workers__c FROM Account WHERE Id = :Id';
+                        queryString = 'SELECT Id, Name, Phone, ShippingStreet, ShippingCity, ShippingPostalCode, ShippingCountry, AnnualRevenue, NumberOfEmployees, companyweb__CW_Street__c, companyweb__CW_PostalCode__c, companyweb__CW_City__c, companyweb__CW_Country__c, companyweb__CW_Address_Line_1__c, companyweb__CW_Address_Line_2__c, companyweb__CW_Full_Name__c, companyweb__CW_Phone__c, companyweb__CW_Name__c, ' + accountVATAPI + ', companyweb__CW_VAT_Liable__c, companyweb__CW_Abbreviation__c, companyweb__CW_Company_Status__c, companyweb__CW_Score_Image__c, companyweb__CW_Score__c, companyweb__CW_Credit_Limit__c, companyweb__CW_Detail_URL__c, companyweb__CW_Report_URL__c, companyweb__CW_Balance__c, companyweb__CW_Equity__c, companyweb__CW_Last_Sync__c, companyweb__CW_Revenue__c, companyweb__CW_Employees__c, companyweb__CW_Gross_Margin__c, companyweb__CW_Result__c, companyweb__CW_Warnings__c,companyweb__CW_Kyc_URL__c,companyweb__CW_Credit_Limit_Reason__c,companyweb__CW_Start_Date__c,companyweb__CW_End_Date__c,companyweb__CW_Preferred_Languages_PL__c,companyweb__CW_Avoid_Callout__c,companyweb__CW_Main_Activity__c, companyweb__CW_Activities__c, companyweb__CW_Joint_Commitees__c, companyweb__CW_Joint_Commitees_White_Collar__c, companyweb__CW_Joint_Commitees_Blue_Collar__c, companyweb__CW_Social_Security_Information__c, companyweb__CW_In_Follow_Up__c, companyweb__CW_Legal_Form__c, companyweb__CW_Workers__c, companyweb__CW_Close_Date__c FROM Account WHERE Id = :Id';
                     } else {
-                        queryString = 'SELECT Id, Name, Phone, ShippingStreet, ShippingCity, ShippingPostalCode, ShippingCountry, AnnualRevenue, NumberOfEmployees, CW_Phone__c, CW_Address_Line_1__c, CW_Address_Line_2__c, CW_Name__c, CW_VAT_Number__c, CW_VAT_Liable__c, CW_Abbreviation__c, CW_Company_Status__c, CW_Score_Image__c, CW_Score__c, CW_Credit_Limit__c, CW_Detail_URL__c, CW_Report_URL__c, CW_Balance__c, CW_Equity__c, CW_Last_Sync__c, CW_Revenue__c, CW_Employees__c, CW_Gross_Margin__c, CW_Result__c, CW_Warnings__c,CW_Kyc_URL__c,CW_Credit_Limit_Reason__c,CW_Start_Date__c,CW_End_Date__c,CW_Preferred_Languages_PL__c,CW_Legal_Form__c,CW_Joint_Commitees__c,CW_Joint_Commitees_Blue_Collar__c,CW_Joint_Commitees_White_Collar__c, CW_Workers__c FROM Account WHERE Id = :Id';
+                        queryString = 'SELECT Id, Name, Phone, ShippingStreet, ShippingCity, ShippingPostalCode, ShippingCountry, AnnualRevenue, NumberOfEmployees, companyweb__CW_Street__c, companyweb__CW_PostalCode__c, companyweb__CW_City__c, companyweb__CW_Country__c, companyweb__CW_Full_Name__c, companyweb__CW_Phone__c,companyweb__CW_Address_Line_1__c, companyweb__CW_Address_Line_2__c, companyweb__CW_Name__c, companyweb__CW_VAT_Number__c, companyweb__CW_VAT_Liable__c, companyweb__CW_Abbreviation__c, companyweb__CW_Company_Status__c, companyweb__CW_Score_Image__c, companyweb__CW_Score__c, companyweb__CW_Credit_Limit__c, companyweb__CW_Detail_URL__c, companyweb__CW_Report_URL__c, companyweb__CW_Balance__c, companyweb__CW_Equity__c, companyweb__CW_Last_Sync__c, companyweb__CW_Revenue__c, companyweb__CW_Employees__c, companyweb__CW_Gross_Margin__c, companyweb__CW_Result__c, companyweb__CW_Warnings__c,companyweb__CW_Kyc_URL__c,companyweb__CW_Credit_Limit_Reason__c,companyweb__CW_Start_Date__c,companyweb__CW_End_Date__c,companyweb__CW_Preferred_Languages_PL__c,companyweb__CW_Avoid_Callout__c,companyweb__CW_Main_Activity__c, companyweb__CW_Activities__c, companyweb__CW_Joint_Commitees__c, companyweb__CW_Joint_Commitees_White_Collar__c, companyweb__CW_Joint_Commitees_Blue_Collar__c, companyweb__CW_Social_Security_Information__c, companyweb__CW_In_Follow_Up__c, companyweb__CW_Legal_Form__c, companyweb__CW_Workers__c, companyweb__CW_Close_Date__c FROM Account WHERE Id = :Id';
                     }
-                    
                 }
                 when 'Lead' {
                     if (leadVATAPI != null) {
-                        queryString = 'SELECT Id, Company, Phone, Street, City, PostalCode, Country, AnnualRevenue, NumberOfEmployees, CW_Phone__c, CW_Address_Line_1__c, CW_Address_Line_2__c, CW_Name__c, ' + leadVATAPI + ', CW_VAT_Liable__c, CW_Abbreviation__c, CW_Company_Status__c, CW_Score_Image__c, CW_Score__c, CW_Credit_Limit__c, CW_Detail_URL__c, CW_Report_URL__c, CW_Balance__c, CW_Equity__c, CW_Last_Sync__c, CW_Revenue__c, CW_Employees__c, CW_Gross_Margin__c, CW_Result__c, CW_Warnings__c,CW_Kyc_URL__c,CW_Credit_Limit_Reason__c,CW_Start_Date__c,CW_End_Date__c,CW_Preferred_Languages_PL__c,CW_Legal_Form__c,CW_Joint_Commitees__c,CW_Joint_Commitees_Blue_Collar__c,CW_Joint_Commitees_White_Collar__c, CW_Workers__c FROM Lead WHERE Id = :Id';
+                        queryString = 'SELECT Id, Name, Phone, AnnualRevenue, NumberOfEmployees, companyweb__CW_Street__c, companyweb__CW_PostalCode__c, companyweb__CW_City__c, companyweb__CW_Country__c, companyweb__CW_Address_Line_1__c, companyweb__CW_Address_Line_2__c, companyweb__CW_Full_Name__c, companyweb__CW_Phone__c, companyweb__CW_Name__c, ' + leadVATAPI + ', companyweb__CW_VAT_Liable__c, companyweb__CW_Abbreviation__c, companyweb__CW_Company_Status__c, companyweb__CW_Score_Image__c, companyweb__CW_Score__c, companyweb__CW_Credit_Limit__c, companyweb__CW_Detail_URL__c, companyweb__CW_Report_URL__c, companyweb__CW_Balance__c, companyweb__CW_Equity__c, companyweb__CW_Last_Sync__c, companyweb__CW_Revenue__c, companyweb__CW_Employees__c, companyweb__CW_Gross_Margin__c, companyweb__CW_Result__c, companyweb__CW_Warnings__c,companyweb__CW_Kyc_URL__c,companyweb__CW_Credit_Limit_Reason__c,companyweb__CW_Start_Date__c,companyweb__CW_End_Date__c,companyweb__CW_Preferred_Languages_PL__c,companyweb__CW_Avoid_Callout__c,companyweb__CW_Main_Activity__c, companyweb__CW_Activities__c, companyweb__CW_Joint_Commitees__c, companyweb__CW_Joint_Commitees_White_Collar__c, companyweb__CW_Joint_Commitees_Blue_Collar__c, companyweb__CW_Social_Security_Information__c, companyweb__CW_In_Follow_Up__c, companyweb__CW_Legal_Form__c, companyweb__CW_Workers__c, companyweb__CW_Close_Date__c FROM Lead WHERE Id = :Id';
                     } else {
-                        queryString = 'SELECT Id, Company, Phone, Street, City, PostalCode, Country, AnnualRevenue, NumberOfEmployees, CW_Phone__c, CW_Address_Line_1__c, CW_Address_Line_2__c, CW_Name__c, CW_VAT_Number__c, CW_VAT_Liable__c, CW_Abbreviation__c, CW_Company_Status__c, CW_Score_Image__c, CW_Score__c, CW_Credit_Limit__c, CW_Detail_URL__c, CW_Report_URL__c, CW_Balance__c, CW_Equity__c, CW_Last_Sync__c, CW_Revenue__c, CW_Employees__c, CW_Gross_Margin__c, CW_Result__c, CW_Warnings__c,CW_Kyc_URL__c,CW_Credit_Limit_Reason__c,CW_Start_Date__c,CW_End_Date__c,CW_Preferred_Languages_PL__c,CW_Legal_Form__c,CW_Joint_Commitees__c,CW_Joint_Commitees_Blue_Collar__c,CW_Joint_Commitees_White_Collar__c, CW_Workers__c FROM Lead WHERE Id = :Id';
+                        queryString = 'SELECT Id, Name, Phone, AnnualRevenue, NumberOfEmployees, companyweb__CW_Street__c, companyweb__CW_PostalCode__c, companyweb__CW_City__c, companyweb__CW_Country__c, companyweb__CW_Address_Line_1__c, companyweb__CW_Address_Line_2__c, companyweb__CW_Full_Name__c, companyweb__CW_Phone__c, companyweb__CW_Name__c, companyweb__CW_VAT_Number__c, companyweb__CW_VAT_Liable__c, companyweb__CW_Abbreviation__c, companyweb__CW_Company_Status__c, companyweb__CW_Score_Image__c, companyweb__CW_Score__c, companyweb__CW_Credit_Limit__c, companyweb__CW_Detail_URL__c, companyweb__CW_Report_URL__c, companyweb__CW_Balance__c, companyweb__CW_Equity__c, companyweb__CW_Last_Sync__c, companyweb__CW_Revenue__c, companyweb__CW_Employees__c, companyweb__CW_Gross_Margin__c, companyweb__CW_Result__c, companyweb__CW_Warnings__c,companyweb__CW_Kyc_URL__c,companyweb__CW_Credit_Limit_Reason__c,companyweb__CW_Start_Date__c,companyweb__CW_End_Date__c,companyweb__CW_Preferred_Languages_PL__c,companyweb__CW_Avoid_Callout__c,companyweb__CW_Main_Activity__c, companyweb__CW_Activities__c, companyweb__CW_Joint_Commitees__c, companyweb__CW_Joint_Commitees_White_Collar__c, companyweb__CW_Joint_Commitees_Blue_Collar__c, companyweb__CW_Social_Security_Information__c, companyweb__CW_In_Follow_Up__c, companyweb__CW_Legal_Form__c, companyweb__CW_Workers__c, companyweb__CW_Close_Date__c FROM Lead WHERE Id = :Id';                
                     }
-                    
                 }
             }
 
@@ -899,7 +892,7 @@ public with sharing class CompanyWebController {
                 acc.CW_City__c = null;
                 acc.CW_PostalCode__c = null; 
                 acc.CW_Country__c = null;
-                acc.CW_VAT_Liable__c = null;
+                acc.CW_VAT_Liable__c = false;
                 if (accountVATAPI != null) {
                     acc.CW_VAT_Number__c = null;
                     acc.put(accountVATAPI, null);
@@ -1014,7 +1007,7 @@ public with sharing class CompanyWebController {
                 lead.CW_Address_Line_1__c = null; 
                 lead.CW_Address_Line_2__c = null;
                 lead.CW_Name__c = null; 
-                lead.CW_VAT_Liable__c = null;
+                lead.CW_VAT_Liable__c = false;
                 if (leadVATAPI != null) {
                     lead.CW_VAT_Number__c = null;
                     lead.put(leadVATAPI, null);
@@ -1280,7 +1273,7 @@ public with sharing class CompanyWebController {
     public static Boolean addCompanyToAlerts(String vatNumber){
         CW_Login_Setup__mdt oLoginSetup = new CW_Login_Setup__mdt();
         oLoginSetup = [SELECT Id, CW_CompanyWebLogin__c, CW_CompanyWebPassword__c, CW_CompanyWebSecret__c, CW_ServiceIntegrator__c, Account_VAT_Number_Field__c, Account_In_Follow_Up_Field__c, Lead_VAT_Number_Field__c, Lead_In_Follow_Up_Field__c FROM CW_Login_Setup__mdt WHERE DeveloperName = 'CW_Login'];
-
+        
         connectCompanywebBe.RequestAddToAlerts request = new connectCompanywebBe.RequestAddToAlerts();
         request.CompanyWebLogin = oLoginSetup.CW_CompanyWebLogin__c;
         request.CompanyWebPassword = oLoginSetup.CW_CompanyWebPassword__c;
@@ -1296,12 +1289,14 @@ public with sharing class CompanyWebController {
         String accountInFollowUpAPI = !String.isEmpty(oLoginSetup.Account_In_Follow_Up_Field__c) ? oLoginSetup.Account_In_Follow_Up_Field__c : 'CW_In_Follow_Up__c';
         String accountVATAPI = oLoginSetup.Account_VAT_Number_Field__c!=null ? oLoginSetup.Account_VAT_Number_Field__c : 'companyweb__CW_VAT_Number__c';
         String qryString = 'SELECT Id, ' + AccountInFollowUpAPI + ' FROM Account WHERE ' + accountVATAPI + '=:vatNumber';
+        System.debug(qryString);
         List<Account> acc = Database.query(qryString);
 
         //find Lead with given VAT Number
         String leadInFollowUpAPI = !String.isEmpty(oLoginSetup.Lead_In_Follow_Up_Field__c) ? oLoginSetup.Lead_In_Follow_Up_Field__c : 'CW_In_Follow_Up__c';
         String leadVATAPI = oLoginSetup.Lead_VAT_Number_Field__c!=null ? oLoginSetup.Lead_VAT_Number_Field__c : 'companyweb__CW_VAT_Number__c';
         qryString = 'SELECT Id, ' + LeadInFollowUpAPI + ' FROM Lead WHERE ' + LeadVATAPI + '=:vatNumber';
+        System.debug(qryString);
         List<Lead> lead = Database.query(qryString);
         
         if(result.StatusCode == 0){
@@ -1651,7 +1646,7 @@ public with sharing class CompanyWebController {
         employeesFieldType = String.valueOf(dtAccountEmployees);
 
         System.debug('vatFieldType = ' + vatAccountFieldType);
-        System.debug('SSI:' + result.CompanyResponse.SocialSecurityInformation.Value.RegistrationId);
+        System.debug('SSI:' + result.CompanyResponse?.SocialSecurityInformation?.Value?.RegistrationId);
         
         //Address
         if(result.CompanyResponse.Address.IsEnabled == True){
@@ -2001,9 +1996,7 @@ public with sharing class CompanyWebController {
                 for (String warning : result.CompanyResponse.WarningsOverview.Value.Warnings.string_x) {
                     //add warnings to a string
                     System.debug('warning = ' + warning);
-                    warningsString += '<li>';
-                    warningsString += warning;
-                    warningsString += '</li>';
+                    warningsString += '<li>' + warning + '</li>';
                 }
                 warningsString += '</ul>';
                 acc.CW_Warnings__c = warningsString;
@@ -2091,7 +2084,7 @@ public with sharing class CompanyWebController {
         }
 
         //Joint Commitees
-        if(result.CompanyResponse.JointCommitees.IsEnabled){
+        if(result.CompanyResponse.JointCommitees.IsEnabled == True){
             Integer JointCommiteeArraySize;
             String JointCommiteeFieldConcatBlue = ''; 
             String JointCommiteeFieldConcatWhite = '';
@@ -2600,9 +2593,7 @@ public with sharing class CompanyWebController {
                 for (String warning : result.CompanyResponse.WarningsOverview.Value.Warnings.string_x) {
                     //add warnings to a string
                     System.debug('warning = ' + warning);
-                    warningsString += '<li>';
-                    warningsString += warning;
-                    warningsString += '</li>';
+                    warningsString += '<li>' + warning + '</li>';
                 }
                 warningsString += '</ul>';
                 lead.CW_Warnings__c = warningsString;
@@ -2748,6 +2739,20 @@ public with sharing class CompanyWebController {
 
         //Avoid Callout
         lead.CW_Avoid_Callout__c = false;
+    }
+
+    public static String getUserLanguage(){
+        String userLanguage = UserInfo.getLanguage();
+        if (userLanguage == 'en_US'){
+            userLanguage = 'EN';
+        } else if(userLanguage == 'nl_NL'){
+            userLanguage = 'NL';
+        } else if(userLanguage == 'fr'){
+            userLanguage = 'FR';
+        } else {
+            userLanguage = 'EN';
+        }
+        return userLanguage;
     }
 
 }

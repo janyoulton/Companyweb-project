@@ -66,16 +66,7 @@ public class companyWebAlertsQueueable implements Queueable, Database.AllowsCall
         request3.ServiceIntegrator = oLoginSetup.CW_ServiceIntegrator__c;
         request3.LoginHash = request1.LoginHash;
         // User user Language
-        String userLanguage = UserInfo.getLanguage();
-        if (userLanguage == 'en_US'){
-            userLanguage = 'EN';
-        } else if(userLanguage == 'nl_NL'){
-            userLanguage = 'NL';
-        } else if(userLanguage == 'fr'){
-            userLanguage = 'FR';
-        } else {
-            userLanguage = 'EN';
-        }
+        String userLanguage = CompanyWebController.getUserLanguage();
         request3.Language = userLanguage;
 
         if(!Test.isRunningTest()){
