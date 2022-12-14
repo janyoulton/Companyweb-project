@@ -106,6 +106,7 @@ global class companyWebCallOutMock implements WebServiceMock {
         connectCompanywebBe.ActivityV1_1 cActivityV1_12 = new  connectCompanywebBe.ActivityV1_1();
         connectCompanywebBe.ActivityResponseFragmentV1_1 cMainActivity = new connectCompanywebBe.ActivityResponseFragmentV1_1();
         cMainActivity.Value = cActivityV1_12;
+        cMainActivity.IsEnabled = true;
         
         connectCompanywebBe.ActivityV1_1 cActivityV1_1= new connectCompanywebBe.ActivityV1_1();
         List<connectCompanywebBe.ActivityV1_1> lEActivityV1_1 = new List<connectCompanywebBe.ActivityV1_1>();

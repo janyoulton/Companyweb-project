@@ -1572,61 +1572,21 @@ public with sharing class CompanyWebController {
         String warningsString = '';
 
         /* Schema.DisplayType dt; */
-        if(accountVATAPI != null){
-            dtAccountVAT = Schema.getGlobalDescribe().get('Account').getDescribe().fields.getMap().get(accountVATAPI).getDescribe().getType();
-        }
-            
-        if(accountScoreAPI != null){
-            dtAccountScore = Schema.getGlobalDescribe().get('Account').getDescribe().fields.getMap().get(accountScoreAPI).getDescribe().getType();
-        }
-
-        if(accountActivitiesAPI != null){
-            dtAccountActivities = Schema.getGlobalDescribe().get('Account').getDescribe().fields.getMap().get(accountActivitiesAPI).getDescribe().getType();
-        }
-
-        if(accountCreditLimitAPI != null){
-            dtAccountCreditLimit = Schema.getGlobalDescribe().get('Account').getDescribe().fields.getMap().get(accountCreditLimitAPI).getDescribe().getType();
-        }
-
-        if(accountJointCommitieesBlueAPI != null){
-            dtAccountJointCommiteesBlue = Schema.getGlobalDescribe().get('Account').getDescribe().fields.getMap().get(accountJointCommitieesBlueAPI).getDescribe().getType();
-        }
-
-        if(accountJointCommitieesWhiteAPI != null){
-            dtAccountJointCommiteesWhite = Schema.getGlobalDescribe().get('Account').getDescribe().fields.getMap().get(accountJointCommitieesWhiteAPI).getDescribe().getType();
-        }
-
-        if(accountLegalFormAPI != null){
-            dtAccountLegalForm = Schema.getGlobalDescribe().get('Account').getDescribe().fields.getMap().get(accountLegalFormAPI).getDescribe().getType();
-        }
-
-        if(accountMainActivityAPI != null){
-            dtAccountMainActivity = Schema.getGlobalDescribe().get('Account').getDescribe().fields.getMap().get(accountMainActivityAPI).getDescribe().getType();
-        }
-
-        if(accountNumberEmployeesAPI != null){
-            dtAccountNumberEmployees = Schema.getGlobalDescribe().get('Account').getDescribe().fields.getMap().get(accountNumberEmployeesAPI).getDescribe().getType();
-        }
-
-        if(accountSocialSecurityAPI != null){
-            dtAccountSocialSecurity = Schema.getGlobalDescribe().get('Account').getDescribe().fields.getMap().get(accountSocialSecurityAPI).getDescribe().getType();
-        }
-
-        if(accountPhoneAPI != null){
-            dtAccountPhone = Schema.getGlobalDescribe().get('Account').getDescribe().fields.getMap().get(accountPhoneAPI).getDescribe().getType();
-        }
-
-        if(accountAnnualRevenueAPI != null){
-            dtAccountAnnualRevenue = Schema.getGlobalDescribe().get('Account').getDescribe().fields.getMap().get(accountAnnualRevenueAPI).getDescribe().getType();
-        }
-
-        if(accountEmployeesAPI != null){
-            dtAccountEmployees = Schema.getGlobalDescribe().get('Account').getDescribe().fields.getMap().get(accountEmployeesAPI).getDescribe().getType();
-        }
-
-        if(accountWorkersAPI != null){
-            dtAccountWorkers = Schema.getGlobalDescribe().get('Account').getDescribe().fields.getMap().get(accountWorkersAPI).getDescribe().getType();
-        }
+        dtAccountVAT = getDisplayType(accountVATAPI,'Account');
+        dtAccountScore = getDisplayType(accountScoreAPI,'Account');
+        dtAccountActivities = getDisplayType(accountActivitiesAPI,'Account');
+        dtAccountCreditLimit = getDisplayType(accountCreditLimitAPI,'Account');
+        dtAccountJointCommiteesBlue = getDisplayType(accountJointCommitieesBlueAPI,'Account');
+        dtAccountJointCommiteesWhite = getDisplayType(accountJointCommitieesWhiteAPI,'Account');
+        dtAccountLegalForm = getDisplayType(accountLegalFormAPI,'Account');
+        dtAccountMainActivity = getDisplayType(accountMainActivityAPI,'Account');
+        dtAccountNumberEmployees =getDisplayType(accountNumberEmployeesAPI,'Account');
+        dtAccountSocialSecurity = getDisplayType(accountSocialSecurityAPI,'Account');
+        dtAccountPhone = getDisplayType(accountPhoneAPI,'Account');
+        dtAccountAnnualRevenue = getDisplayType(accountAnnualRevenueAPI,'Account');
+        dtAccountEmployees = getDisplayType(accountEmployeesAPI,'Account');
+        dtAccountWorkers = getDisplayType(accountWorkersAPI,'Account');
+        
         
         String vatAccountFieldType,scoreFieldType,activitiesFieldType,creditLimitFieldType,joinCommiteesBlueFieldType,joinCommiteesWhiteFieldType,legalFormFieldType,mainActivityFieldType,numberEmployeesFieldType,socialSecurityFieldType,phoneFieldType,annualRevenueFieldType,workersFieldType,employeesFieldType;
 
@@ -2147,61 +2107,21 @@ public with sharing class CompanyWebController {
         String vatFieldType = String.valueOf(dt);
                         
         /* Schema.DisplayType dt; */
-        if(leadVATAPI != null){
-            dtLeadVAT = Schema.getGlobalDescribe().get('Lead').getDescribe().fields.getMap().get(leadVATAPI).getDescribe().getType();
-        }
         
-        if(leadScoreAPI != null){
-            dtLeadScore = Schema.getGlobalDescribe().get('Lead').getDescribe().fields.getMap().get(leadScoreAPI).getDescribe().getType();
-        }
-
-        if(leadActivitiesAPI != null){
-            dtLeadActivities = Schema.getGlobalDescribe().get('Lead').getDescribe().fields.getMap().get(leadActivitiesAPI).getDescribe().getType();
-        }
-
-        if(leadCreditLimitAPI != null){
-            dtLeadCreditLimit = Schema.getGlobalDescribe().get('Lead').getDescribe().fields.getMap().get(leadCreditLimitAPI).getDescribe().getType();
-        }
-
-        if(leadJointCommitieesBlueAPI != null){
-            dtLeadJointCommiteesBlue = Schema.getGlobalDescribe().get('Lead').getDescribe().fields.getMap().get(leadJointCommitieesBlueAPI).getDescribe().getType();
-        }
-
-        if(leadJointCommitieesWhiteAPI != null){
-            dtLeadJointCommiteesWhite = Schema.getGlobalDescribe().get('Lead').getDescribe().fields.getMap().get(leadJointCommitieesWhiteAPI).getDescribe().getType();
-        }
-
-        if(leadLegalFormAPI != null){
-            dtLeadLegalForm = Schema.getGlobalDescribe().get('Lead').getDescribe().fields.getMap().get(leadLegalFormAPI).getDescribe().getType();
-        }
-
-        if(leadMainActivityAPI != null){
-            dtLeadMainActivity = Schema.getGlobalDescribe().get('Lead').getDescribe().fields.getMap().get(leadMainActivityAPI).getDescribe().getType();
-        }
-
-        if(leadNumberEmployeesAPI != null){
-            dtLeadNumberEmployees = Schema.getGlobalDescribe().get('Lead').getDescribe().fields.getMap().get(leadNumberEmployeesAPI).getDescribe().getType();
-        }
-
-        if(leadSocialSecurityAPI != null){
-            dtLeadSocialSecurity = Schema.getGlobalDescribe().get('Lead').getDescribe().fields.getMap().get(leadSocialSecurityAPI).getDescribe().getType();
-        }
-
-        if(leadPhoneAPI != null){
-            dtLeadPhone = Schema.getGlobalDescribe().get('Lead').getDescribe().fields.getMap().get(leadPhoneAPI).getDescribe().getType();
-        }
-
-        if(leadAnnualRevenueAPI != null){
-            dtLeadAnnualRevenue = Schema.getGlobalDescribe().get('Lead').getDescribe().fields.getMap().get(leadAnnualRevenueAPI).getDescribe().getType();
-        }
-
-        if(leadWorkersAPI != null){
-            dtLeadWorkers = Schema.getGlobalDescribe().get('Lead').getDescribe().fields.getMap().get(leadWorkersAPI).getDescribe().getType();
-        }
-        
-        if(leadEmployeesAPI != null){
-            dtLeadEmployees = Schema.getGlobalDescribe().get('Lead').getDescribe().fields.getMap().get(leadEmployeesAPI).getDescribe().getType();
-        }
+        dtLeadVAT = getDisplayType(leadVATAPI, 'Lead');
+        dtLeadScore = getDisplayType(leadScoreAPI, 'Lead');
+        dtLeadActivities = getDisplayType(leadActivitiesAPI, 'Lead');
+        dtLeadCreditLimit = getDisplayType(leadCreditLimitAPI, 'Lead');
+        dtLeadJointCommiteesBlue = getDisplayType(leadJointCommitieesBlueAPI, 'Lead');
+        dtLeadJointCommiteesWhite = getDisplayType(leadJointCommitieesWhiteAPI, 'Lead');
+        dtLeadLegalForm = getDisplayType(leadLegalFormAPI, 'Lead');
+        dtLeadMainActivity = getDisplayType(leadMainActivityAPI, 'Lead');
+        dtLeadNumberEmployees = getDisplayType(leadNumberEmployeesAPI, 'Lead');
+        dtLeadSocialSecurity =getDisplayType(leadSocialSecurityAPI, 'Lead');
+        dtLeadPhone = getDisplayType(leadPhoneAPI, 'Lead');
+        dtLeadAnnualRevenue =getDisplayType(leadAnnualRevenueAPI, 'Lead');
+        dtLeadWorkers = getDisplayType(leadWorkersAPI, 'Lead');
+        dtLeadEmployees = getDisplayType(leadEmployeesAPI, 'Lead');
 
         String vatLeadFieldType, scoreFieldType, activitiesFieldType,creditLimitFieldType,joinCommiteesBlueFieldType,joinCommiteesWhiteFieldType,legalFormFieldType,mainActivityFieldType,numberEmployeesFieldType,socialSecurityFieldType,phoneFieldType,annualRevenueFieldType, workersFieldType, employeesFieldType;
 
@@ -2755,4 +2675,11 @@ public with sharing class CompanyWebController {
         return userLanguage;
     }
 
+    public static Schema.DisplayType getDisplayType(String apiName, String objectName){
+        if(apiName !=null){
+            return Schema.getGlobalDescribe().get(objectName).getDescribe().fields.getMap().get(apiName).getDescribe().getType();
+        }else{
+            return null;
+        }
+    }
 }
