@@ -5,7 +5,7 @@ public class companyWebAlertsQueueable implements Queueable, Database.AllowsCall
     }
 
     public void execute(QueueableContext context) {
-        System.debug('initial queueable job');
+        //System.debug('initial queueable job');
         List<Account> listOfAccountsToUpdate = new List<Account>();
         List<Lead> listOfLeadsToUpdate = new List<Lead>();
 
@@ -20,7 +20,7 @@ public class companyWebAlertsQueueable implements Queueable, Database.AllowsCall
 
         //Step 1: get Change Dates
         Map<Integer,String> mapOfStep2Token = Test.isRunningTest() ? new Map<Integer,String>() : companyWebController.getChangeDates(httpreq, request1);
-        System.debug(mapOfStep2Token);
+        //System.debug(mapOfStep2Token);
 
         connectCompanywebBe.RequestStep2 request2 = new connectCompanywebBe.RequestStep2();
         request2.CompanyWebLogin = oLoginSetup.CW_CompanyWebLogin__c;
@@ -59,7 +59,7 @@ public class companyWebAlertsQueueable implements Queueable, Database.AllowsCall
         }
 
 
-        System.debug(collectionOfStep3TokensByChangedDate);
+        //System.debug(collectionOfStep3TokensByChangedDate);
         connectCompanywebBe.RequestStep3_CompanyOnVat request3 = new connectCompanywebBe.RequestStep3_CompanyOnVat();
         request3.CompanyWebLogin = oLoginSetup.CW_CompanyWebLogin__c;
         request3.CompanyWebPassword = oLoginSetup.CW_CompanyWebPassword__c;

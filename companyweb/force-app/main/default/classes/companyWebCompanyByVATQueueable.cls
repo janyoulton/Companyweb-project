@@ -18,7 +18,7 @@ public class companyWebCompanyByVATQueueable implements Queueable, Database.Allo
     }
 
     public void execute(QueueableContext context) {
-        System.debug('CompanyByVAT queueable job');
+        //System.debug('CompanyByVAT queueable job');
         Map<Integer,Map<Integer,String>> collectionForNextQueueableJob = collectionOfStep3TokensByChangedDate;
         Boolean chainJob = false;
 
@@ -36,7 +36,10 @@ public class companyWebCompanyByVATQueueable implements Queueable, Database.Allo
                 connectCompanywebBe.CompanyResponseV1_5 companyData;
                 if(Limits.getCallouts() < Limits.getLimitCallouts()){
                     companyData = CompanyWebController.getCompanyData(httpreq, request);
-                    collectionForNextQueueableJob.remove(changedDate);
+                    String token = collectionForNextQueueableJob.get(changedDate).remove(vatNumber);
+                    if(collectionForNextQueueableJob.get(changedDate).isEmpty()){
+                        Map<Integer,String> mapToBeRemoved = collectionForNextQueueableJob.remove(changedDate);
+                    }
                 } else {
                     System.debug('exceeded Callouts limit');
                     chainJob = true;
@@ -44,7 +47,6 @@ public class companyWebCompanyByVATQueueable implements Queueable, Database.Allo
                 }
 
                 if(companyData!=null && companyData?.VatNumber?.IsEnabled){
-                    System.debug('companyData.VatNumber.Value : ' + companyData.VatNumber.Value);
                     CompanyWebController.updateCompanyByResponse(oLoginSetup, companyData, listOfAccountsToUpdate, listOfLeadsToUpdate);
                 } else {
                     System.debug('vatnumber is disabled, won\'t update the company');

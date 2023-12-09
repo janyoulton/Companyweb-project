@@ -4,14 +4,38 @@
         <description>Daily job to monitor changes on the followed companies and update respective accounts and leads with said changes.</description>
         <name>get_Alerts_A_La_Carte</name>
         <label>get Alerts A La Carte</label>
-        <locationX>176</locationX>
-        <locationY>276</locationY>
+        <locationX>50</locationX>
+        <locationY>468</locationY>
         <actionName>CompanyWebAlertsController</actionName>
         <actionType>apex</actionType>
         <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <nameSegment>CompanyWebAlertsController</nameSegment>
+        <versionSegment>1</versionSegment>
     </actionCalls>
     <apiVersion>56.0</apiVersion>
-    <description>Changed start time</description>
+    <decisions>
+        <name>Are_Alerts_a_la_Carte_enabled</name>
+        <label>Are Alerts a la Carte enabled?</label>
+        <locationX>182</locationX>
+        <locationY>360</locationY>
+        <defaultConnectorLabel>Disabled</defaultConnectorLabel>
+        <rules>
+            <name>Enabled</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Get_Login_Metadata_Type_record.CW_Enable_Alerts_a_la_carte__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>get_Alerts_A_La_Carte</targetReference>
+            </connector>
+            <label>Enabled</label>
+        </rules>
+    </decisions>
+    <description>Introduced check on &quot;Enable Alerts a la carte&quot; field to prevent license errors for non-Alerts customers.</description>
     <environments>Default</environments>
     <interviewLabel>Alerts A La Carte Daily Flow {!$Flow.CurrentDateTime}</interviewLabel>
     <label>Alerts A La Carte Daily Flow</label>
@@ -34,16 +58,41 @@
         </value>
     </processMetadataValues>
     <processType>AutoLaunchedFlow</processType>
+    <recordLookups>
+        <name>Get_Login_Metadata_Type_record</name>
+        <label>Get Login Metadata Type record</label>
+        <locationX>182</locationX>
+        <locationY>252</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Are_Alerts_a_la_Carte_enabled</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Label</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>Login</stringValue>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>CW_Login_Setup__mdt</object>
+        <queriedFields>Id</queriedFields>
+        <queriedFields>CW_Enable_Alerts_a_la_carte__c</queriedFields>
+        <sortField>Id</sortField>
+        <sortOrder>Desc</sortOrder>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
     <start>
-        <locationX>50</locationX>
+        <locationX>56</locationX>
         <locationY>0</locationY>
         <connector>
-            <targetReference>get_Alerts_A_La_Carte</targetReference>
+            <targetReference>Get_Login_Metadata_Type_record</targetReference>
         </connector>
         <schedule>
             <frequency>Daily</frequency>
-            <startDate>2022-11-10</startDate>
-            <startTime>04:00:00.000Z</startTime>
+            <startDate>2022-11-16</startDate>
+            <startTime>03:00:00.000Z</startTime>
         </schedule>
         <triggerType>Scheduled</triggerType>
     </start>
